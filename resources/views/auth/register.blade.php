@@ -64,7 +64,7 @@
                             class=" block w-full p-3 text-lg  text-black rounded-lg">
                     </div>
                     <div class="py-2">
-                        <input class="block w-full p-3 text-lg rounded-lg bg-white text-black" type="password"
+                        <input class="block w-full p-3 text-lg rounded-lg bg-[#ffffff] text-black" type="password"
                             name="password" id="password" placeholder="Mật Khẩu">
                     </div>
                     <div class="text-right text-black hover:underline hover:text-gray-500 text-base">

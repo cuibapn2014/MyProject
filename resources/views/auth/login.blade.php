@@ -42,13 +42,26 @@
                 </div>
                 <form action="{{ route('request.login') }}" class="sm:w-2/3 w-full px-4 lg:px-0 mx-auto" method="post">
                     @csrf
+                    @if($errors->any())
+                    <p class="bg-red-100 text-red-500 text-left text-lg rounded-lg p-3 shadow-sm">{{
+                        $errors->first() }}</p>
+                    @endif
+                    @if(session('failed'))
+                    <p class="bg-red-100 text-red-500 text-left text-lg rounded-lg p-3 shadow-sm">{{
+                        session('failed') }}</p>
+                    @endif
                     <div class="pb-2 pt-4 ">
                         <input name="email" id="email" placeholder="Email"
                             class=" block w-full p-3 text-lg  text-black rounded-lg">
                     </div>
                     <div class="pb-2 pt-4">
-                        <input class="block w-full p-3 text-lg rounded-lg bg-white text-black" type="password"
+                        <input class="block w-full p-3 text-lg rounded-lg bg-[#ffffff] text-black" type="password"
                             name="password" id="password" placeholder="Mật Khẩu">
+                    </div>
+                    <div class="py-2 text-black flex items-center">
+                        <input class="w-4 h-4 accent-indigo-600 checked:bg-indigo-400" type="checkbox"
+                            name="remember" id="chk_remember" />
+                        <label class="mx-1" for="chk_remember">Nhớ tôi</label>
                     </div>
                     <div class="text-right text-black hover:underline hover:text-gray-500 text-base">
                         <a href="#" class="">Quên Mật Khẩu?</a>

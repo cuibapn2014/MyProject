@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\FabricController;
+use App\Http\Controllers\Admin\IngredientController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +41,18 @@ Route::get('/logout', function () {
 })->middleware('auth')->name('logout');
 
 //Admin Route
-Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function ($route) {
+Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function ($route) {
     $route->get('/', [AdminController::class, 'index'])->name('admin.home');
+
+    $route->group(['prefix' => 'fabric'], function ($route) {
+        $route->get('/', [FabricController::class, 'index'])->name('admin.fabric.index');
+        $route->post('/create', [AdminController::class, 'storeFabric'])->name('admin.fabric.create');
+        $route->post('/update', [AdminController::class, 'updateFabric'])->name('admin.manage.update');
+    });
+
+    $route->group(['prefix' => 'ingredient'], function ($route) {
+        $route->get('/', [IngredientController::class, 'index'])->name('admin.ingredient.index');
+        $route->post('/create', [AdminController::class, 'storeFabric'])->name('admin.fabric.create');
+        $route->post('/update', [AdminController::class, 'updateFabric'])->name('admin.manage.update');
+    });
 });
