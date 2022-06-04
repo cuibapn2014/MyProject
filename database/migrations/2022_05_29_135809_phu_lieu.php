@@ -18,7 +18,6 @@ class PhuLieu extends Migration
             $table->id();
             $table->string('Ten')->unique();
             $table->string('GhiChu')->nullable();
-            $table->string('HinhAnh')->nullable();
         });
     }
 

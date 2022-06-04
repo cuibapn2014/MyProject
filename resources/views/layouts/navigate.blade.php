@@ -5,11 +5,13 @@
         </a>
         <ul class="mt-6">
             <li class="relative px-6 py-3">
-                <span v-if="this.isActive == 0" class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
+                <span v-if="isActive == 0"
+                    class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
                     aria-hidden="true"></span>
-                <a @click="this.setActive(0)" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
+                <a @click="setIsActive(0)"
+                    class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                     href="{{ route('admin.home') }}"
-                    :class="{ 'text-gray-800' : this.isActive == 0 }">
+                    :class="{ 'text-gray-800' : this.isActive == 0, 'dark:text-gray-100' : this.isActive == 0 }">
                     <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
                         stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                         <path
@@ -22,10 +24,29 @@
         </ul>
         <ul>
             <li class="relative px-6 py-3">
-                <span v-if="this.isActive == 1" class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
+                <span v-if="this.isActive == 1"
+                    class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
                     aria-hidden="true"></span>
-                <a @click="this.setActive(1)" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                    href="{{ route('admin.fabric.index') }}">
+                <a @click="setIsActive(1)"
+                    class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    href="{{ route('admin.order.index') }}"
+                    :class="{ 'text-gray-800' : this.isActive == 1, 'dark:text-gray-100' : this.isActive == 1 }">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    <span class="ml-4">Quản lý đơn hàng</span>
+                </a>
+            </li>
+            <li class="relative px-6 py-3">
+                <span v-if="this.isActive == 2"
+                    class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
+                    aria-hidden="true"></span>
+                <a @click="setIsActive(2)"
+                    class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    href="{{ route('admin.fabric.index') }}"
+                    :class="{ 'text-gray-800' : this.isActive == 2, 'dark:text-gray-100' : this.isActive == 2 }">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -35,10 +56,13 @@
                 </a>
             </li>
             <li class="relative px-6 py-3">
-                <span v-if="this.isActive == 2" class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
+                <span v-if="this.isActive == 3"
+                    class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
                     aria-hidden="true"></span>
-                <a @click="this.setActive(2)" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                    href="{{ route('admin.ingredient.index') }}">
+                <a @click="setIsActive(3)"
+                    class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    href="{{ route('admin.ingredient.index') }}"
+                    :class="{ 'text-gray-800' : this.isActive == 3, 'dark:text-gray-100' : this.isActive == 3 }">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -48,10 +72,13 @@
                 </a>
             </li>
             <li class="relative px-6 py-3">
-                <span v-if="this.isActive == 3" class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
+                <span v-if="this.isActive == 4"
+                    class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
                     aria-hidden="true"></span>
-                <a @click="this.setActive(3)" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                    href="javascript:void()">
+                <a @click="setIsActive(4)"
+                    class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    href="javascript:void()"
+                    :class="{ 'text-gray-800' : this.isActive == 4, 'dark:text-gray-100' : this.isActive == 4 }">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -61,16 +88,15 @@
                 </a>
             </li>
     </div>
-    <h2 class="w-full h-auto text-sm px-3 dark:text-gray-200">{{\Carbon\Carbon::parse(now())->format('Y')}} <i
-            class="fa-solid fa-copyright"></i> Copyright by LyunHouse</h2>
-    <h2 class="w-full h-auto text-sm px-3 dark:text-gray-200">Developed by Manh Tuan</h2>
+    <h2 class="w-full h-auto text-sm px-3 dark:text-gray-200">{{\Carbon\Carbon::parse(now())->format('Y')}} © Copyright
+        by LyunHouse</h2>
+    <h2 class="w-full h-auto text-sm px-3 dark:text-gray-200">Developed by A&T</h2>
 </aside>
 <!-- Mobile sidebar -->
 <!-- Backdrop -->
-<div v-if="isSideMenuOpen" x-transition:enter="transition ease-in-out duration-150"
-    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-    x-transition:leave="transition ease-in-out duration-150" x-transition:leave-start="opacity-100"
-    x-transition:leave-end="opacity-0"
+<div v-if="isSideMenuOpen" x-transition:enter="transition ease-in-out duration-150" x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in-out duration-150"
+    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
     class="fixed inset-0 z-10 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center"></div>
 <aside class="fixed inset-y-0 z-20 flex-shrink-0 w-64 mt-16 overflow-y-auto bg-[#ffffff] dark:bg-gray-800 md:hidden"
     v-if="isSideMenuOpen" x-transition:enter="transition ease-in-out duration-150"
@@ -230,7 +256,7 @@
             </button>
         </div>
     </div>
-    <h2 class="w-full h-auto text-sm px-3 dark:text-gray-200">{{\Carbon\Carbon::parse(now())->format('Y')}} <i
-            class="fa-solid fa-copyright"></i> Copyright by LyunHouse</h2>
-    <h2 class="w-full h-auto text-sm px-3 dark:text-gray-200">Developed by Manh Tuan</h2>
+    <h2 class="w-full h-auto text-sm px-3 dark:text-gray-200">{{\Carbon\Carbon::parse(now())->format('Y')}} © Copyright
+        by LyunHouse</h2>
+    <h2 class="w-full h-auto text-sm px-3 dark:text-gray-200">Developed by A&T</h2>
 </aside>

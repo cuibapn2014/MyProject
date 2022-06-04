@@ -17,6 +17,7 @@ class Gia extends Migration
         Schema::create('gia', function(Blueprint $table){
             $table->id();
             $table->integer('id_ChatLuong');
+            $table->integer('id_DanhMuc');
             $table->unsignedFloat('Gia');
             $table->bigInteger('LimitStart');
             $table->bigInteger('LimitFinish');

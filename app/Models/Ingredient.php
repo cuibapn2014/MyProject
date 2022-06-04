@@ -11,6 +11,8 @@ class Ingredient extends Model
 
     protected $table = 'phu_lieu';
 
+    public $timestamps = false;
+
     protected $fillable = ['Ten', 'GhiChu', 'HinhAnh'];
 
     public function images(){

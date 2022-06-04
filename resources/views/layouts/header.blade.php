@@ -1,4 +1,4 @@
-<div class="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
+<div class="container flex items-center justify-between py-2 h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
     <!-- Mobile hamburger -->
     <button class="p-1 mr-5 -ml-1 rounded-md md:hidden focus:outline-none focus:shadow-outline-purple"
         @click="toggleSideMenu" aria-label="Menu">
@@ -95,9 +95,8 @@
         <li class="relative">
             <button class="align-middle rounded-full focus:shadow-outline-purple focus:outline-none"
                 @click="toggleProfileMenu" @keydown.escape="closeProfileMenu" aria-label="Account" aria-haspopup="true">
-                <img class="object-cover w-8 h-8 rounded-full"
-                    src="https://tatshop.tech/image/ceo.jpg"
-                    alt="" aria-hidden="true" />
+                <img class="object-cover w-8 h-8 rounded-full" src="https://tatshop.tech/image/ceo.jpg" alt=""
+                    aria-hidden="true" />
             </button>
             <template v-if="isProfileMenuOpen">
                 <ul x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"

@@ -22,7 +22,6 @@ class ChiTietDonHang extends Migration
             $table->integer('id_PhuLieu')->nullable();
             $table->integer('SoLuong')->nullable();
             $table->string('KichThuoc');
-            $table->integer('id_LoaiHang');
             $table->integer('id_ChatLuong');
             $table->timestamps();
         });

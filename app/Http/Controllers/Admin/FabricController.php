@@ -11,8 +11,17 @@ class FabricController extends Controller
     //
     public function index()
     {
-        return view('admin.manage.fabric', ['fabric' => Fabric::all()]);
+        return view('admin.manage.fabric.fabric', ['fabrics' => Fabric::paginate(25)]);
     }
+
+    public function getAll(){
+        return response()->json(Fabric::all());
+    }
+
+    public function getStore(){
+        return view('admin.manage.fabric.createFabric');
+    }
+
 
     public function store(Request $req)
     {
@@ -46,6 +55,10 @@ class FabricController extends Controller
         return back()->with('success', 'Thêm thành công');
     }
 
+    public function getUpdate($id){
+        return view('admin.manage.fabric.editFabric',['fabric' => Fabric::findOrFail($id)]);
+    }
+
     public function update(Request $req, $id)
     {
         $this->validate(
@@ -71,7 +84,7 @@ class FabricController extends Controller
         $fabric->Ten = $req->name;
         $fabric->MauSac = $req->color;
         $fabric->TinhChat = $req->property;
-        $fabric->GhiChu = $req->GhiChu;
+        $fabric->GhiChu = $req->note;
         $fabric->Gia = $req->price;
         $fabric->DiaChiMua = $req->location;
         $fabric->save();

@@ -5,7 +5,6 @@
  */
 
 require('./bootstrap');
-require('./init-alpine');
 
 window.Vue = require('vue').default;
 
@@ -21,6 +20,12 @@ window.Vue = require('vue').default;
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('input-file', require('./components/InputFileComponent.vue').default);
+Vue.component('image-modal', require('./components/ImageModalComponent.vue').default);
+Vue.component('add-order', require('./components/AddOrderComponent.vue').default);
+
+window.axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
+window.axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -30,32 +35,32 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 const app = new Vue({
     el: '#app',
-    created() {
-        dark = this.getThemeFromLocalStorage()
+    delimiters: [
+        "[[", "]]"
+    ],
+    mounted(){
+        this.getTheme()
     },
     updated(){
-        if (this.dark) {
-            document.documentElement.classList.add('dark')
-          } else {
-            document.documentElement.classList.remove('dark')
-          }
+        this.getTheme()
     },
     data() {
         return {
+            idDelete: 0,
+            display: 0,
             isActive: 0,
-            dark: false,
+            dark: this.getThemeFromLocalStorage(),
             isSideMenuOpen: false,
             isNotificationsMenuOpen: false,
             isProfileMenuOpen: false,
             isPagesMenuOpen: false,
             isModalOpen: false,
-            trapCleanup: null,
+            trapCleanup: null
         }
     },
     methods: {
-        setActive(index) {
+        setIsActive(index) {
             this.isActive = index
-            console.log(isActive)
         },
         getThemeFromLocalStorage() {
             // if user already changed the theme, use it
@@ -69,7 +74,7 @@ const app = new Vue({
                 window.matchMedia('(prefers-color-scheme: dark)').matches
             )
         },
-        
+
         setThemeToLocalStorage(value) {
             window.localStorage.setItem('dark', value)
         },
@@ -107,13 +112,32 @@ const app = new Vue({
         },
         // Modal
 
-        openModal() {
+        openModal(id) {
+            this.idDelete = id
             this.isModalOpen = true
-            this.trapCleanup = focusTrap(document.querySelector('#modal'))
+            // this.trapCleanup = focusTrap(document.querySelector('#modal'))
         },
+        
         closeModal() {
             this.isModalOpen = false
-            this.trapCleanup()
+            // this.trapCleanup()
         },
+
+        getTheme(){
+            if (this.dark) {
+                document.documentElement.classList.add('dark')
+            } else {
+                document.documentElement.classList.remove('dark')
+            }
+        },
+        handleClick(){
+            this.display >= 0 && this.display <= 2 ? this.display++ : this.display
+        },
+        handleDeleteIngredient(id){
+            location.href = `/admin/ingredient/delete/${id}`
+        },
+        handleDeleteFabric(id){
+            location.href = `/admin/fabric/delete/${id}`
+        }
     }
 });
