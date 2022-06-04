@@ -44,7 +44,16 @@ class OrderController extends Controller
                 'province' => 'required',
                 'district' => 'required',
                 'ward' => 'required',
-                'address' => 'required'
+                'address' => 'required',
+                'product_name' => 'requried',
+                'size' => 'required',
+                'quantity' => 'min:1',
+                'category' => 'required',
+                'fabric' => 'required',
+                'fabric_owner' => 'required',
+                'quality' => 'required',
+                'totalPrice' => 'required',
+                'duration' => 'required'
             ],
             [
                 'fullname.required' => 'Tên khách hàng không được để trống',
@@ -54,7 +63,16 @@ class OrderController extends Controller
                 'province.required' => 'Không được để trống Tỉnh/Thành Phố',
                 'district.required' => 'Không được để trống Quận/Huyện',
                 'ward.required' => 'Không được để trống Phường/Xã',
-                'address.required' => 'Không được để trống địa chỉ'
+                'address.required' => 'Không được để trống địa chỉ',
+                'product_name.required' => 'Không được để trống tên sản phẩm',
+                'size.required' => 'Không được để trống kích thước sản phẩm',
+                'quantity.required' => 'Không được để trống sớ lượng sản phẩm',
+                'category.required' => 'Không được để trống danh mục sản phẩm',
+                'fabric.required' => 'Không được để trống loại vải',
+                'fabric_owner.required' => 'Không được để trống nguồn cung cấp vải',
+                'quality.required' => 'Không được để trống chất lượng sản phẩm',
+                'totoPrice.required' => 'Không được để trống tổng số tiền',
+                'duration.required' => 'Không được để trống ngày trả đơn'
             ]
         );
     }
@@ -76,8 +94,8 @@ class OrderController extends Controller
                 'category' => 'required',
                 'fabric' => 'required',
                 'fabric_owner' => 'required',
-                'ingredient' => 'required',
-                'quality' => 'required'
+                'duration' => 'required',
+                'price' => 'required|numeric'
             ],
             [
                 'fullname.required' => 'Tên khách hàng không được để trống',
@@ -87,7 +105,17 @@ class OrderController extends Controller
                 'province.required' => 'Không được để trống Tỉnh/Thành Phố',
                 'district.required' => 'Không được để trống Quận/Huyện',
                 'ward.required' => 'Không được để trống Phường/Xã',
-                'address.required' => 'Không được để trống địa chỉ'
+                'address.required' => 'Không được để trống địa chỉ',
+                'product_name.required' => 'Không được để trống tên sản phẩm',
+                'size.required' => 'Không được để trống kích thước sản phẩm',
+                'quantity.required' => 'Không được để trống sớ lượng sản phẩm',
+                'category.required' => 'Không được để trống danh mục sản phẩm',
+                'fabric.required' => 'Không được để trống loại vải',
+                'fabric_owner.required' => 'Không được để trống nguồn cung cấp vải',
+                'quality.required' => 'Không được để trống chất lượng sản phẩm',
+                'price.required' => 'Không được để trống giá tiền',
+                'price.numeric' => 'Giá tiền không hợp lệ',
+                'duration.required' => 'Không được để trống ngày trả đơn'
             ]
         );
     }

@@ -26,7 +26,6 @@
       accept="image/*"
       type="file"
       name="image[]"
-      required
     />
     <a class="bg-gray-100 mx-2 rounded-lg p-1 cursor-pointer" @click="handleReload">
       <svg

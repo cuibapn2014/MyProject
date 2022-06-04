@@ -5970,6 +5970,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   created: function created() {
@@ -6410,7 +6435,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
 //
 //
 //
@@ -29541,7 +29565,28 @@ var render = function () {
       _vm._v(" "),
       _vm._m(6),
       _vm._v(" "),
-      _vm._m(7),
+      _c("div", { staticClass: "flex items-center" }, [
+        _vm._m(7),
+        _vm._v(" "),
+        _vm._m(8),
+        _vm._v(" "),
+        this.productType == "unavailable"
+          ? _c("label", { staticClass: "block text-sm my-1 mx-2" }, [
+              _vm._m(9),
+              _vm._v(" "),
+              _c("input", {
+                staticClass:
+                  "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
+                attrs: {
+                  type: "number",
+                  min: "0",
+                  placeholder: "",
+                  name: "price",
+                },
+              }),
+            ])
+          : _vm._e(),
+      ]),
       _vm._v(" "),
       _c("div", { staticClass: "mt-4 text-sm" }, [
         _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
@@ -29597,7 +29642,7 @@ var render = function () {
       ]),
       _vm._v(" "),
       _c("label", { staticClass: "block my-2 text-sm w-2/4 sm:w-full" }, [
-        _vm._m(8),
+        _vm._m(10),
         _vm._v(" "),
         _c(
           "select",
@@ -29624,7 +29669,7 @@ var render = function () {
       ]),
       _vm._v(" "),
       _c("label", { staticClass: "block my-2 text-sm w-2/4 sm:w-full" }, [
-        _vm._m(9),
+        _vm._m(11),
         _vm._v(" "),
         _c(
           "select",
@@ -29650,10 +29695,10 @@ var render = function () {
         ),
       ]),
       _vm._v(" "),
-      _vm._m(10),
+      _vm._m(12),
       _vm._v(" "),
       _c("label", { staticClass: "block my-2 text-sm w-2/4 sm:w-full" }, [
-        _vm._m(11),
+        _vm._m(13),
         _vm._v(" "),
         _c(
           "select",
@@ -29680,7 +29725,7 @@ var render = function () {
       ]),
       _vm._v(" "),
       _c("label", { staticClass: "block my-2 text-sm w-2/4 sm:w-full" }, [
-        _vm._m(12),
+        _vm._m(14),
         _vm._v(" "),
         _c(
           "select",
@@ -29709,7 +29754,7 @@ var render = function () {
       _vm.productType == "available"
         ? _c("div", { staticClass: "flex mt-1" }, [
             _c("label", { staticClass: "block text-sm my-1" }, [
-              _vm._m(13),
+              _vm._m(15),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -29724,7 +29769,7 @@ var render = function () {
                   "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
                 attrs: {
                   type: "number",
-                  min: "1000",
+                  min: "0",
                   placeholder: "",
                   name: "deposit",
                 },
@@ -29741,7 +29786,7 @@ var render = function () {
             ]),
             _vm._v(" "),
             _c("label", { staticClass: "block text-sm my-1 mx-2" }, [
-              _vm._m(14),
+              _vm._m(16),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -29805,7 +29850,7 @@ var render = function () {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _vm._m(15),
+      _vm._m(17),
       _vm._v(" "),
       _c("div", { staticClass: "flex justify-end" }, [
         _c(
@@ -29918,7 +29963,7 @@ var render = function () {
                         ),
                       ]),
                       _vm._v(" "),
-                      _vm._m(16),
+                      _vm._m(18),
                       _vm._v(" "),
                       _c(
                         "footer",
@@ -30077,39 +30122,54 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "flex items-center" }, [
-      _c("label", { staticClass: "block text-sm my-1" }, [
-        _c("span", { staticClass: "flex text-gray-700 dark:text-gray-400" }, [
-          _vm._v("Kích thước\n        "),
-          _c("p", { staticClass: "text-red-500 mx-1" }, [_vm._v("*")]),
-        ]),
-        _vm._v(" "),
-        _c("input", {
-          staticClass:
-            "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
-          attrs: { placeholder: "", name: "size" },
-        }),
+    return _c("label", { staticClass: "block text-sm my-1" }, [
+      _c("span", { staticClass: "flex text-gray-700 dark:text-gray-400" }, [
+        _vm._v("Kích thước\n        "),
+        _c("p", { staticClass: "text-red-500 mx-1" }, [_vm._v("*")]),
       ]),
       _vm._v(" "),
-      _c("label", { staticClass: "block text-sm my-1 mx-2" }, [
-        _c("span", { staticClass: "flex text-gray-700 dark:text-gray-400" }, [
-          _vm._v("Số lượng\n        "),
-          _c("p", { staticClass: "text-red-500 mx-1" }, [_vm._v("*")]),
-        ]),
-        _vm._v(" "),
-        _c("input", {
-          staticClass:
-            "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
-          attrs: {
-            type: "number",
-            min: "1",
-            placeholder: "",
-            name: "quantity",
-            value: "1",
-          },
-        }),
-      ]),
+      _c("input", {
+        staticClass:
+          "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
+        attrs: { placeholder: "", name: "size" },
+      }),
     ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { staticClass: "block text-sm my-1 mx-2" }, [
+      _c("span", { staticClass: "flex text-gray-700 dark:text-gray-400" }, [
+        _vm._v("Số lượng\n        "),
+        _c("p", { staticClass: "text-red-500 mx-1" }, [_vm._v("*")]),
+      ]),
+      _vm._v(" "),
+      _c("input", {
+        staticClass:
+          "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
+        attrs: {
+          type: "number",
+          min: "1",
+          placeholder: "",
+          name: "quantity",
+          value: "1",
+        },
+      }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "span",
+      { staticClass: "flex text-gray-700 dark:text-gray-400" },
+      [
+        _vm._v("Giá\n        "),
+        _c("p", { staticClass: "text-red-500 mx-1" }, [_vm._v("*")]),
+      ]
+    )
   },
   function () {
     var _vm = this
@@ -30152,7 +30212,7 @@ var staticRenderFns = [
         {
           staticClass:
             "\n        block\n        w-full\n        mt-1\n        text-sm\n        dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n        form-select\n        focus:border-purple-400 focus:outline-none focus:shadow-outline-purple\n        dark:focus:shadow-outline-gray\n      ",
-          attrs: { name: "fabric" },
+          attrs: { name: "fabric_owner" },
         },
         [
           _c("option", { attrs: { selected: "", value: "" } }, [
@@ -30232,7 +30292,7 @@ var staticRenderFns = [
       _c("input", {
         staticClass:
           "\n        block\n        w-full\n        mt-1\n        text-sm\n        disabled:bg-gray-50\n        dark:border-gray-600 dark:bg-gray-700\n        focus:border-purple-400 focus:outline-none focus:shadow-outline-purple\n        dark:text-gray-300 dark:focus:shadow-outline-gray\n        form-input\n      ",
-        attrs: { type: "date", placeholder: "" },
+        attrs: { type: "date", name: "duration", placeholder: "" },
       }),
     ])
   },
@@ -30554,12 +30614,7 @@ var render = function () {
         ref: "fileImage",
         staticClass:
           "\n      form-control\n      first-line:block\n      bg-clip-padding\n      w-8/12\n      text-sm text-gray-900\n      bg-gray-50\n      rounded-lg\n      border border-gray-300\n      cursor-pointer\n      dark:text-gray-400\n      focus:outline-none\n      dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400\n    ",
-        attrs: {
-          accept: "image/*",
-          type: "file",
-          name: "image[]",
-          required: "",
-        },
+        attrs: { accept: "image/*", type: "file", name: "image[]" },
         on: { change: _vm.handleChangeFile },
       }),
       _vm._v(" "),

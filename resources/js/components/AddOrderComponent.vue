@@ -238,6 +238,30 @@
           value="1"
         />
       </label>
+       <label v-if="this.productType == 'unavailable'" class="block text-sm my-1 mx-2">
+        <span class="flex text-gray-700 dark:text-gray-400"
+          >Giá
+          <p class="text-red-500 mx-1">*</p></span
+        >
+        <input
+          class="
+            block
+            w-full
+            mt-1
+            text-sm
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:text-gray-300 dark:focus:shadow-outline-gray
+            form-input
+          "
+          type="number"
+          min="0"
+          placeholder=""
+          name="price"
+        />
+      </label>
     </div>
     <div class="mt-4 text-sm">
       <span class="text-gray-700 dark:text-gray-400"> Loại hàng </span>
@@ -355,7 +379,7 @@
           focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
           dark:focus:shadow-outline-gray
         "
-        name="fabric"
+        name="fabric_owner"
       >
         <option selected value="">Chọn nguồn cung cấp</option>
         <option value="company">Công ty</option>
@@ -438,7 +462,7 @@
             form-input
           "
           type="number"
-          min="1000"
+          min="0"
           placeholder=""
           name="deposit"
           v-model="deposit"
@@ -508,6 +532,7 @@
           form-input
         "
         type="date"
+        name="duration"
         placeholder=""
       />
     </label>
