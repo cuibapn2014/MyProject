@@ -14,6 +14,7 @@ class DetailOrder extends Model
     protected $table = 'chi_tiet_don_hang';
 
     protected $fillable = [
+        'id_DonHang',
         'TenSP', 'LoaiHang',
         'id_DanhMuc', 'id_LoaiVai',
         'id_PhuLieu', 'SoLuong',
