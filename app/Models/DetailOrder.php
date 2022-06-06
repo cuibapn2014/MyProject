@@ -19,7 +19,8 @@ class DetailOrder extends Model
         'id_DanhMuc', 'id_LoaiVai',
         'id_PhuLieu', 'SoLuong',
         'KichThuoc', 'id_ChatLuong',
-        'TongTien', 'TienCoc'
+        'TongTien', 'TienCoc',
+        'NguonCungCap', 'image'
     ];
 
     public $timestamps = true;
