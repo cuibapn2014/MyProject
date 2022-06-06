@@ -23,6 +23,8 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('input-file', require('./components/InputFileComponent.vue').default);
 Vue.component('image-modal', require('./components/ImageModalComponent.vue').default);
 Vue.component('add-order', require('./components/AddOrderComponent.vue').default);
+Vue.component('edit-order', require('./components/EditOrderComponent.vue').default);
+
 
 window.axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
 window.axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
@@ -138,6 +140,12 @@ const app = new Vue({
         },
         handleDeleteFabric(id){
             location.href = `/admin/fabric/delete/${id}`
+        },
+        handleDeleteOrder(id){
+            location.href = `/admin/order/delete/${id}`
+        },
+        handlePrintClick(){
+            window.print()
         }
     }
 });

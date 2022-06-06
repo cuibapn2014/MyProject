@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Fabric;
+use App\Models\Image;
 use Illuminate\Http\Request;
 
 class FabricController extends Controller
@@ -14,11 +15,13 @@ class FabricController extends Controller
         return view('admin.manage.fabric.fabric', ['fabrics' => Fabric::paginate(25)]);
     }
 
-    public function getAll(){
+    public function getAll()
+    {
         return response()->json(Fabric::all());
     }
 
-    public function getStore(){
+    public function getStore()
+    {
         return view('admin.manage.fabric.createFabric');
     }
 
@@ -32,7 +35,9 @@ class FabricController extends Controller
                 'color' => 'required',
                 'property' => 'required',
                 'price' => 'required|integer',
-                'location' => 'required'
+                'location' => 'required',
+                'image.*' => 'required',
+                'phone_number' => 'required|numeric|digits:10',
             ],
             [
                 'name.required' => 'Tên loại vải không được để trống',
@@ -40,7 +45,11 @@ class FabricController extends Controller
                 'property.required' => 'Tính chất loại vải không được để trống',
                 'price.required' => 'Giá tiền không được để trống',
                 'price.integer' => 'Giá tiền phải là số nguyên',
-                'location.required' => 'Địa chỉ mua hàng không được để trống'
+                'location.required' => 'Địa chỉ mua hàng không được để trống',
+                'image.*.required' => 'Bạn chưa thêm hình ảnh cho loại vải này',
+                'phone_number.required' => 'Số điện thoại không được để trống',
+                'phone_number.numeric' => 'Số điện thoại không hợp lệ',
+                'phone_number.digits' => 'Số điện thoại không hợp lệ',
             ]
         );
 
@@ -51,12 +60,30 @@ class FabricController extends Controller
         $fabric->GhiChu = $req->GhiChu;
         $fabric->Gia = $req->price;
         $fabric->DiaChiMua = $req->location;
+        $fabric->SoDienThoai = $req->phone_number;
         $fabric->save();
+
+        if ($req->hasFile('image')) {
+            foreach ($req->file('image') as $image) {
+                $photo = new Image();
+                if ($image != null) {
+                    $extension = $image->getClientOriginalExtension();
+                    $file_name = current(explode('.', $image->getClientOriginalName())) . '_' . time() . '.' . $extension;
+                    $image->move('img', $file_name);
+                    $photo->urlImage = $file_name;
+                    $photo->type = 'lv';
+                    $photo->id_provide = $fabric->id;
+                    $photo->save();
+                }
+            }
+        }
+
         return back()->with('success', 'Thêm thành công');
     }
 
-    public function getUpdate($id){
-        return view('admin.manage.fabric.editFabric',['fabric' => Fabric::findOrFail($id)]);
+    public function getUpdate($id)
+    {
+        return view('admin.manage.fabric.editFabric', ['fabric' => Fabric::findOrFail($id)]);
     }
 
     public function update(Request $req, $id)
@@ -87,7 +114,23 @@ class FabricController extends Controller
         $fabric->GhiChu = $req->note;
         $fabric->Gia = $req->price;
         $fabric->DiaChiMua = $req->location;
+        $fabric->SoDienThoai = $req->phone_number;
         $fabric->save();
+
+        if ($req->hasFile('image')) {
+            foreach ($req->file('image') as $image) {
+                $photo = new Image();
+                if ($image != null) {
+                    $extension = $image->getClientOriginalExtension();
+                    $file_name = current(explode('.', $image->getClientOriginalName())) . '_' . time() . '.' . $extension;
+                    $image->move('img', $file_name);
+                    $photo->urlImage = $file_name;
+                    $photo->type = 'lv';
+                    $photo->id_provide = $fabric->id;
+                    $photo->save();
+                }
+            }
+        }
         return back()->with('success', 'Cập nhật thành công');
     }
 

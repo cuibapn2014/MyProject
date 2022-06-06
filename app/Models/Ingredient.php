@@ -16,6 +16,6 @@ class Ingredient extends Model
     protected $fillable = ['Ten', 'GhiChu', 'HinhAnh'];
 
     public function images(){
-        return $this->hasMany(Image::class, 'id_PhuLieu', 'id');
+        return $this->hasMany(Image::class, 'id_provide', 'id');
     }
 }

@@ -14,7 +14,7 @@ $current = 2;
     @if($errors->any())
     <p class="p-2 rounded-md my-2 bg-red-100 text-red-400 text-sm">{{ $errors->first() }}</p>
     @endif
-    <form action="{{route('admin.fabric.request.create')}}" method="post">
+    <form action="{{route('admin.fabric.request.create')}}" method="post" enctype="multipart/form-data">
         @csrf
         <div class="px-4 py-3 mb-8 bg-[#ffffff] rounded-lg shadow-md dark:bg-gray-800">
             <label class="block text-sm">
@@ -23,7 +23,16 @@ $current = 2;
                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                     placeholder="" name="name" />
             </label>
-            <label class="block text-sm my-2">
+            <div class="upload__image block text-sm my-3">
+                <label class="text-gray-700 dark:text-gray-400">Hình ảnh</label>
+                <input-file v-if="display >= 0"></input-file>
+                <input-file v-if="display >= 1"></input-file>
+                <input-file v-if="display >= 2"></input-file>
+            </div>
+            <a v-if="this.display <= 1" class="btn__add--input p-2 bg-indigo-600 rounded-lg text-white mt-2 mb-4"
+                @click="handleClick">Thêm ảnh</a>
+
+            <label class="block text-sm mb-2 mt-4">
                 <span class="text-gray-700 dark:text-gray-400">Màu sắc</span>
                 <input
                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -47,6 +56,12 @@ $current = 2;
                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                     type="text" name="location" />
             </label>
+            <label class="block text-sm my-2">
+                <span class="text-gray-700 dark:text-gray-400">Số điện thoại liên hệ</span>
+                <input
+                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                    type="text" name="phone_number" placeholder="XXXXXXXXXX" />
+            </label>
             <label class="block mt-4 text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Ghi chú</span>
                 <textarea
@@ -62,13 +77,14 @@ $current = 2;
 
 <div v-if="isModalOpen" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0"
     x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150"
-    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" 
+    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
     class="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center">
     <!-- Modal -->
     <div v-if="isModalOpen" x-transition:enter="transition ease-out duration-150"
         x-transition:enter-start="opacity-0 transform translate-y-1/2" x-transition:enter-end="opacity-100"
         x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0  transform translate-y-1/2" @keydown.escape="closeModal" @click.away="closeModal"
+        x-transition:leave-end="opacity-0  transform translate-y-1/2" @keydown.escape="closeModal"
+        @click.away="closeModal"
         class="w-full px-6 py-4 overflow-hidden bg-[#ffffff] rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-xl"
         role="dialog" id="modal">
         <!-- Remove header if you don't want a close icon. Use modal body to place modal tile. -->

@@ -182,7 +182,7 @@
 <script>
 export default {
   props: {
-    data: Object,
+    data: Object
   },
   data() {
     return {
@@ -198,7 +198,7 @@ export default {
       this.isModalOpen = false;
     },
     handleDeleteImage() {
-      location.href = `/admin/image/delete/${this.data.id_PhuLieu}/${this.data.id}`;
+      location.href = `/admin/image/delete/${this.data.type}/${this.data.id_provide}/${this.data.id}`;
     },
   },
 };

@@ -23,6 +23,7 @@
         "
         placeholder="Nguyễn Văn A"
         name="fullname"
+        v-model="this.dataOrder.TenKhachHang"
       />
     </label>
 
@@ -45,6 +46,7 @@
         placeholder="XXXXXXXXXX"
         name="phone_number"
         type="text"
+        v-model="this.dataOrder.SoDienThoai"
       />
     </label>
 
@@ -70,11 +72,12 @@
           @change="handleChangeProvince"
           name="province"
         >
-          <option selected value="">Chọn Tỉnh/Thành phố</option>
+          <option value="">Chọn Tỉnh/Thành phố</option>
           <option
             v-for="province in this.dataProvince"
             :key="province.code"
             :value="province.name"
+            :selected="dataOrder.DiaChi.includes(province.name)"
           >
             {{ province.name }}
           </option>
@@ -102,10 +105,14 @@
           name="district"
         >
           <option selected value="">Chọn Quận/Huyện</option>
+          <option selected :value="dataOrder.DiaChi.split(' - ')[1]">
+            {{ dataOrder.DiaChi.split(" - ")[1] }}
+          </option>
           <option
             v-for="district in this.dataDistrict"
             :key="district.code"
             :value="district.name"
+            :selected="dataOrder.DiaChi.includes(district.name)"
           >
             {{ district.name }}
           </option>
@@ -132,11 +139,15 @@
           "
           name="ward"
         >
-          <option selected value="">Chọn Phường/Xã</option>
+          <option value="">Chọn Phường/Xã</option>
+          <option selected :value="dataOrder.DiaChi.split(' - ')[0].split(',')[1]">
+            {{ dataOrder.DiaChi.split(" - ")[0].split(",")[1] }}
+          </option>
           <option
             v-for="ward in this.dataWard"
             :key="ward.code"
             :value="ward.name"
+            :selected="dataOrder.DiaChi.includes(ward.name)"
           >
             {{ ward.name }}
           </option>
@@ -162,6 +173,7 @@
         placeholder="Tên đường, Hẻm/ngõ.."
         name="address"
         type="text"
+        v-model="dataOrder.DiaChi.split(',')[0]"
       />
     </label>
 
@@ -187,10 +199,22 @@
         "
         placeholder=""
         name="product_name"
+        v-model="dataOrder.detail.TenSP"
       />
     </label>
+    <div class="upload__image block text-sm my-3">
+      <label class="text-gray-700 dark:text-gray-400">Hình ảnh</label>
+      <div class="flex items-center">
+        <input type="hidden" name="old_image" value="dataOrder.detail.image" />
+        <img
+          :src="'img/' + dataOrder.detail.image"
+          class="w-16 h-16 object-cover rounded-lg mx-2"
+        />
+      </div>
+      <InputFile />
+    </div>
 
-    <div class="flex items-center">
+    <div class="flex items-center mt-4">
       <label class="block text-sm my-1">
         <span class="flex text-gray-700 dark:text-gray-400"
           >Kích thước
@@ -211,6 +235,7 @@
           "
           placeholder=""
           name="size"
+          v-model="dataOrder.detail.KichThuoc"
         />
       </label>
       <label class="block text-sm my-1 mx-2">
@@ -235,7 +260,36 @@
           min="1"
           placeholder=""
           name="quantity"
-          value="1"
+          v-model="quantity"
+          @change="this.getApiCost"
+        />
+      </label>
+      <label
+        v-if="this.productType == 'unavailable'"
+        class="block text-sm my-1 mx-2"
+      >
+        <span class="flex text-gray-700 dark:text-gray-400"
+          >Giá
+          <p class="text-red-500 mx-1">*</p></span
+        >
+        <input
+          class="
+            block
+            w-full
+            mt-1
+            text-sm
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:text-gray-300 dark:focus:shadow-outline-gray
+            form-input
+          "
+          type="number"
+          min="0"
+          placeholder=""
+          name="price"
+          v-model="dataOrder.detail.Gia"
         />
       </label>
     </div>
@@ -258,7 +312,7 @@
             name="productType"
             value="available"
             @change="handleChecked"
-            checked
+            :checked="dataOrder.detail.LoaiHang == 'Hàng may'"
           />
           <span class="ml-2">Hàng may</span>
         </label>
@@ -277,6 +331,7 @@
             "
             name="productType"
             value="unavailable"
+            :checked="dataOrder.detail.LoaiHang == 'Hàng mẫu'"
             @change="handleChecked"
           />
           <span class="ml-2">Hàng mẫu</span>
@@ -299,6 +354,7 @@
           focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
           dark:focus:shadow-outline-gray
         "
+        @change="this.handleChangeCategory"
         name="category"
       >
         <option selected value="">Chọn danh mục</option>
@@ -306,6 +362,7 @@
           v-for="category in this.dataCategory"
           :key="category.id"
           :value="category.id"
+          :selected="dataOrder.detail.category.id == category.id"
         >
           {{ category.Ten }}
         </option>
@@ -334,6 +391,7 @@
           v-for="fabric in this.dataFabric"
           :key="fabric.id"
           :value="fabric.id"
+          :selected="dataOrder.detail.fabric.id == fabric.id"
         >
           {{ fabric.Ten }}
         </option>
@@ -355,11 +413,21 @@
           focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
           dark:focus:shadow-outline-gray
         "
-        name="fabric"
+        name="fabric_owner"
       >
         <option selected value="">Chọn nguồn cung cấp</option>
-        <option value="company">Công ty</option>
-        <option value="customer">Khách hàng</option>
+        <option
+          value="company"
+          :selected="dataOrder.detail.NguonCungCap === 'Công ty'"
+        >
+          Công ty
+        </option>
+        <option
+          value="customer"
+          :selected="dataOrder.detail.NguonCungCap === 'Khách hàng'"
+        >
+          Khách hàng
+        </option>
       </select>
     </label>
     <label class="block my-2 text-sm w-2/4 sm:w-full">
@@ -385,6 +453,7 @@
           v-for="ingredient in this.dataIngredient"
           :key="ingredient.id"
           :value="ingredient.id"
+          :selected="dataOrder.detail.ingredient.id == ingredient.id"
         >
           {{ ingredient.Ten }}
         </option>
@@ -407,12 +476,14 @@
           dark:focus:shadow-outline-gray
         "
         name="quality"
+        @change="this.handleChangeQuality"
       >
         <option selected value="">Chọn chất lượng</option>
         <option
           v-for="quality in this.dataQuality"
           :key="quality.id"
           :value="quality.id"
+          :selected="dataOrder.detail.quality.id == quality.id"
         >
           {{ quality.Ten }}
         </option>
@@ -438,10 +509,10 @@
             form-input
           "
           type="number"
-          min="1000"
+          min="0"
           placeholder=""
           name="deposit"
-          v-model="deposit"
+          v-model="dataOrder.detail.TienCoc"
         />
       </label>
       <label class="block text-sm my-1 mx-2">
@@ -459,14 +530,15 @@
             focus:border-purple-400
             focus:outline-none
             focus:shadow-outline-purple
+            disabled:bg-gray-50
             dark:text-gray-300 dark:focus:shadow-outline-gray
             form-input
           "
           type="number"
           min="1000"
           placeholder=""
-          name="totolPrice"
-          v-model="totalPrice"
+          name="totalPrice"
+          :value="this.totalPrice"
         />
       </label>
       <label class="block text-sm my-1 mx-2">
@@ -508,14 +580,15 @@
           form-input
         "
         type="date"
-        placeholder=""
+        name="duration"
+        v-model="dataOrder.NgayTraDon"
       />
     </label>
     <div class="flex justify-end">
       <button
         class="mt-4 text-white px-4 py-2 rounded-md border-0 bg-indigo-600 mx-2"
       >
-        Thêm đơn hàng
+        Lưu thay đổi
       </button>
       <a
         class="
@@ -694,24 +767,38 @@
 </template>
 <script>
 import axios from "axios";
+import InputFile from "./InputFileComponent.vue";
 export default {
+  props: {
+    order: String,
+  },
+  components: {
+    InputFile
+  },
   created() {
     this.getApiProvince();
     this.getApiQuality();
     this.getApiCategory();
     this.getApiFabric();
     this.getApiIngredient();
+    this.getApiCost();
   },
   updated() {
-    this.price = this.formatPrice(this.totalPrice - this.deposit);
+    this.price = this.formatPrice(
+      this.dataOrder.detail.TongTien - this.dataOrder.detail.TienCoc
+    );
   },
   data() {
     return {
+      dataOrder: JSON.parse(this.order),
       isModalOpen: false,
       dataProvince: null,
       dataDistrict: null,
       dataWard: null,
-      productType: "available",
+      productType:
+        JSON.parse(this.order).detail.LoaiHang === "Hàng may"
+          ? "available"
+          : "unavailable",
       deposit: 1000,
       totalPrice: 1000,
       price: null,
@@ -719,6 +806,9 @@ export default {
       dataCategory: [],
       dataFabric: [],
       dataIngredient: [],
+      idCategorySelected: JSON.parse(this.order).detail.id_DanhMuc,
+      idQualitySelected: JSON.parse(this.order).detail.id_ChatLuong,
+      quantity: JSON.parse(this.order).detail.SoLuong,
     };
   },
   methods: {
@@ -758,6 +848,25 @@ export default {
         .then((res) => (this.dataIngredient = res.data))
         .catch((err) => console.log(err));
     },
+    async getApiCost() {
+      await axios
+        .get(
+          `admin/cost/${this.idQualitySelected}/${this.idCategorySelected}?quantity=${this.quantity}`
+        )
+        .then((res) => {
+          if (res.data.Gia != null)
+            this.totalPrice = res.data.Gia * this.quantity;
+        })
+        .catch((err) => console.log(err));
+    },
+    handleChangeQuality(e) {
+      this.idQualitySelected = e.target.value;
+      this.getApiCost();
+    },
+    handleChangeCategory(e) {
+      this.idCategorySelected = e.target.value;
+      this.getApiCost();
+    },
     handleChangeProvince(e) {
       this.dataProvince.forEach((ele) => {
         if (ele.name === e.target.value) this.dataDistrict = ele.districts;
@@ -777,6 +886,9 @@ export default {
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
         .concat(" VND");
+    },
+    convertToDate(value) {
+      return value;
     },
   },
 };

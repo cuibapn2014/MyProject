@@ -29,6 +29,7 @@ $current = 2;
                 <thead>
                     <tr
                         class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                        <th class="px-4 py-3">Hình ảnh</th>
                         <th class="px-4 py-3">Tên</th>
                         <th class="px-4 py-3">Màu sắc</th>
                         <th class="px-4 py-3">Tính chất</th>
@@ -41,6 +42,11 @@ $current = 2;
 
                     @foreach($fabrics as $fabric)
                     <tr class="text-gray-700 dark:text-gray-400">
+                        <td class="px-4 py-3">
+                            <img class="w-16 h-16 rounded-lg object-cover"
+                                src="{{ $fabric->images->first() != null ? asset('img/'.$fabric->images->first()->urlImage) : 'img/placeholder.jpg'}}"
+                                alt="{{$fabric->Ten}}" />
+                        </td>
                         <td class="px-4 py-3">
                             {{$fabric->Ten}}
                         </td>

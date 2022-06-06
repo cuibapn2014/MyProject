@@ -36,7 +36,7 @@ class AuthController extends Controller
                 'password.min' => 'Mật khẩu ít nhất phải từ 8 ký tự'
             ]
         );
-    
+
         $credentials = $req->only('email', 'password');
         $remember = $req->remember == 'on' ? true : false;
         if (Auth::attempt($credentials, $remember)) {
@@ -73,11 +73,11 @@ class AuthController extends Controller
                 'password.min' => 'Mật khẩu của bạn phải ít nhất từ 8 ký tự'
             ]
         );
-
         $user = new User();
         $user->name = $req->fullname;
         $user->email = $req->email;
         $user->password = Hash::make($req->password);
+        $user->role = 1;
         $user->save();
 
         return back()->with('success', 'Đăng ký thành công!');

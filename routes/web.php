@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\CostController;
 use App\Http\Controllers\Admin\FabricController;
 use App\Http\Controllers\Admin\IngredientController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\ImageController;
+use App\Http\Controllers\Admin\ImageController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -69,11 +70,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function ($route) {
         $route->get('/', [OrderController::class, 'index'])->name('admin.order.index');
         $route->get('/create', [OrderController::class, 'create'])->name('admin.order.create');
         $route->post('/create', [OrderController::class, 'store'])->name('admin.order.request.create');
-        $route->get('/update/{id}', [IngredientController::class, 'getUpdate'])->name('admin.order.update');
-        $route->post('/update/{id}', [IngredientController::class, 'update'])->name('admin.order.request.update');
-        $route->get('/delete/{id}', [IngredientController::class, 'delete'])->name('admin.order.delete');
+        $route->get('/update/{id}', [OrderController::class, 'edit'])->name('admin.order.update');
+        $route->post('/update/{id}', [OrderController::class, 'update'])->name('admin.order.request.update');
+        $route->get('/delete/{id}', [OrderController::class, 'delete'])->name('admin.order.delete');
+    });
+
+    $route->group(['prefix' => 'cost'], function ($route) {
+        $route->get('/', [CostController::class, 'getAll'])->name('admin.cost.index');
+        $route->get('/{idChatLuong}/{idDanhMuc}', [CostController::class, 'getCost'])->name('admin.cost.getBy');
     });
     
+    $route->get('/invoice/{id}', [AdminController::class, 'getInvoice'])->name('admin.invoice');
 
-    $route->get('/image/delete/{idIngredient}/{idImg}', [ImageController::class, 'delete'])->name('admin.image.delete');
+    $route->get('/image/delete/{type}/{idProvide}/{idImg}', [ImageController::class, 'delete'])->name('admin.image.delete');
 });

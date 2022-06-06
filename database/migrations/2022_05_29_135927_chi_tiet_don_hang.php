@@ -18,11 +18,14 @@ class ChiTietDonHang extends Migration
             $table->id();
             $table->string('TenSP')->nullable();
             $table->integer('id_DanhMuc');
+            $table->integer('id_LoaiHang');
             $table->integer('id_LoaiVai')->nullable();
             $table->integer('id_PhuLieu')->nullable();
             $table->integer('SoLuong')->nullable();
             $table->string('KichThuoc');
             $table->integer('id_ChatLuong');
+            $table->float('TongTien')->nullable();
+            $table->float('TienCoc')->nullable();
             $table->timestamps();
         });
     }

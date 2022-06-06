@@ -17,7 +17,8 @@ class IngredientController extends Controller
         return view('admin.manage.ingredient.ingredient', ['ingredient' => Ingredient::all()]);
     }
 
-    public function getAll(){
+    public function getAll()
+    {
         return response()->json(Ingredient::all());
     }
 
@@ -32,15 +33,28 @@ class IngredientController extends Controller
             $req,
             [
                 'name' => 'required',
-                'image.*' => 'required'
+                'image.*' => 'required',
+                'location' => 'required',
+                'phone_number' => 'required|numeric|digits:10',
+                'price' => 'required|integer'
             ],
             [
                 'name.required' => 'Tên phụ liệu không được để trống',
-                'image.*.required' => 'Bạn chưa thêm hình ảnh cho phụ liệu này'
+                'price.required' => 'Giá không được để trống',
+                'price.integer' => 'Giá phải là số nguyên',
+                'image.*.required' => 'Bạn chưa thêm hình ảnh cho phụ liệu này',
+                'location.required' => 'Địa chỉ mua hàng không được để trống',
+                'phone_number.required' => 'Số điện thoại không được để trống',
+                'phone_number.numeric' => 'Số điện thoại không hợp lệ',
+                'phone_number.digits' => 'Số điện thoại không hợp lệ',
             ]
         );
         $ingredient = new Ingredient();
         $ingredient->Ten = $req->name;
+        $ingredient->DiaChi = $req->location;
+        $ingredient->SoDienThoai = $req->phone_number;
+        $ingredient->Gia = $req->price;
+
         $ingredient->save();
         foreach ($req->file('image') as $image) {
             $photo = new Image();
@@ -49,7 +63,8 @@ class IngredientController extends Controller
                 $file_name = current(explode('.', $image->getClientOriginalName())) . '_' . time() . '.' . $extension;
                 $image->move('img', $file_name);
                 $photo->urlImage = $file_name;
-                $photo->id_PhuLieu = $ingredient->id;
+                $photo->type = 'pl';
+                $photo->id_provide = $ingredient->id;
                 $photo->save();
             }
         }
@@ -64,13 +79,22 @@ class IngredientController extends Controller
 
     public function update(Request $req, $id)
     {
-        $validator = $this->validate(
+        $validator =  $this->validate(
             $req,
             [
                 'name' => 'required',
+                'location' => 'required',
+                'phone_number' => 'required|numeric|digits:10',
+                'price' => 'required|integer'
             ],
             [
                 'name.required' => 'Tên phụ liệu không được để trống',
+                'price.required' => 'Giá không được để trống',
+                'price.integer' => 'Giá phải là số nguyên',
+                'location.required' => 'Địa chỉ mua hàng không được để trống',
+                'phone_number.required' => 'Số điện thoại không được để trống',
+                'phone_number.numeric' => 'Số điện thoại không hợp lệ',
+                'phone_number.digits' => 'Số điện thoại không hợp lệ',
             ]
         );
         if ($req->input('old_image') == null && !$req->hasFile('image'))
@@ -79,6 +103,9 @@ class IngredientController extends Controller
 
         $ingredient = Ingredient::findOrFail($id);
         $ingredient->Ten = $req->name;
+        $ingredient->DiaChi = $req->location;
+        $ingredient->SoDienThoai = $req->phone_number;
+        $ingredient->Gia = $req->price;
         $ingredient->save();
 
         if ($req->hasFile('image')) {
@@ -89,7 +116,8 @@ class IngredientController extends Controller
                     $file_name = current(explode('.', $image->getClientOriginalName())) . '_' . time() . '.' . $extension;
                     $image->move('img', $file_name);
                     $photo->urlImage = $file_name;
-                    $photo->id_PhuLieu = $ingredient->id;
+                    $photo->type = 'pl';
+                    $photo->id_provide = $ingredient->id;
                     $photo->save();
                 }
             }
@@ -99,14 +127,14 @@ class IngredientController extends Controller
 
     public function delete($id)
     {
-        $images = Image::where('id_PhuLieu', $id)->get();
+        $images = Image::where('id_provide', $id)->where('type', 'pl')->get();
         if ($images->count() > 0) {
             foreach ($images as $image) {
-                File::delete(public_path("img/".$image->urlImage));
+                File::delete(public_path("img/" . $image->urlImage));
             }
-            Image::where('id_PhuLieu', $id)->delete();
+            Image::where('id_provide', $id)->delete();
         }
-        Ingredient::findOrFail($id)->delete();
+        Ingredient::findOrFail($id)->where('type', 'pl')->delete();
         return back()->with('success', 'Đã xóa');
     }
 }

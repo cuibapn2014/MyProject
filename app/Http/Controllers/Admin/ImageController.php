@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\File;
 class ImageController extends Controller
 {
     //
-    public function delete($idIngredient, $idImg)
+    public function delete($type,$idIngredient, $idImg)
     {
-        $images = Image::where('id', $idImg)->where('id_PhuLieu', $idIngredient)->get();
+        $images = Image::where('type', $type)->where('id', $idImg)->where('id_provide', $idIngredient)->get();
         if ($images->count() > 0) {
             foreach ($images as $image) {
                 File::delete(public_path("img/".$image->urlImage));
             }
-            Image::where('id', $idImg)->where('id_PhuLieu', $idIngredient)->delete();
+            Image::where('type', $type)->where('id', $idImg)->where('id_provide', $idIngredient)->delete();
         }
         return back()->with('success', 'Xóa thành công');
     }

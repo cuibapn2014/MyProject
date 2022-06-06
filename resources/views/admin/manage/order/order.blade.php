@@ -29,9 +29,12 @@ $current = 1;
                 <thead>
                     <tr
                         class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                        <th class="px-4 py-3">Hình ảnh</th>
-                        <th class="px-4 py-3">Tên</th>
-                        <th class="px-4 py-3">Ghi Chú</th>
+                        <th class="px-4 py-3 font-bold">#</th>
+                        <th class="px-4 py-3">Tên khách hàng</th>
+                        <th class="px-4 py-3">Số điện thoại</th>
+                        <th class="px-4 py-3">Nhân viên</th>
+                        <th class="px-4 py-3">Thành tiền</th>
+                        <th class="px-4 py-3">Ngày cập nhật</th>
                         <th class="px-4 py-3">Hành động</th>
                     </tr>
                 </thead>
@@ -40,21 +43,28 @@ $current = 1;
                     @foreach($orders as $order)
                     <tr class="text-gray-700 dark:text-gray-400">
                         <td class="px-4 py-3">
-                            <img class="w-16 h-16 rounded-lg object-cover"
-                                src="{{ $ingredient->images->first() != null ? asset('img/'.$ingredient->images->first()->urlImage) : 'img/placeholder.jpg'}}"
-                                alt="{{$ingredient->Ten}}" />
+                            {{ $order->id }}
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{$order->Ten}}
+                            {{ $order->TenKhachHang }}
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{$order->GhiChu}}
+                            {{ $order->SoDienThoai }}
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                            {{ $order->user->name }}
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                            {{ number_format($order->detail->TongTien) }} VND
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                            {{ \Carbon\Carbon::parse($order->updated_at)->timezone('Asia/Ho_Chi_Minh')->format('H:i:s d/m/Y') }}
                         </td>
                         <td class="px-4 py-3 text-sm flex items-center">
                             <button title="Chỉnh sửa"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Edit"
-                                onclick="location.href='{{ route('admin.order.update',['id' => $ingredient->id]) }}'">
+                                onclick="location.href='{{ route('admin.order.update',['id' => $order->id]) }}'">
                                 <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                                     <path
                                         d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
@@ -132,11 +142,11 @@ $current = 1;
         <div class="mt-4 mb-6">
             <!-- Modal title -->
             <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
-                Xóa phụ liệu
+                Xóa đơn hàng
             </p>
             <!-- Modal description -->
             <p class="text-sm text-gray-700 dark:text-gray-400">
-                Bạn có chắc chắn muốn xóa phụ liệu này ?
+                Bạn có chắc chắn muốn xóa đơn hàng này ?
             </p>
         </div>
         <footer class="
@@ -169,7 +179,7 @@ $current = 1;
               active:bg-purple-600
               hover:bg-purple-700
               focus:outline-none focus:shadow-outline-purple
-            " @click="handleDeleteIngredient(idDelete)">
+            " @click="handleDeleteOrder(idDelete)">
                 Chắc chắn
             </button>
             <button @click="closeModal" class="

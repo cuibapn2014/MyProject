@@ -16,7 +16,8 @@ $current = 3;
     @if($errors->any())
     <p class="p-2 rounded-md my-2 bg-red-100 text-red-400 text-sm">{{ $errors->first() }}</p>
     @endif
-    <form action="{{route('admin.ingredient.request.update',['id' => $ingredient->id])}}" method="post" enctype="multipart/form-data">
+    <form action="{{route('admin.ingredient.request.update',['id' => $ingredient->id])}}" method="post"
+        enctype="multipart/form-data">
         @csrf
         <div class="px-4 py-3 mb-8 bg-[#ffffff] rounded-lg shadow-md dark:bg-gray-800">
             <label class="block text-sm">
@@ -37,10 +38,27 @@ $current = 3;
                 <image-modal :data='{{ $image }}'></image-modal>
                 @endforeach
             </div>
-            <a v-if="this.display <= 1" class="btn__add--input p-2 bg-indigo-600 rounded-lg text-white my-2 cursor-pointer"
+            <a v-if="this.display <= 1"
+                class="btn__add--input p-2 bg-indigo-600 rounded-lg text-white my-2 cursor-pointer"
                 @click="handleClick">Thêm ảnh</a>
-
-
+            <label class="block text-sm mt-4">
+                <span class="text-gray-700 dark:text-gray-400">Giá</span>
+                <input
+                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                    placeholder="" value="{{ $ingredient->Gia }}" name="price" />
+            </label>
+            <label class="block text-sm mt-4 mb-2">
+                <span class="text-gray-700 dark:text-gray-400">Địa chỉ mua</span>
+                <input
+                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                    type="text" name="location" value="{{ $ingredient->DiaChi }}"/>
+            </label>
+            <label class="block text-sm my-2">
+                <span class="text-gray-700 dark:text-gray-400">Số điện thoại liên hệ</span>
+                <input
+                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                    type="text" name="phone_number" placeholder="XXXXXXXXXX" value="{{ $ingredient->SoDienThoai }}"/>
+            </label>
             <label class="block mt-4 text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Ghi chú</span>
                 <textarea

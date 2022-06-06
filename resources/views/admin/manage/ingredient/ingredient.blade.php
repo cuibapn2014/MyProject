@@ -31,6 +31,9 @@ $current = 3;
                         class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                         <th class="px-4 py-3">Hình ảnh</th>
                         <th class="px-4 py-3">Tên</th>
+                        <th class="px-4 py-3">Giá</th>
+                        <th class="px-4 py-3">Địa chỉ</th>
+                        <th class="px-4 py-3">Số điện thoại</th>
                         <th class="px-4 py-3">Ghi Chú</th>
                         <th class="px-4 py-3">Hành động</th>
                     </tr>
@@ -46,6 +49,15 @@ $current = 3;
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{$ingredient->Ten}}
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                            {{number_format($ingredient->Gia)}}VND
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                            {{$ingredient->DiaChi}}
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                            {{$ingredient->SoDienThoai}}
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{$ingredient->GhiChu}}

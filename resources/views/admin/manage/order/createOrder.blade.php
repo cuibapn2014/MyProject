@@ -14,7 +14,7 @@ $current = 1;
     @if($errors->any())
     <p class="p-2 rounded-md my-2 bg-red-100 text-red-400 text-sm">{{ $errors->first() }}</p>
     @endif
-    <form action="{{route('admin.order.request.create')}}" method="post">
+    <form action="{{route('admin.order.request.create')}}" method="post" enctype="multipart/form-data">
         @csrf
         <add-order></add-order>
     </form>

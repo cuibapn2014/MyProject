@@ -189,8 +189,11 @@
         name="product_name"
       />
     </label>
-
-    <div class="flex items-center">
+    <div class="upload__image block text-sm my-3">
+      <label class="text-gray-700 dark:text-gray-400">Hình ảnh</label>
+      <InputFile />
+    </div>
+    <div class="flex items-center mt-4">
       <label class="block text-sm my-1">
         <span class="flex text-gray-700 dark:text-gray-400"
           >Kích thước
@@ -235,10 +238,14 @@
           min="1"
           placeholder=""
           name="quantity"
-          value="1"
+          v-model="quantity"
+          @change="this.getApiCost"
         />
       </label>
-       <label v-if="this.productType == 'unavailable'" class="block text-sm my-1 mx-2">
+      <label
+        v-if="this.productType == 'unavailable'"
+        class="block text-sm my-1 mx-2"
+      >
         <span class="flex text-gray-700 dark:text-gray-400"
           >Giá
           <p class="text-red-500 mx-1">*</p></span
@@ -324,6 +331,7 @@
           dark:focus:shadow-outline-gray
         "
         name="category"
+        @change="handleChangeCategory"
       >
         <option selected value="">Chọn danh mục</option>
         <option
@@ -431,6 +439,7 @@
           dark:focus:shadow-outline-gray
         "
         name="quality"
+        @change="handleChangeQuality"
       >
         <option selected value="">Chọn chất lượng</option>
         <option
@@ -484,13 +493,16 @@
             focus:outline-none
             focus:shadow-outline-purple
             dark:text-gray-300 dark:focus:shadow-outline-gray
+            disabled:bg-gray-50
             form-input
           "
           type="number"
           min="1000"
           placeholder=""
           name="totolPrice"
+          value="1000"
           v-model="totalPrice"
+          disabled
         />
       </label>
       <label class="block text-sm my-1 mx-2">
@@ -719,6 +731,7 @@
 </template>
 <script>
 import axios from "axios";
+import InputFile from "./InputFileComponent";
 export default {
   created() {
     this.getApiProvince();
@@ -729,6 +742,9 @@ export default {
   },
   updated() {
     this.price = this.formatPrice(this.totalPrice - this.deposit);
+  },
+  components: {
+    InputFile,
   },
   data() {
     return {
@@ -744,6 +760,9 @@ export default {
       dataCategory: [],
       dataFabric: [],
       dataIngredient: [],
+      idCategorySelected: 0,
+      idQualitySelected: 0,
+      quantity: 1,
     };
   },
   methods: {
@@ -783,6 +802,17 @@ export default {
         .then((res) => (this.dataIngredient = res.data))
         .catch((err) => console.log(err));
     },
+    async getApiCost() {
+      await axios
+        .get(
+          `admin/cost/${this.idQualitySelected}/${this.idCategorySelected}?quantity=${this.quantity}`
+        )
+        .then((res) => {
+          if (res.data.Gia != null)
+            this.totalPrice = res.data.Gia * this.quantity;
+        })
+        .catch((err) => console.log(err));
+    },
     handleChangeProvince(e) {
       this.dataProvince.forEach((ele) => {
         if (ele.name === e.target.value) this.dataDistrict = ele.districts;
@@ -795,6 +825,14 @@ export default {
     },
     handleChecked(e) {
       this.productType = e.target.value;
+    },
+    handleChangeQuality(e) {
+      this.idQualitySelected = e.target.value;
+      this.getApiCost();
+    },
+    handleChangeCategory(e) {
+      this.idCategorySelected = e.target.value;
+      this.getApiCost();
     },
     formatPrice(value) {
       let val = (value / 1).toFixed(0).replace(".", ",");
