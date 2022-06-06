@@ -8,6 +8,7 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -43,7 +44,8 @@ class OrderController extends Controller
             'TenKhachHang' => $req->fullname,
             'SoDienThoai' => $req->phone_number,
             'DiaChi' => $address,
-            'NgayTraDon' => $req->duration
+            'NgayTraDon' => $req->duration,
+            'id_NhanVien' => Auth::user()->id
         ]);
 
         if ($req->productType === 'available') {
