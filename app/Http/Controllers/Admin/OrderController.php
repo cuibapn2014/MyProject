@@ -61,6 +61,7 @@ class OrderController extends Controller
                 'id_ChatLuong' => $req->quality,
                 'TongTien' => $req->totalPrice,
                 'TienCoc' => $req->deposit,
+                'NguonCungCap' => $req->fabric_owner,
                 'LoaiHang' => 'Hàng may',
                 'image' => $file_name
             ]);
@@ -75,6 +76,7 @@ class OrderController extends Controller
                 'SoLuong' => $req->quantity,
                 'KichThuoc' => $req->size,
                 'id_ChatLuong' => $req->quality,
+                'NguonCungCap' => $req->fabric_owner,
                 'LoaiHang' => 'Hàng mẫu',
                 'image' => $file_name,
                 'TongTien' => $req->price * $req->quantity
@@ -127,6 +129,7 @@ class OrderController extends Controller
                 'KichThuoc' => $req->size,
                 'id_ChatLuong' => $req->quality,
                 'TongTien' => $req->totalPrice,
+                'NguonCungCap' => $req->fabric_owner,
                 'TienCoc' => $req->deposit,
                 'LoaiHang' => 'Hàng may',
                 'image' => $file_name != null ? $file_name : $oldImg
@@ -141,6 +144,7 @@ class OrderController extends Controller
                 'SoLuong' => $req->quantity,
                 'KichThuoc' => $req->size,
                 'id_ChatLuong' => $req->quality,
+                'NguonCungCap' => $req->fabric_owner,
                 'LoaiHang' => 'Hàng mẫu',
                 'image' => $file_name != null ? $file_name : $oldImg,
                 'TongTien' => $req->price * $req->quantity
