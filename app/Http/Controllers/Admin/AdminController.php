@@ -17,7 +17,7 @@ class AdminController extends Controller
     public function getInvoice($id){
         $order = Order::findOrFail($id);
         // $pdf = PDF::loadView('admin.invoice',['order' => $order]);
-        // return $pdf->stream('invoice.pdf', array('Attachment'=>0));         
+        // return $pdf->stream('invoice.pdf', array('Attachment'=> 1));         
         return view('admin.invoice',['order' => $order]);
     }
 }

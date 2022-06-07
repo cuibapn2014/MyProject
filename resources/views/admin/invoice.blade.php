@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" onclick="print()">
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="image/favicon.ico" type="image/x-icon" />
+    <base href="{{asset('')}}" />
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <title>HÓA ĐƠN LYUNHOUSE</title>
@@ -30,22 +31,15 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <style>
-        @font-face {
-          font-family: 'Roboto';
-          font-weight: normal;
-          font-style: normal;
-          font-variant: normal;
-          src: url({{asset('/Roboto-Regular.ttf')}});
-        }
         body {
-          font-family: Helvetica, sans-serif;
+            cursor: pointer;
         }
-        </style>
+    </style>
 </head>
 
 <body class="bg-light">
 
-    <section class="back">
+    <section class="back" id="app">
         <div class="container-xxl p-4">
             <div class="row">
                 <div class="col-xs-12">
@@ -170,7 +164,6 @@
             </div>
         </div>
     </section>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
@@ -188,6 +181,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
+
+    <script src="{{ asset('js/app.js') }}" defer></script>
+
 
 </body>
 

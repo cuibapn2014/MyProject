@@ -597,7 +597,7 @@
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0  transform translate-y-1/2"
         @keydown.escape="closeModal"
-        @click="closeModal"
+        v-on-clickaway="closeModal"
         class="
           w-full
           px-6
@@ -732,7 +732,9 @@
 <script>
 import axios from "axios";
 import InputFile from "./InputFileComponent";
+import {mixin as clickaway} from 'vue-clickaway'
 export default {
+  mixins:[clickaway],
   created() {
     this.getApiProvince();
     this.getApiQuality();

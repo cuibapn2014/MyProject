@@ -51,6 +51,7 @@
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0  transform translate-y-1/2"
         @keydown.escape="closeModal"
+        v-on-clickaway="closeModal"
         class="
           w-full
           px-6
@@ -180,7 +181,9 @@
   </div>
 </template>
 <script>
+import {mixin as clickaway} from 'vue-clickaway'
 export default {
+  mixins: [clickaway],
   props: {
     data: Object
   },

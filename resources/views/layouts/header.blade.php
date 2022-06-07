@@ -47,6 +47,7 @@
         <li class="relative">
             <button class="relative align-middle rounded-md focus:outline-none focus:shadow-outline-purple"
                 @click="toggleNotificationsMenu" @keydown.escape="closeNotificationsMenu" aria-label="Notifications"
+                v-on-clickaway="closeNotificationsMenu"
                 aria-haspopup="true">
                 <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                     <path
@@ -94,7 +95,7 @@
         <!-- Profile menu -->
         <li class="relative">
             <button class="align-middle rounded-full focus:shadow-outline-purple focus:outline-none"
-                @click="toggleProfileMenu" @keydown.escape="closeProfileMenu" aria-label="Account" aria-haspopup="true">
+                @click="toggleProfileMenu" @keydown.escape="closeProfileMenu" aria-label="Account" v-on-clickaway="closeProfileMenu" aria-haspopup="true">
                 <img class="object-cover w-8 h-8 rounded-full" src="https://tatshop.tech/image/ceo.jpg" alt=""
                     aria-hidden="true" />
             </button>

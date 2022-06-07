@@ -5,6 +5,7 @@
  */
 
 require('./bootstrap');
+import {mixin as clickaway} from 'vue-clickaway'
 
 window.Vue = require('vue').default;
 
@@ -37,6 +38,7 @@ window.axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
 const app = new Vue({
     el: '#app',
+    mixins:[ clickaway ],
     delimiters: [
         "[[", "]]"
     ],

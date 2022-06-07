@@ -10,7 +10,7 @@ $current = 0;
     </h2> -->
     <!-- Cards -->
     <span class="h-full flex items-center text-center w-full justify-center text-lg dark:text-gray-200">Chào mừng bạn đến với website Lynhouse</span>
-    <iframe src="{{asset('/admin/invoice/3')}}" class="h-full border" width="4961" height="7016" frameborder="1"></iframe>
+   <!-- <iframe src="{{asset('/admin/invoice/3')}}" width="575px" height="775px" class="border mx-auto scale-75" frameborder="0"></iframe> -->
 </div>
 @endsection
 @section('script')

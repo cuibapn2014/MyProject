@@ -134,7 +134,7 @@ class IngredientController extends Controller
             }
             Image::where('id_provide', $id)->delete();
         }
-        Ingredient::findOrFail($id)->where('type', 'pl')->delete();
+        Ingredient::findOrFail($id)->delete();
         return back()->with('success', 'Đã xóa');
     }
 }
