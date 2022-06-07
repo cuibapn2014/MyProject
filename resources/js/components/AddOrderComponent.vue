@@ -168,7 +168,50 @@
     <h3 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
       Thông tin đơn hàng
     </h3>
-
+    <div class="mt-4 text-sm">
+      <span class="text-gray-700 dark:text-gray-400"> Loại hàng </span>
+      <div class="mt-2">
+        <label
+          class="inline-flex items-center text-gray-600 dark:text-gray-400"
+        >
+          <input
+            type="radio"
+            class="
+              text-purple-600
+              form-radio
+              focus:border-purple-400
+              focus:outline-none
+              focus:shadow-outline-purple
+              dark:focus:shadow-outline-gray
+            "
+            name="productType"
+            value="available"
+            @change="handleChecked"
+            checked
+          />
+          <span class="ml-2">Hàng may</span>
+        </label>
+        <label
+          class="inline-flex items-center ml-6 text-gray-600 dark:text-gray-400"
+        >
+          <input
+            type="radio"
+            class="
+              text-purple-600
+              form-radio
+              focus:border-purple-400
+              focus:outline-none
+              focus:shadow-outline-purple
+              dark:focus:shadow-outline-gray
+            "
+            name="productType"
+            value="unavailable"
+            @change="handleChecked"
+          />
+          <span class="ml-2">Hàng mẫu</span>
+        </label>
+      </div>
+    </div>
     <label class="block text-sm my-1">
       <span class="flex text-gray-700 dark:text-gray-400"
         >Tên sản phẩm
@@ -270,50 +313,7 @@
         />
       </label>
     </div>
-    <div class="mt-4 text-sm">
-      <span class="text-gray-700 dark:text-gray-400"> Loại hàng </span>
-      <div class="mt-2">
-        <label
-          class="inline-flex items-center text-gray-600 dark:text-gray-400"
-        >
-          <input
-            type="radio"
-            class="
-              text-purple-600
-              form-radio
-              focus:border-purple-400
-              focus:outline-none
-              focus:shadow-outline-purple
-              dark:focus:shadow-outline-gray
-            "
-            name="productType"
-            value="available"
-            @change="handleChecked"
-            checked
-          />
-          <span class="ml-2">Hàng may</span>
-        </label>
-        <label
-          class="inline-flex items-center ml-6 text-gray-600 dark:text-gray-400"
-        >
-          <input
-            type="radio"
-            class="
-              text-purple-600
-              form-radio
-              focus:border-purple-400
-              focus:outline-none
-              focus:shadow-outline-purple
-              dark:focus:shadow-outline-gray
-            "
-            name="productType"
-            value="unavailable"
-            @change="handleChecked"
-          />
-          <span class="ml-2">Hàng mẫu</span>
-        </label>
-      </div>
-    </div>
+
     <label class="block my-2 text-sm w-2/4 sm:w-full">
       <span class="flex text-gray-700 dark:text-gray-400">
         Danh mục sản phẩm
@@ -732,9 +732,9 @@
 <script>
 import axios from "axios";
 import InputFile from "./InputFileComponent";
-import {mixin as clickaway} from 'vue-clickaway'
+import { mixin as clickaway } from "vue-clickaway";
 export default {
-  mixins:[clickaway],
+  mixins: [clickaway],
   created() {
     this.getApiProvince();
     this.getApiQuality();
