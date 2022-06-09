@@ -23,7 +23,7 @@
         "
         placeholder="Nguyễn Văn A"
         name="fullname"
-        v-model="this.dataOrder.TenKhachHang"
+        v-model="order.TenKhachHang"
       />
     </label>
 
@@ -46,7 +46,7 @@
         placeholder="XXXXXXXXXX"
         name="phone_number"
         type="text"
-        v-model="this.dataOrder.SoDienThoai"
+        v-model="order.SoDienThoai"
       />
     </label>
 
@@ -77,7 +77,7 @@
             v-for="province in this.dataProvince"
             :key="province.code"
             :value="province.name"
-            :selected="dataOrder.DiaChi.includes(province.name)"
+            :selected="order.DiaChi.includes(province.name)"
           >
             {{ province.name }}
           </option>
@@ -105,14 +105,14 @@
           name="district"
         >
           <option selected value="">Chọn Quận/Huyện</option>
-          <option selected :value="dataOrder.DiaChi.split(' - ')[1]">
-            {{ dataOrder.DiaChi.split(" - ")[1] }}
+          <option selected :value="order.DiaChi.split(' - ')[1]">
+            {{ order.DiaChi.split(" - ")[1] }}
           </option>
           <option
             v-for="district in this.dataDistrict"
             :key="district.code"
             :value="district.name"
-            :selected="dataOrder.DiaChi.includes(district.name)"
+            :selected="order.DiaChi.includes(district.name)"
           >
             {{ district.name }}
           </option>
@@ -140,17 +140,14 @@
           name="ward"
         >
           <option value="">Chọn Phường/Xã</option>
-          <option
-            selected
-            :value="dataOrder.DiaChi.split(' - ')[0].split(',')[1]"
-          >
-            {{ dataOrder.DiaChi.split(" - ")[0].split(",")[1] }}
+          <option selected :value="order.DiaChi.split(' - ')[0].split(',')[1]">
+            {{ order.DiaChi.split(" - ")[0].split(",")[1] }}
           </option>
           <option
             v-for="ward in this.dataWard"
             :key="ward.code"
             :value="ward.name"
-            :selected="dataOrder.DiaChi.includes(ward.name)"
+            :selected="order.DiaChi.includes(ward.name)"
           >
             {{ ward.name }}
           </option>
@@ -176,7 +173,7 @@
         placeholder="Tên đường, Hẻm/ngõ.."
         name="address"
         type="text"
-        v-model="dataOrder.DiaChi.split(',')[0]"
+        v-model="order.DiaChi.split(',')[0]"
       />
     </label>
 
@@ -202,7 +199,7 @@
             name="productType"
             value="available"
             @change="handleChecked"
-            :checked="dataOrder.detail.LoaiHang == 'Hàng may'"
+            :checked="order.detail.LoaiHang == 'Hàng may'"
           />
           <span class="ml-2">Hàng may</span>
         </label>
@@ -221,50 +218,17 @@
             "
             name="productType"
             value="unavailable"
-            :checked="dataOrder.detail.LoaiHang == 'Hàng mẫu'"
+            :checked="order.detail.LoaiHang == 'Hàng mẫu'"
             @change="handleChecked"
           />
           <span class="ml-2">Hàng mẫu</span>
         </label>
       </div>
     </div>
-    <label class="block text-sm my-1">
-      <span class="flex text-gray-700 dark:text-gray-400"
-        >Tên sản phẩm
-        <p class="text-red-500 mx-1">*</p></span
-      >
-      <input
-        class="
-          block
-          w-full
-          mt-1
-          text-sm
-          dark:border-gray-600 dark:bg-gray-700
-          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
-          dark:text-gray-300 dark:focus:shadow-outline-gray
-          form-input
-        "
-        placeholder=""
-        name="product_name"
-        v-model="dataOrder.detail.TenSP"
-      />
-    </label>
-    <div class="upload__image block text-sm my-3">
-      <label class="text-gray-700 dark:text-gray-400">Hình ảnh</label>
-      <div class="flex items-center">
-        <input type="hidden" name="old_image" value="dataOrder.detail.image" />
-        <img
-          :src="'img/' + dataOrder.detail.image"
-          class="w-16 h-16 object-cover rounded-lg mx-2"
-        />
-      </div>
-      <InputFile />
-    </div>
-
-    <div class="flex items-center mt-4">
-      <label class="block text-sm my-1">
+    <div class="flex items-end">
+      <label class="block text-sm mr-2 grow">
         <span class="flex text-gray-700 dark:text-gray-400"
-          >Kích thước
+          >Tên sản phẩm
           <p class="text-red-500 mx-1">*</p></span
         >
         <input
@@ -281,63 +245,58 @@
             form-input
           "
           placeholder=""
-          name="size"
-          v-model="dataOrder.detail.KichThuoc"
+          name="product_name"
+          v-model="this.order.detail.TenSP"
         />
       </label>
-      <label class="block text-sm my-1 mx-2">
-        <span class="flex text-gray-700 dark:text-gray-400"
-          >Số lượng
-          <p class="text-red-500 mx-1">*</p></span
-        >
-        <input
-          class="
-            block
-            w-full
-            mt-1
-            text-sm
-            dark:border-gray-600 dark:bg-gray-700
-            focus:border-purple-400
-            focus:outline-none
-            focus:shadow-outline-purple
-            dark:text-gray-300 dark:focus:shadow-outline-gray
-            form-input
-          "
-          type="number"
-          min="1"
-          placeholder=""
-          name="quantity"
-          v-model="quantity"
-          @change="this.getApiCost"
-        />
-      </label>
-      <label
-        v-if="this.productType == 'unavailable'"
-        class="block text-sm my-1 mx-2"
-      >
-        <span class="flex text-gray-700 dark:text-gray-400"
+      <label v-if="this.productType === 'unavailable'">
+        <span class="dark:text-gray-200 flex"
           >Giá
           <p class="text-red-500 mx-1">*</p></span
         >
-        <input
-          class="
-            block
-            w-full
-            mt-1
-            text-sm
-            dark:border-gray-600 dark:bg-gray-700
-            focus:border-purple-400
-            focus:outline-none
-            focus:shadow-outline-purple
-            dark:text-gray-300 dark:focus:shadow-outline-gray
-            form-input
-          "
-          type="number"
-          min="0"
-          placeholder=""
-          name="price"
-          v-model="dataOrder.detail.Gia"
-        />
+        <div class="relative text-gray-500 focus-within:text-purple-600">
+          <input
+            class="
+              block
+              w-full
+              pr-20
+              text-sm text-[#000000]
+              dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+              focus:border-purple-400
+              focus:outline-none
+              focus:shadow-outline-purple
+              dark:focus:shadow-outline-gray
+              form-input
+              dark:text-gray-200
+            "
+            placeholder=""
+            min="0"
+            type="number"
+            name="price"
+            autocomplete="off"
+          />
+          <p
+            class="
+              absolute
+              inset-y-0
+              right-0
+              px-4
+              text-sm
+              font-medium
+              leading-5
+              text-white
+              transition-colors
+              duration-150
+              bg-indigo-600
+              rounded-r-md
+              focus:outline-none focus:shadow-outline-purple
+              flex
+              items-center
+            "
+          >
+            VND
+          </p>
+        </div>
       </label>
     </div>
     <label class="block my-2 text-sm w-2/4 sm:w-full">
@@ -356,20 +315,131 @@
           focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
           dark:focus:shadow-outline-gray
         "
-        @change="this.handleChangeCategory"
         name="category"
+        @change="handleChangeCategory"
       >
-        <option selected value="">Chọn danh mục</option>
+        <option selected :value="null">Chọn danh mục</option>
         <option
           v-for="category in this.dataCategory"
           :key="category.id"
           :value="category.id"
-          :selected="dataOrder.detail.category.id == category.id"
+          :selected="order.detail.id_DanhMuc === category.id"
         >
           {{ category.Ten }}
         </option>
       </select>
     </label>
+    <div class="upload__image block text-sm my-3">
+      <label class="text-gray-700 dark:text-gray-400">Hình ảnh</label>
+      <div class="flex items-center">
+        <input type="hidden" name="old_image" :value="order.detail.image" />
+        <img
+          :src="'img/' + order.detail.image"
+          class="w-16 h-16 object-cover rounded-lg mx-2"
+        />
+      </div>
+      <InputFile />
+    </div>
+    <h3 class="mt-4 font-bold text-lg dark:text-gray-200">
+      Thuộc tính sản phẩm
+    </h3>
+    <div class="flex flex-col">
+      <div
+        class="flex items-center"
+        v-for="(properties, index) in dataProperty"
+        :key="index"
+      >
+        <label class="block text-sm my-1">
+          <span class="flex text-gray-700 dark:text-gray-400"
+            >Cân nặng
+            <p class="text-red-500 mx-1">*</p></span
+          >
+          <select
+            class="
+              block
+              w-full
+              mt-1
+              text-sm
+              dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+              form-select
+              focus:border-purple-400
+              focus:outline-none
+              focus:shadow-outline-purple
+              dark:focus:shadow-outline-gray
+            "
+            name="weight[]"
+          >
+            <option selected value="">Chọn cân nặng</option>
+            <option v-for="size in dataSize" :key="size" :value="size" :selected="size === properties.CanNang">
+              {{ size }}
+            </option>
+          </select>
+        </label>
+        <label class="block text-sm my-1 mx-2">
+          <span class="flex text-gray-700 dark:text-gray-400"
+            >Chiều cao
+            <p class="text-red-500 mx-1">*</p></span
+          >
+          <select
+            class="
+              block
+              w-full
+              mt-1
+              text-sm
+              dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+              form-select
+              focus:border-purple-400
+              focus:outline-none
+              focus:shadow-outline-purple
+              dark:focus:shadow-outline-gray
+            "
+            name="height[]"
+          >
+            <option selected value="">Chọn chiều cao</option>
+            <option v-for="size in dataSize" :key="size" :value="size" :selected="properties.ChieuCao">
+              {{ size }}
+            </option>
+          </select>
+        </label>
+        <label class="block text-sm my-1 mx-2">
+          <span class="flex text-gray-700 dark:text-gray-400"
+            >Số lượng
+            <p class="text-red-500 mx-1">*</p></span
+          >
+          <input
+            class="
+              block
+              w-full
+              mt-1
+              text-sm
+              dark:border-gray-600 dark:bg-gray-700
+              focus:border-purple-400
+              focus:outline-none
+              focus:shadow-outline-purple
+              dark:text-gray-300 dark:focus:shadow-outline-gray
+              form-input
+            "
+            type="number"
+            min="1"
+            placeholder=""
+            name="quantity[]"
+            v-model="properties.SoLuong"
+          />
+        </label>
+      </div>
+    </div>
+    <button
+      class="px-2 py-2 rounded-md text-sm text-white bg-indigo-600"
+      @click.prevent="handleClickAddProperty"
+    >
+      Thêm thuộc tính
+    </button>
+    <button
+      class="px-2 py-2 rounded-md text-sm text-white bg-indigo-600"
+      @click.prevent="handleClickRemoveProperty"
+    >
+      Xóa
+    </button>
     <label class="block my-2 text-sm w-2/4 sm:w-full">
       <span class="flex text-gray-700 dark:text-gray-400">
         Loại vải
@@ -393,12 +463,91 @@
           v-for="fabric in this.dataFabric"
           :key="fabric.id"
           :value="fabric.id"
-          :selected="dataOrder.detail.fabric.id == fabric.id"
+          :selected="order.detail.fabric.id == fabric.id"
         >
           {{ fabric.Ten }}
         </option>
       </select>
     </label>
+    <div class="flex items-center">
+      <label class="block text-sm mr-2">
+        <span class="flex text-gray-700 dark:text-gray-400"
+          >Vải chính (Mét)
+          <p class="text-red-500 mx-1">*</p></span
+        >
+        <input
+          class="
+            block
+            w-full
+            mt-1
+            text-sm
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:text-gray-300 dark:focus:shadow-outline-gray
+            form-input
+          "
+          placeholder=""
+          name="main"
+          type="number"
+          min="0"
+          v-model="order.detail.VaiChinh"
+        />
+      </label>
+      <label class="block text-sm mr-2">
+        <span class="flex text-gray-700 dark:text-gray-400"
+          >Vải phụ (Mét)
+          <p class="text-red-500 mx-1">*</p></span
+        >
+        <input
+          class="
+            block
+            w-full
+            mt-1
+            text-sm
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:text-gray-300 dark:focus:shadow-outline-gray
+            form-input
+          "
+          placeholder=""
+          name="extra"
+          type="number"
+          min="0"
+          v-model="order.detail.VaiPhu"
+
+        />
+      </label>
+      <label class="block text-sm mr-2">
+        <span class="flex text-gray-700 dark:text-gray-400"
+          >Vải lót (Mét)
+          <p class="text-red-500 mx-1">*</p></span
+        >
+        <input
+          class="
+            block
+            w-full
+            mt-1
+            text-sm
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:text-gray-300 dark:focus:shadow-outline-gray
+            form-input
+          "
+          placeholder=""
+          name="lining"
+          type="number"
+          min="0"
+          v-model="order.detail.VaiLot"
+
+        />
+      </label>
+    </div>
     <label class="block my-2 text-sm w-2/4 sm:w-full">
       <span class="flex text-gray-700 dark:text-gray-400">
         Nguồn cung cấp vải
@@ -420,13 +569,13 @@
         <option selected value="">Chọn nguồn cung cấp</option>
         <option
           value="company"
-          :selected="dataOrder.detail.NguonCungCap === 'Công ty'"
+          :selected="order.detail.NguonCungCap === 'Công ty'"
         >
           Công ty
         </option>
         <option
           value="customer"
-          :selected="dataOrder.detail.NguonCungCap === 'Khách hàng'"
+          :selected="order.detail.NguonCungCap === 'Khách hàng'"
         >
           Khách hàng
         </option>
@@ -455,7 +604,7 @@
           v-for="ingredient in this.dataIngredient"
           :key="ingredient.id"
           :value="ingredient.id"
-          :selected="dataOrder.detail.ingredient.id == ingredient.id"
+          :selected="order.detail.ingredient.id == ingredient.id"
         >
           {{ ingredient.Ten }}
         </option>
@@ -485,7 +634,7 @@
           v-for="quality in this.dataQuality"
           :key="quality.id"
           :value="quality.id"
-          :selected="dataOrder.detail.quality.id == quality.id"
+          :selected="order.detail.quality.id == quality.id"
         >
           {{ quality.Ten }}
         </option>
@@ -514,7 +663,7 @@
           min="0"
           placeholder=""
           name="deposit"
-          v-model="dataOrder.detail.TienCoc"
+          v-model="order.detail.TienCoc"
         />
       </label>
       <label class="block text-sm my-1 mx-2">
@@ -583,8 +732,27 @@
         "
         type="date"
         name="duration"
-        v-model="dataOrder.NgayTraDon"
+        v-model="order.NgayTraDon"
       />
+    </label>
+    <label class="block mt-4 text-sm">
+      <span class="text-gray-700 dark:text-gray-400">Yêu cầu khách hàng</span>
+      <textarea
+        class="
+          block
+          w-full
+          mt-1
+          text-sm
+          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+          form-textarea
+          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
+          dark:focus:shadow-outline-gray
+        "
+        rows="3"
+        placeholder=""
+        v-model="order.detail.GhiChu"
+        name="note"
+      ></textarea>
     </label>
     <div class="flex justify-end">
       <button
@@ -771,10 +939,11 @@
 import axios from "axios";
 import InputFile from "./InputFileComponent.vue";
 import { mixin as clickaway } from "vue-clickaway";
+import Size from "../data.json";
 export default {
   mixins: [clickaway],
   props: {
-    order: String,
+    order: Object,
   },
   components: {
     InputFile,
@@ -786,23 +955,23 @@ export default {
     this.getApiFabric();
     this.getApiIngredient();
     this.getApiCost();
+    this.dataProperty = this.order.detail.properties.length > 0 ? this.order.detail.properties : this.dataProperty
   },
   updated() {
     this.price = this.formatPrice(
-      this.dataOrder.detail.TongTien - this.dataOrder.detail.TienCoc
+      this.order.detail.TongTien - this.order.detail.TienCoc
     );
+    this.quantity = this.dataProperty.reduce((a, b) => a + parseInt(b.SoLuong), 0)
+    this.getApiCost()
   },
   data() {
     return {
-      dataOrder: JSON.parse(this.order),
       isModalOpen: false,
       dataProvince: null,
       dataDistrict: null,
       dataWard: null,
       productType:
-        JSON.parse(this.order).detail.LoaiHang === "Hàng may"
-          ? "available"
-          : "unavailable",
+        this.order.detail.LoaiHang === "Hàng may" ? "available" : "unavailable",
       deposit: 1000,
       totalPrice: 1000,
       price: null,
@@ -810,9 +979,21 @@ export default {
       dataCategory: [],
       dataFabric: [],
       dataIngredient: [],
-      idCategorySelected: JSON.parse(this.order).detail.id_DanhMuc,
-      idQualitySelected: JSON.parse(this.order).detail.id_ChatLuong,
-      quantity: JSON.parse(this.order).detail.SoLuong,
+      idCategorySelected: this.order.detail.id_DanhMuc,
+      idQualitySelected: this.order.detail.id_ChatLuong,
+      quantity: 0,
+      dataProperty: [
+        {
+          CanNang: 0,
+          ChieuCao: 0,
+          SoLuong: 0,
+        },
+      ],
+      dataSize: Size,
+      display:
+        this.order.detail.properties.length <= 0
+          ? 0
+          : this.order.detail.properties.length - 1,
     };
   },
   methods: {
@@ -893,6 +1074,18 @@ export default {
     },
     convertToDate(value) {
       return value;
+    },
+    handleClickAddProperty() {
+      this.dataProperty.push({
+        CanNang: 0,
+        ChieuCao: 0,
+        SoLuong: 0,
+      });
+    },
+    handleClickRemoveProperty() {
+      if (this.dataProperty.length > 1)
+        this.dataProperty.splice(this.dataProperty.length - 1, 1);
+      this.getApiCost();
     },
   },
 };

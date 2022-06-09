@@ -87,29 +87,57 @@
                                                     <th>Số lượng</th>
                                                     <th>Sản phẩm</th>
                                                     <th>Tên sản phẩm</th>
-                                                    <th>Kích thước</th>
-                                                    <th>Loại hàng</th>
-                                                    <th>Thành tiền</th>
+                                                    <th>Chiều cao</th>
+                                                    <th>Cân nặng</th>
+                                                    <th>Chất lượng may</th>
+                                                    <th>Cung cấp vải</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-
+                                                @php
+                                                $amount = 0;
+                                                @endphp
+                                                @foreach($order->detail->properties as $properties)
+                                                {{ $amount += $properties->SoLuong }}
                                                 <tr>
-                                                    <td>{{ $order->detail->SoLuong }}</td>
+                                                    <td>{{ $properties->SoLuong }}</td>
                                                     <td><img src="/img/{{ $order->detail->image }}"
                                                             class="object-contain" alt="product" width="60px"></td>
-                                                    <td>{{$order->detail->TenSP}}</td>
-                                                    <td>{{$order->detail->KichThuoc}}</td>
-                                                    <td>{{$order->detail->LoaiHang}}</td>
-                                                    <td>{{ number_format($order->detail->TongTien) }}đ</td>
+                                                    <td>{{ $order->detail->TenSP }}</td>
+                                                    <td>{{ $properties->ChieuCao }}</td>
+                                                    <td>{{ $properties->CanNang }}</td>
+                                                    <td>{{ $order->detail->quality->Ten }}</td>
+                                                    <td>{{ $order->detail->NguonCungCap }}</td>
                                                 </tr>
-
-
+                                                @endforeach
                                                 <tr style="height: 40px;"></tr>
                                             </tbody>
                                             <thead>
                                                 <tr>
-                                                    <th>Tổng</th>
+                                                    <th>Tổng số lượng </th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th>{{ $amount }} sản phẩm</th>
+                                                </tr>
+                                            </thead>
+                                            <thead>
+                                                <tr>
+                                                    <th>Giá áp dụng </th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th>{{ number_format($cost) }}đ/sản phẩm</th>
+                                                </tr>
+                                            </thead>
+                                            <thead>
+                                                <tr>
+                                                    <th>Tổng thành tiền</th>
+                                                    <th></th>
                                                     <th></th>
                                                     <th></th>
                                                     <th></th>

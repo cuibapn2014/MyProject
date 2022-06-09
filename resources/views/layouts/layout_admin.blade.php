@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html :class="{ 'theme-dark': !dark }" lang="vi">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,11 +23,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" />
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" defer></script>
-    <script src="{{ asset('js/init-alpine.js') }}"></script>    
+    <script src="{{ asset('js/init-alpine.js') }}"></script>
 
 </head>
 
-<body >
+<body>
     <div id="app" class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
         <!-- Desktop sidebar -->
         @include('layouts.navigate')
@@ -39,6 +40,8 @@
                 [[setIsActive({{$current}})]]
             </main>
         </div>
+        <profile v-if="isModalProfile" class="z-50" :user="{{ auth()->user()->load(['role']) }}" @toggle-profile="toggleProfileModal"></profile>
+
     </div>
     <script src="{{ asset('js/app.js') }}" defer></script>
     @yield('script')

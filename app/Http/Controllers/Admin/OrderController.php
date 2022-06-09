@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\DetailOrder;
 use App\Models\Order;
+use App\Models\PropertyProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
@@ -27,63 +28,107 @@ class OrderController extends Controller
     {
         $file_name = null;
         $address = $req->address . ', ' . $req->ward . ' - ' . $req->district . ' - ' . $req->province;
-
-        if ($req->hasFile('image')) {
-            $file = $req->file('image')[0];
-            $extension = $file->getClientOriginalExtension();
-            $accept = array("png", "jpg", "jpeg", "bmp");
-
-            if (!in_array($extension, $accept))
-                return back()->with('error', 'Định dạng ảnh không hợp lệ! Vui lòng thử lại');
-
-            $file_name = current(explode('.', $extension)) . '_' . time() . '.' . $extension;
-            $file->move('img', $file_name);
-        }
-
-        $order = Order::create([
-            'TenKhachHang' => $req->fullname,
-            'SoDienThoai' => $req->phone_number,
-            'DiaChi' => $address,
-            'NgayTraDon' => $req->duration,
-            'id_NhanVien' => Auth::user()->id
-        ]);
-
+        if(!$req->hasFile('image')) return back()->withErrors(['image' => 'Bạn chưa thêm ảnh cho sản phẩm']);
+    
         if ($req->productType === 'available') {
             $this->validateProductAvailable($req);
+            $order = Order::create([
+                'TenKhachHang' => $req->fullname,
+                'SoDienThoai' => $req->phone_number,
+                'DiaChi' => $address,
+                'NgayTraDon' => $req->duration,
+                'id_NhanVien' => Auth::user()->id
+            ]);
+
+            if ($req->hasFile('image')) {
+                $file = $req->image[0];
+                $extension = $file->getClientOriginalExtension();
+                $accept = array("png", "jpg", "jpeg", "bmp");
+    
+                if (!in_array($extension, $accept))
+                    return back()->with('error', 'Định dạng ảnh không hợp lệ! Vui lòng thử lại');
+    
+                $file_name = current(explode('.', $file->getClientOriginalName())) . '_' . time() . '.' . $extension;
+                $file->move('img',$file_name);
+            }
+            
             $orderDetail = DetailOrder::create([
                 'id_DonHang' => $order->id,
                 'TenSP' => $req->product_name,
                 'id_DanhMuc' => $req->category,
                 'id_LoaiVai' => $req->fabric,
                 'id_PhuLieu' => $req->ingredient,
-                'SoLuong' => $req->quantity,
-                'KichThuoc' => $req->size,
                 'id_ChatLuong' => $req->quality,
                 'TongTien' => $req->totalPrice,
                 'TienCoc' => $req->deposit,
-                'NguonCungCap' => $req->fabric_owner,
+                'NguonCungCap' => $req->fabric_owner == 'customer' ? "Khách hàng" : "Công ty",
                 'LoaiHang' => 'Hàng may',
-                'image' => $file_name
+                'image' => $file_name,
+                'VaiChinh' => $req->main,
+                'VaiLot' => $req->lining,
+                'VaiPhu' => $req->extra,
+                'GhiChu' => $req->note
             ]);
+
+            foreach ($req->input('weight') as $index => $weight) {
+    
+                PropertyProduct::create([
+                    'CanNang' => $weight,
+                    'ChieuCao' => $req->input('height')[$index],
+                    'SoLuong' => $req->input('quantity')[$index],
+                    'id_ChiTiet' => $orderDetail->id
+                ]);
+            }
         } else {
             $this->validateProductUnavailable($req);
+            $order = Order::create([
+                'TenKhachHang' => $req->fullname,
+                'SoDienThoai' => $req->phone_number,
+                'DiaChi' => $address,
+                'NgayTraDon' => $req->duration,
+                'id_NhanVien' => Auth::user()->id
+            ]);
+
+            if ($req->hasFile('image')) {
+                $file = $req->image[0];
+                $extension = $file->getClientOriginalExtension();
+                $accept = array("png", "jpg", "jpeg", "bmp");
+    
+                if (!in_array($extension, $accept))
+                    return back()->with('error', 'Định dạng ảnh không hợp lệ! Vui lòng thử lại');
+    
+                $file_name = current(explode('.', $file->getClientOriginalName())) . '_' . time() . '.' . $extension;
+                $file->move('img',$file_name);
+            }
+
             $orderDetail = DetailOrder::create([
                 'id_DonHang' => $order->id,
                 'TenSP' => $req->product_name,
                 'id_DanhMuc' => $req->category,
                 'id_LoaiVai' => $req->fabric,
                 'id_PhuLieu' => $req->ingredient,
-                'SoLuong' => $req->quantity,
-                'KichThuoc' => $req->size,
                 'id_ChatLuong' => $req->quality,
-                'NguonCungCap' => $req->fabric_owner,
+                'NguonCungCap' => $req->fabric_owner == 'customer' ? "Khách hàng" : "Công ty",
                 'LoaiHang' => 'Hàng mẫu',
                 'image' => $file_name,
-                'TongTien' => $req->price * $req->quantity
+                'TongTien' => $req->price * $req->quantity,
+                'VaiChinh' => $req->main,
+                'VaiLot' => $req->lining,
+                'VaiPhu' => $req->extra,
+                'GhiChu' => $req->note
             ]);
+
+            foreach ($req->input('weight') as $index => $weight) {
+                PropertyProduct::create([
+                    'CanNang' => $weight,
+                    'ChieuCao' => $req->input('height')[$index],
+                    'SoLuong' => $req->input('quantity')[$index],
+                    'id_ChiTiet' => $orderDetail->id
+                ]);
+            }
         }
 
-        return back();
+        return redirect()->route('admin.order.index')->with('success', 'Thêm đơn hàng thành công');
     }
 
     public function edit($id)
@@ -93,7 +138,8 @@ class OrderController extends Controller
             'detail.category',
             'detail.fabric',
             'detail.ingredient',
-            'detail.quality'
+            'detail.quality',
+            'detail.properties'
         ])->findOrFail($id)]);
     }
 
@@ -103,52 +149,94 @@ class OrderController extends Controller
         $oldImg = Order::findOrFail($id)->detail->image;
         $address = $req->address . ', ' . $req->ward . ' - ' . $req->district . ' - ' . $req->province;
 
-        if ($req->hasFile('image')) {
-            if ($oldImg != null) {
-                File::delete(public_path("img/" . $oldImg));
-            }
-            $file = $req->file('image')[0];
-            $extension = $file->getClientOriginalExtension();
-            $accept = array("png", "jpg", "jpeg", "bmp");
-
-            if (!in_array($extension, $accept))
-                return back()->with('error', 'Định dạng ảnh không hợp lệ! Vui lòng thử lại');
-
-            $file_name = current(explode('.', $extension)) . '_' . time() . '.' . $extension;
-            $file->move('img', $file_name);
-        }
+        PropertyProduct::where('id_ChiTiet', Order::findOrFail($id)->detail->id)->delete();
 
         if ($req->productType === 'available') {
             $this->validateProductAvailable($req);
+            if ($req->hasFile('image')) {
+                if ($oldImg != null) {
+                    File::delete(public_path("img/" . $oldImg));
+                }
+                $file = $req->file('image')[0];
+                $extension = $file->getClientOriginalExtension();
+                $accept = array("png", "jpg", "jpeg", "bmp");
+    
+                if (!in_array($extension, $accept))
+                    return back()->with('error', 'Định dạng ảnh không hợp lệ! Vui lòng thử lại');
+    
+                $file_name = current(explode('.', $extension)) . '_' . time() . '.' . $extension;
+                File::delete(public_path("img/".$oldImg));
+                $file->move('img', $file_name);
+            }
+
             $orderDetail = DetailOrder::where('id_DonHang', $id)->update([
                 'TenSP' => $req->product_name,
                 'id_DanhMuc' => $req->category,
                 'id_LoaiVai' => $req->fabric,
                 'id_PhuLieu' => $req->ingredient,
-                'SoLuong' => $req->quantity,
-                'KichThuoc' => $req->size,
                 'id_ChatLuong' => $req->quality,
                 'TongTien' => $req->totalPrice,
-                'NguonCungCap' => $req->fabric_owner,
+                'NguonCungCap' => $req->fabric_owner == 'customer' ? "Khách hàng" : "Công ty",
                 'TienCoc' => $req->deposit,
                 'LoaiHang' => 'Hàng may',
-                'image' => $file_name != null ? $file_name : $oldImg
+                'image' => $file_name != null ? $file_name : $oldImg,
+                'VaiChinh' => $req->main,
+                'VaiLot' => $req->lining,
+                'VaiPhu' => $req->extra,
+                'GhiChu' => $req->note
             ]);
+
+            foreach ($req->input('weight') as $index => $weight) {
+                PropertyProduct::create([
+                    'CanNang' => $weight,
+                    'ChieuCao' => $req->input('height')[$index],
+                    'SoLuong' => $req->input('quantity')[$index],
+                    'id_ChiTiet' => DetailOrder::where('id_DonHang', $id)->first()->id
+                ]);
+            }
         } else {
             $this->validateProductUnavailable($req);
+
+            if ($req->hasFile('image')) {
+                if ($oldImg != null) {
+                    File::delete(public_path("img/" . $oldImg));
+                }
+                $file = $req->file('image')[0];
+                $extension = $file->getClientOriginalExtension();
+                $accept = array("png", "jpg", "jpeg", "bmp");
+    
+                if (!in_array($extension, $accept))
+                    return back()->with('error', 'Định dạng ảnh không hợp lệ! Vui lòng thử lại');
+    
+                $file_name = current(explode('.', $extension)) . '_' . time() . '.' . $extension;
+                File::delete(public_path("img/".$oldImg));
+                $file->move('img', $file_name);
+            }
+
             $orderDetail = DetailOrder::where('id_DonHang', $id)->update([
                 'TenSP' => $req->product_name,
                 'id_DanhMuc' => $req->category,
                 'id_LoaiVai' => $req->fabric,
                 'id_PhuLieu' => $req->ingredient,
-                'SoLuong' => $req->quantity,
-                'KichThuoc' => $req->size,
                 'id_ChatLuong' => $req->quality,
-                'NguonCungCap' => $req->fabric_owner,
+                'NguonCungCap' => $req->fabric_owner == 'customer' ? "Khách hàng" : "Công ty",
                 'LoaiHang' => 'Hàng mẫu',
                 'image' => $file_name != null ? $file_name : $oldImg,
-                'TongTien' => $req->price * $req->quantity
+                'TongTien' => $req->price * $req->quantity,
+                'VaiChinh' => $req->main,
+                'VaiLot' => $req->lining,
+                'VaiPhu' => $req->extra,
+                'GhiChu' => $req->note
             ]);
+
+            foreach ($req->input('weight') as $index => $weight) {
+                PropertyProduct::create([
+                    'CanNang' => $weight,
+                    'ChieuCao' => $req->input('height')[$index],
+                    'SoLuong' => $req->input('quantity')[$index],
+                    'id_ChiTiet' => DetailOrder::where('id_DonHang', $id)->first()->id
+                ]);
+            }
         }
 
         $order = Order::findOrFail($id);
@@ -162,7 +250,7 @@ class OrderController extends Controller
         $order->updated_at = now();
         $order->save();
 
-        return back()->with('success', 'Cập nhật thành công');
+        return redirect()->route('admin.order.index')->with('success', 'Cập nhật thành công');
     }
 
     public function delete($id)
@@ -174,8 +262,8 @@ class OrderController extends Controller
 
     private function validateProductAvailable($req)
     {
-        $validator = Validator::make(
-            $req->all(),
+        $this->validate(
+            $req,
             [
                 'fullname' => 'required',
                 'phone_number' => 'required|numeric|digits:10',
@@ -183,16 +271,17 @@ class OrderController extends Controller
                 'district' => 'required',
                 'ward' => 'required',
                 'address' => 'required',
-                'product_name' => 'requried',
-                'size' => 'required',
-                'quantity' => 'min:1',
+                'product_name' => 'required',
+                'weight.*' => 'required',
+                'height.*' => 'required',
+                'quantity.*' => 'min:1',
                 'category' => 'required',
                 'fabric' => 'required',
                 'fabric_owner' => 'required',
                 'quality' => 'required',
                 'totalPrice' => 'required',
                 'duration' => 'required|date',
-                'image.0' => 'required|mimes:jpeg,jpg,png,bmp|max:3000'
+                'image.0' => 'mimes:jpeg,jpg,png,bmp|max:3000'
             ],
             [
                 'fullname.required' => 'Tên khách hàng không được để trống',
@@ -204,25 +293,25 @@ class OrderController extends Controller
                 'ward.required' => 'Không được để trống Phường/Xã',
                 'address.required' => 'Không được để trống địa chỉ',
                 'product_name.required' => 'Không được để trống tên sản phẩm',
-                'size.required' => 'Không được để trống kích thước sản phẩm',
-                'quantity.required' => 'Không được để trống sớ lượng sản phẩm',
+                'weight.*.required' => 'Không được để trống thuộc tính cân nặng',
+                'height.*.required' => 'Không được để trống thuộc tính chiều cao',
+                'quantity.*.required' => 'Không được để trống sớ lượng sản phẩm',
                 'category.required' => 'Không được để trống danh mục sản phẩm',
                 'fabric.required' => 'Không được để trống loại vải',
                 'fabric_owner.required' => 'Không được để trống nguồn cung cấp vải',
                 'quality.required' => 'Không được để trống chất lượng sản phẩm',
-                'totoPrice.required' => 'Không được để trống tổng số tiền',
+                'totalPrice.required' => 'Không được để trống tổng số tiền',
                 'duration.required' => 'Không được để trống ngày trả đơn',
-                'image.0.required' => 'Bạn chưa chọn ảnh sản phẩm',
                 'image.0.mimes' => 'Định dạng file ảnh không hợp lệ',
-                'image.0.max' => 'Dung lượng tối đa của hình ảnh không phải nhỏ hơn 3MB'
+                'image.0.max' => 'Dung lượng tối đa của hình ảnh phải nhỏ hơn 3MB'
             ]
         );
     }
 
     private function validateProductUnavailable($req)
     {
-        $validator = Validator::make(
-            $req->all(),
+        $this->validate(
+            $req,
             [
                 'fullname' => 'required|min:6',
                 'phone_number' => 'required|numeric|digits:10',
@@ -230,15 +319,16 @@ class OrderController extends Controller
                 'district' => 'required',
                 'ward' => 'required',
                 'address' => 'required',
-                'product_name' => 'requried',
-                'size' => 'required',
-                'quantity' => 'min:1',
+                'product_name' => 'required',
+                'weight.*' => 'required',
+                'height.*' => 'required',
+                'quantity.*' => 'min:1',
                 'category' => 'required',
                 'fabric' => 'required',
                 'fabric_owner' => 'required',
                 'duration' => 'required|date',
                 'price' => 'required|numeric',
-                'image.0' => 'required|mimes:jpeg,jpg,png,bmp|max:3000',
+                'image.0' => 'mimes:jpeg,jpg,png,bmp|max:3000',
             ],
             [
                 'fullname.required' => 'Tên khách hàng không được để trống',
@@ -250,8 +340,9 @@ class OrderController extends Controller
                 'ward.required' => 'Không được để trống Phường/Xã',
                 'address.required' => 'Không được để trống địa chỉ',
                 'product_name.required' => 'Không được để trống tên sản phẩm',
-                'size.required' => 'Không được để trống kích thước sản phẩm',
-                'quantity.required' => 'Không được để trống sớ lượng sản phẩm',
+                'weight.*.required' => 'Không được để trống thuộc tính cân nặng',
+                'height.*.required' => 'Không được để trống thuộc tính chiều cao',
+                'quantity.*.required' => 'Không được để trống sớ lượng sản phẩm',
                 'category.required' => 'Không được để trống danh mục sản phẩm',
                 'fabric.required' => 'Không được để trống loại vải',
                 'fabric_owner.required' => 'Không được để trống nguồn cung cấp vải',
@@ -259,7 +350,6 @@ class OrderController extends Controller
                 'price.required' => 'Không được để trống giá tiền',
                 'price.numeric' => 'Giá tiền không hợp lệ',
                 'duration.required' => 'Không được để trống ngày trả đơn',
-                'image.0.required' => 'Bạn chưa chọn ảnh sản phẩm',
                 'image.0.mimes' => 'Định dạng file ảnh không hợp lệ',
                 'image.0.max' => 'Dung lượng tối đa của hình ảnh không phải nhỏ hơn 3MB'
             ]

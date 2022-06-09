@@ -114,7 +114,6 @@ $current = 3;
         </footer>
     </div>
 </div>
-</div>
 @endsection
 @section('script')
 <script src="{{ asset('js/script.js') }}" defer></script>

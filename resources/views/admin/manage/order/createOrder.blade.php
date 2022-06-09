@@ -19,6 +19,4 @@ $current = 1;
         <add-order></add-order>
     </form>
 </div>
-
-</div>
 @endsection

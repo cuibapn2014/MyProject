@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Order;
 use App\Models\Category;
+use App\Models\PropertyProduct;
 
 class DetailOrder extends Model
 {
@@ -20,7 +21,9 @@ class DetailOrder extends Model
         'id_PhuLieu', 'SoLuong',
         'KichThuoc', 'id_ChatLuong',
         'TongTien', 'TienCoc',
-        'NguonCungCap', 'image'
+        'NguonCungCap', 'image',
+        'VaiChinh', 'VaiPhu', 'VaiLot',
+        'GhiChu'
     ];
 
     public $timestamps = true;
@@ -48,5 +51,9 @@ class DetailOrder extends Model
     public function quality()
     {
         return $this->belongsTo(Quality::class, 'id_ChatLuong', 'id');
+    }
+
+    public function properties(){
+        return $this->hasMany(PropertyProduct::class, 'id_ChiTiet', 'id');
     }
 }

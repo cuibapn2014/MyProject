@@ -212,34 +212,10 @@
         </label>
       </div>
     </div>
-    <label class="block text-sm my-1">
-      <span class="flex text-gray-700 dark:text-gray-400"
-        >Tên sản phẩm
-        <p class="text-red-500 mx-1">*</p></span
-      >
-      <input
-        class="
-          block
-          w-full
-          mt-1
-          text-sm
-          dark:border-gray-600 dark:bg-gray-700
-          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
-          dark:text-gray-300 dark:focus:shadow-outline-gray
-          form-input
-        "
-        placeholder=""
-        name="product_name"
-      />
-    </label>
-    <div class="upload__image block text-sm my-3">
-      <label class="text-gray-700 dark:text-gray-400">Hình ảnh</label>
-      <InputFile />
-    </div>
-    <div class="flex items-center mt-4">
-      <label class="block text-sm my-1">
+    <div class="flex items-end">
+      <label class="block text-sm mr-2 grow">
         <span class="flex text-gray-700 dark:text-gray-400"
-          >Kích thước
+          >Tên sản phẩm
           <p class="text-red-500 mx-1">*</p></span
         >
         <input
@@ -256,64 +232,59 @@
             form-input
           "
           placeholder=""
-          name="size"
+          name="product_name"
         />
       </label>
-      <label class="block text-sm my-1 mx-2">
-        <span class="flex text-gray-700 dark:text-gray-400"
-          >Số lượng
-          <p class="text-red-500 mx-1">*</p></span
-        >
-        <input
-          class="
-            block
-            w-full
-            mt-1
-            text-sm
-            dark:border-gray-600 dark:bg-gray-700
-            focus:border-purple-400
-            focus:outline-none
-            focus:shadow-outline-purple
-            dark:text-gray-300 dark:focus:shadow-outline-gray
-            form-input
-          "
-          type="number"
-          min="1"
-          placeholder=""
-          name="quantity"
-          v-model="quantity"
-          @change="this.getApiCost"
-        />
-      </label>
-      <label
-        v-if="this.productType == 'unavailable'"
-        class="block text-sm my-1 mx-2"
-      >
-        <span class="flex text-gray-700 dark:text-gray-400"
+      <label v-if="this.productType === 'unavailable'">
+        <span class="dark:text-gray-200 flex"
           >Giá
           <p class="text-red-500 mx-1">*</p></span
         >
-        <input
-          class="
-            block
-            w-full
-            mt-1
-            text-sm
-            dark:border-gray-600 dark:bg-gray-700
-            focus:border-purple-400
-            focus:outline-none
-            focus:shadow-outline-purple
-            dark:text-gray-300 dark:focus:shadow-outline-gray
-            form-input
-          "
-          type="number"
-          min="0"
-          placeholder=""
-          name="price"
-        />
+        <div class="relative text-gray-500 focus-within:text-purple-600">
+          <input
+            class="
+              block
+              w-full
+              pr-20
+              text-sm text-[#000000]
+              dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+              focus:border-purple-400
+              focus:outline-none
+              focus:shadow-outline-purple
+              dark:focus:shadow-outline-gray
+              form-input
+              dark:text-gray-200
+            "
+            placeholder=""
+            min="0"
+            type="number"
+            name="price"
+            autocomplete="off"
+          />
+          <p
+            class="
+              absolute
+              inset-y-0
+              right-0
+              px-4
+              text-sm
+              font-medium
+              leading-5
+              text-white
+              transition-colors
+              duration-150
+              bg-indigo-600
+              rounded-r-md
+              focus:outline-none focus:shadow-outline-purple
+              flex
+              items-center
+            "
+          >
+            VND
+          </p>
+        </div>
       </label>
     </div>
-
     <label class="block my-2 text-sm w-2/4 sm:w-full">
       <span class="flex text-gray-700 dark:text-gray-400">
         Danh mục sản phẩm
@@ -333,7 +304,7 @@
         name="category"
         @change="handleChangeCategory"
       >
-        <option selected value="">Chọn danh mục</option>
+        <option selected :value="null">Chọn danh mục</option>
         <option
           v-for="category in this.dataCategory"
           :key="category.id"
@@ -343,6 +314,110 @@
         </option>
       </select>
     </label>
+    <div class="upload__image block text-sm my-3">
+      <label class="text-gray-700 dark:text-gray-400">Hình ảnh</label>
+      <InputFile />
+    </div>
+    <h3 class="mt-4 font-bold text-lg dark:text-gray-200">
+      Thuộc tính sản phẩm
+    </h3>
+    <div class="flex flex-col">
+      <div
+        class="flex items-center"
+        v-for="(properties, index) in dataProperty"
+        :key="index"
+      >
+        <label class="block text-sm my-1">
+          <span class="flex text-gray-700 dark:text-gray-400"
+            >Cân nặng
+            <p class="text-red-500 mx-1">*</p></span
+          >
+          <select
+            class="
+              block
+              w-full
+              mt-1
+              text-sm
+              dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+              form-select
+              focus:border-purple-400
+              focus:outline-none
+              focus:shadow-outline-purple
+              dark:focus:shadow-outline-gray
+            "
+            name="weight[]"
+          >
+            <option selected value="">Chọn cân nặng</option>
+            <option v-for="size in dataSize" :key="size" :value="size">
+              {{ size }}
+            </option>
+          </select>
+        </label>
+        <label class="block text-sm my-1 mx-2">
+          <span class="flex text-gray-700 dark:text-gray-400"
+            >Chiều cao
+            <p class="text-red-500 mx-1">*</p></span
+          >
+          <select
+            class="
+              block
+              w-full
+              mt-1
+              text-sm
+              dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+              form-select
+              focus:border-purple-400
+              focus:outline-none
+              focus:shadow-outline-purple
+              dark:focus:shadow-outline-gray
+            "
+            name="height[]"
+          >
+            <option selected value="">Chọn chiều cao</option>
+            <option v-for="size in dataSize" :key="size" :value="size">
+              {{ size }}
+            </option>
+          </select>
+        </label>
+        <label class="block text-sm my-1 mx-2">
+          <span class="flex text-gray-700 dark:text-gray-400"
+            >Số lượng
+            <p class="text-red-500 mx-1">*</p></span
+          >
+          <input
+            class="
+              block
+              w-full
+              mt-1
+              text-sm
+              dark:border-gray-600 dark:bg-gray-700
+              focus:border-purple-400
+              focus:outline-none
+              focus:shadow-outline-purple
+              dark:text-gray-300 dark:focus:shadow-outline-gray
+              form-input
+            "
+            type="number"
+            min="1"
+            placeholder=""
+            name="quantity[]"
+            v-model="properties.quantity"
+          />
+        </label>
+      </div>
+    </div>
+    <button
+      class="px-2 py-2 rounded-md text-sm text-white bg-indigo-600"
+      @click.prevent="handleClickAddProperty"
+    >
+      Thêm thuộc tính
+    </button>
+    <button
+      class="px-2 py-2 rounded-md text-sm text-white bg-indigo-600"
+      @click.prevent="handleClickRemoveProperty"
+    >
+      Xóa
+    </button>
     <label class="block my-2 text-sm w-2/4 sm:w-full">
       <span class="flex text-gray-700 dark:text-gray-400">
         Loại vải
@@ -371,6 +446,80 @@
         </option>
       </select>
     </label>
+    <div class="flex items-center">
+      <label class="block text-sm mr-2">
+        <span class="flex text-gray-700 dark:text-gray-400"
+          >Vải chính (Mét)
+          <p class="text-red-500 mx-1">*</p></span
+        >
+        <input
+          class="
+            block
+            w-full
+            mt-1
+            text-sm
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:text-gray-300 dark:focus:shadow-outline-gray
+            form-input
+          "
+          placeholder=""
+          name="main"
+          type="number"
+          min="0"
+        />
+      </label>
+      <label class="block text-sm mr-2">
+        <span class="flex text-gray-700 dark:text-gray-400"
+          >Vải phụ (Mét)
+          <p class="text-red-500 mx-1">*</p></span
+        >
+        <input
+          class="
+            block
+            w-full
+            mt-1
+            text-sm
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:text-gray-300 dark:focus:shadow-outline-gray
+            form-input
+          "
+          placeholder=""
+          name="extra"
+          type="number"
+          min="0"
+        />
+      </label>
+      <label class="block text-sm mr-2">
+        <span class="flex text-gray-700 dark:text-gray-400"
+          >Vải lót (Mét)
+          <p class="text-red-500 mx-1">*</p></span
+        >
+        <input
+          class="
+            block
+            w-full
+            mt-1
+            text-sm
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:text-gray-300 dark:focus:shadow-outline-gray
+            form-input
+          "
+          placeholder=""
+          name="lining"
+          type="number"
+          min="0"
+        />
+      </label>
+    </div>
     <label class="block my-2 text-sm w-2/4 sm:w-full">
       <span class="flex text-gray-700 dark:text-gray-400">
         Nguồn cung cấp vải
@@ -499,10 +648,10 @@
           type="number"
           min="1000"
           placeholder=""
-          name="totolPrice"
+          name="totalPrice"
           value="1000"
           v-model="totalPrice"
-          disabled
+          :disabled="this.productType === 'unavailable'"
         />
       </label>
       <label class="block text-sm my-1 mx-2">
@@ -547,6 +696,24 @@
         name="duration"
         placeholder=""
       />
+    </label>
+    <label class="block mt-4 text-sm">
+      <span class="text-gray-700 dark:text-gray-400">Yêu cầu khách hàng</span>
+      <textarea
+        class="
+          block
+          w-full
+          mt-1
+          text-sm
+          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+          form-textarea
+          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
+          dark:focus:shadow-outline-gray
+        "
+        rows="3"
+        placeholder=""
+        name="note"
+      ></textarea>
     </label>
     <div class="flex justify-end">
       <button
@@ -733,6 +900,7 @@
 import axios from "axios";
 import InputFile from "./InputFileComponent";
 import { mixin as clickaway } from "vue-clickaway";
+import Size from "../data.json";
 export default {
   mixins: [clickaway],
   created() {
@@ -744,6 +912,11 @@ export default {
   },
   updated() {
     this.price = this.formatPrice(this.totalPrice - this.deposit);
+    this.quantity = this.dataProperty.reduce(
+      (a, b) => a + parseInt(b.quantity),
+      0
+    );
+    this.getApiCost();
   },
   components: {
     InputFile,
@@ -762,9 +935,18 @@ export default {
       dataCategory: [],
       dataFabric: [],
       dataIngredient: [],
+      dataProperty: [
+        {
+          weight: 0,
+          height: 0,
+          quantity: 0,
+        },
+      ],
       idCategorySelected: 0,
       idQualitySelected: 0,
       quantity: 1,
+      dataSize: Size,
+      display: 0,
     };
   },
   methods: {
@@ -842,6 +1024,18 @@ export default {
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
         .concat(" VND");
+    },
+    handleClickAddProperty() {
+      this.dataProperty.push({
+        weight: 0,
+        height: 0,
+        quantity: 0,
+      });
+    },
+    handleClickRemoveProperty() {
+      if (this.dataProperty.length > 1)
+        this.dataProperty.splice(this.dataProperty.length - 1, 1);
+      this.getApiCost();
     },
   },
 };

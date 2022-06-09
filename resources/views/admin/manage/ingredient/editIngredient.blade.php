@@ -120,5 +120,4 @@ $current = 3;
         </footer>
     </div>
 </div>
-</div>
 @endsection

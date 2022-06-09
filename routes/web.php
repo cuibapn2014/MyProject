@@ -83,4 +83,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function ($route) {
     $route->get('/invoice/{id}', [AdminController::class, 'getInvoice'])->name('admin.invoice');
 
     $route->get('/image/delete/{type}/{idProvide}/{idImg}', [ImageController::class, 'delete'])->name('admin.image.delete');
+
+    $route->post('/image-update/{id}', [AdminController::class, 'updateImageUser'])->name('admin.user.image.update');
+    $route->post('/update/{id}', [AdminController::class, 'updateUser'])->name('admin.user.update');
+
 });

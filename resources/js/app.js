@@ -25,6 +25,7 @@ Vue.component('input-file', require('./components/InputFileComponent.vue').defau
 Vue.component('image-modal', require('./components/ImageModalComponent.vue').default);
 Vue.component('add-order', require('./components/AddOrderComponent.vue').default);
 Vue.component('edit-order', require('./components/EditOrderComponent.vue').default);
+Vue.component('profile', require('./components/ProfileComponent.vue').default);
 
 
 window.axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
@@ -59,6 +60,7 @@ const app = new Vue({
             isProfileMenuOpen: false,
             isPagesMenuOpen: false,
             isModalOpen: false,
+            isModalProfile:false,
             trapCleanup: null
         }
     },
@@ -148,6 +150,12 @@ const app = new Vue({
         },
         handlePrintClick(){
             window.print()
+        },
+        toggleProfileModal(e){
+            this.isModalProfile = e.isOpenModal
+        },
+        openProfileModal(){
+            this.isModalProfile = true
         }
     }
 });

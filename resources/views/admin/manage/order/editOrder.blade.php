@@ -18,9 +18,7 @@ $current = 1;
     @endif
     <form action="{{route('admin.order.request.update',['id' => $order->id])}}" method="post" enctype="multipart/form-data">
         @csrf
-        <edit-order order="{{$order}}"></edit-order>
+        <edit-order :order="{{ $order }}"></edit-order>
     </form>
-</div>
-
 </div>
 @endsection
