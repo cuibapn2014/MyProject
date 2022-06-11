@@ -27,6 +27,8 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
+        "laravel-echo": "^1.11.7",
+        "pusher-js": "^7.1.1-beta",
         "toastify-js": "^1.11.2",
         "vue-clickaway": "^2.2.2"
     }

@@ -5,7 +5,9 @@
  */
 
 require('./bootstrap');
-import {mixin as clickaway} from 'vue-clickaway'
+import axios from 'axios';
+import { mixin as clickaway } from 'vue-clickaway'
+import Echo from 'laravel-echo';
 
 window.Vue = require('vue').default;
 
@@ -26,6 +28,7 @@ Vue.component('image-modal', require('./components/ImageModalComponent.vue').def
 Vue.component('add-order', require('./components/AddOrderComponent.vue').default);
 Vue.component('edit-order', require('./components/EditOrderComponent.vue').default);
 Vue.component('profile', require('./components/ProfileComponent.vue').default);
+Vue.component('task', require('./components/TaskComponent.vue').default);
 
 
 window.axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
@@ -39,19 +42,27 @@ window.axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
 const app = new Vue({
     el: '#app',
-    mixins:[ clickaway ],
+    mixins: [clickaway],
+    props:[
+        'user'
+    ],
     delimiters: [
         "[[", "]]"
     ],
-    mounted(){
+    created() {
+        this.user = document.querySelector('#app').getAttribute('user') 
+        this.fetchTask()     
+    },
+    mounted() {
         this.getTheme()
     },
-    updated(){
+    updated() {
         this.getTheme()
     },
     data() {
         return {
             idDelete: 0,
+            countTask: 0,
             display: 0,
             isActive: 0,
             dark: this.getThemeFromLocalStorage(),
@@ -60,14 +71,44 @@ const app = new Vue({
             isProfileMenuOpen: false,
             isPagesMenuOpen: false,
             isModalOpen: false,
-            isModalProfile:false,
-            trapCleanup: null
+            isModalProfile: false,
+            trapCleanup: null,
+            checkAll: false,
+            dataTask: []
         }
     },
     methods: {
         setIsActive(index) {
             this.isActive = index
         },
+        async fetchTask() {
+            this.getListTask()
+
+            await axios.get('/admin/task/get')
+                .then(res => this.dataTask = res.data)
+                .catch(err => console.log(err))
+
+            this.dataTask.map(item => {
+                this.countTask = item.TrangThai == 0 ? this.countTask + 1 : this.countTask
+            })
+
+            if (this.countTask > 0) {
+                const oldTitle = document.title
+                setInterval(() => {
+                    document.title = document.title === oldTitle ? `Bạn có ${this.countTask} thông báo mới` : oldTitle
+                }, 1000)
+            }
+        },
+        getListTask(){
+            window.Echo.private(`task.${this.user}`)
+            .listen('TaskEvent', (e) => {
+                console.log(e)
+                this.dataTask.push(e.assign)
+                console.log(this.dataTask)
+                this.countTask += 1
+            })
+        },
+
         getThemeFromLocalStorage() {
             // if user already changed the theme, use it
             if (window.localStorage.getItem('dark')) {
@@ -123,39 +164,45 @@ const app = new Vue({
             this.isModalOpen = true
             // this.trapCleanup = focusTrap(document.querySelector('#modal'))
         },
-        
+
         closeModal() {
             this.isModalOpen = false
             // this.trapCleanup()
         },
 
-        getTheme(){
+        getTheme() {
             if (this.dark) {
                 document.documentElement.classList.add('dark')
             } else {
                 document.documentElement.classList.remove('dark')
             }
         },
-        handleClick(){
+        handleClick() {
             this.display >= 0 && this.display <= 2 ? this.display++ : this.display
         },
-        handleDeleteIngredient(id){
+        handleDeleteIngredient(id) {
             location.href = `/admin/ingredient/delete/${id}`
         },
-        handleDeleteFabric(id){
+        handleDeleteFabric(id) {
             location.href = `/admin/fabric/delete/${id}`
         },
-        handleDeleteOrder(id){
+        handleDeleteOrder(id) {
             location.href = `/admin/order/delete/${id}`
         },
-        handlePrintClick(){
+        handleDeleteTask(id) {
+            location.href = `/admin/task/delete/${id}`
+        },
+        handlePrintClick() {
             window.print()
         },
-        toggleProfileModal(e){
+        toggleProfileModal(e) {
             this.isModalProfile = e.isOpenModal
         },
-        openProfileModal(){
+        openProfileModal() {
             this.isModalProfile = true
+        },
+        toggleCheckAll() {
+            this.checkAll = !this.checkAll
         }
     }
 });

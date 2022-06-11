@@ -77,7 +77,7 @@
                     aria-hidden="true"></span>
                 <a @click="setIsActive(4)"
                     class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                    href="javascript:void()"
+                    href="{{ route('admin.task.index') }}"
                     :class="{ 'text-gray-800' : this.isActive == 4, 'dark:text-gray-100' : this.isActive == 4 }">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="2">
@@ -183,7 +183,7 @@
                     aria-hidden="true"></span>
                 <a @click="setIsActive(4)"
                     class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                    href="javascript:void()"
+                    href="{{ route('admin.task.index') }}"
                     :class="{ 'text-gray-800' : this.isActive == 4, 'dark:text-gray-100' : this.isActive == 4 }">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="2">

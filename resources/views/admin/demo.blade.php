@@ -21,7 +21,7 @@ $current = 0;
             </div>
             <div>
                 <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                    Total clients
+                    Khách
                 </p>
                 <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
                     6389
@@ -39,10 +39,10 @@ $current = 0;
             </div>
             <div>
                 <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                    Account balance
+                    Doanh thu của bạn
                 </p>
                 <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                    $ 46,760.89
+                    46,760.89VND
                 </p>
             </div>
         </div>
@@ -57,7 +57,7 @@ $current = 0;
             </div>
             <div>
                 <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                    New sales
+                    Đơn hàng
                 </p>
                 <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
                     376

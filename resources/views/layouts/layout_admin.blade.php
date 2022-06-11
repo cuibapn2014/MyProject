@@ -28,7 +28,7 @@
 </head>
 
 <body>
-    <div id="app" class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
+    <div id="app" class="flex h-screen bg-gray-50 dark:bg-gray-900" user="{{ auth()->user()->id }}" :class="{ 'overflow-hidden': isSideMenuOpen }">
         <!-- Desktop sidebar -->
         @include('layouts.navigate')
         <div class="flex flex-col flex-1 w-full">
