@@ -7,9 +7,11 @@ use App\Models\DetailOrder;
 use App\Models\Order;
 use App\Models\PropertyProduct;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\OrderExport;
+use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
@@ -31,7 +33,56 @@ class OrderController extends Controller
         if(!$req->hasFile('image')) return back()->withErrors(['image' => 'Bạn chưa thêm ảnh cho sản phẩm']);
     
         if ($req->productType === 'available') {
-            $this->validateProductAvailable($req);
+            $validator = Validator::make(
+                $req->all(),
+                [
+                    'fullname' => 'required',
+                    'phone_number' => 'required|numeric|digits:10',
+                    'province' => 'required',
+                    'district' => 'required',
+                    'ward' => 'required',
+                    'address' => 'required',
+                    // 'product_name' => 'required',
+                    'weight.*' => 'required',
+                    'height.*' => 'required',
+                    'quantity.*' => 'min:1',
+                    'category' => 'required',
+                    // 'fabric' => 'required',
+                    // 'fabric_owner' => 'required',
+                    'quality' => 'required',
+                    'totalPrice' => 'required',
+                    'duration' => 'required|date',
+                    'image.0' => 'mimes:jpeg,jpg,png,bmp|max:3000'
+                ],
+                [
+                    'fullname.required' => 'Tên khách hàng không được để trống',
+                    'phone_number.required' => 'Số điện thoại không được để trống',
+                    'phone_number.numeric' => 'Số điện thoại không hợp lệ',
+                    'phone_number.digits' => 'Số điện thoại không hợp lệ',
+                    'province.required' => 'Không được để trống Tỉnh/Thành Phố',
+                    'district.required' => 'Không được để trống Quận/Huyện',
+                    'ward.required' => 'Không được để trống Phường/Xã',
+                    'address.required' => 'Không được để trống địa chỉ',
+                    // 'product_name.required' => 'Không được để trống tên sản phẩm',
+                    'weight.*.required' => 'Không được để trống thuộc tính cân nặng',
+                    'height.*.required' => 'Không được để trống thuộc tính chiều cao',
+                    // 'quantity.*.required' => 'Không được để trống sớ lượng sản phẩm',
+                    // 'category.required' => 'Không được để trống danh mục sản phẩm',
+                    // 'fabric.required' => 'Không được để trống loại vải',
+                    // 'fabric_owner.required' => 'Không được để trống nguồn cung cấp vải',
+                    'quality.required' => 'Không được để trống chất lượng sản phẩm',
+                    'totalPrice.required' => 'Không được để trống tổng số tiền',
+                    // 'duration.required' => 'Không được để trống ngày trả đơn',
+                    'image.0.mimes' => 'Định dạng file ảnh không hợp lệ',
+                    'image.0.max' => 'Dung lượng tối đa của hình ảnh phải nhỏ hơn 3MB'
+                ]
+            );
+    
+            if($validator->fails()){
+                return back()->withErrors($validator)->withInput();   
+            }
+
+
             $order = Order::create([
                 'TenKhachHang' => $req->fullname,
                 'SoDienThoai' => $req->phone_number,
@@ -76,11 +127,60 @@ class OrderController extends Controller
                     'CanNang' => $weight,
                     'ChieuCao' => $req->input('height')[$index],
                     'SoLuong' => $req->input('quantity')[$index],
+                    'KichCo' => $req->input('size')[$index],
                     'id_ChiTiet' => $orderDetail->id
                 ]);
             }
         } else {
-            $this->validateProductUnavailable($req);
+            $validator = Validator::make(
+                $req->all(),
+                [
+                    'fullname' => 'required',
+                    'phone_number' => 'required|numeric|digits:10',
+                    'province' => 'required',
+                    'district' => 'required',
+                    'ward' => 'required',
+                    'address' => 'required',
+                    'product_name' => 'required',
+                    'weight.*' => 'required',
+                    'height.*' => 'required',
+                    'quantity.*' => 'min:1',
+                    'category' => 'required',
+                    // 'fabric' => 'required',
+                    // 'fabric_owner' => 'required',
+                    // 'duration' => 'required|date',
+                    'price' => 'required|numeric',
+                    'image.0' => 'mimes:jpeg,jpg,png,bmp|max:3000',
+                ],
+                [
+                    'fullname.required' => 'Tên khách hàng không được để trống',
+                    'phone_number.required' => 'Số điện thoại không được để trống',
+                    'phone_number.numeric' => 'Số điện thoại không hợp lệ',
+                    'phone_number.digits' => 'Số điện thoại không hợp lệ',
+                    'province.required' => 'Không được để trống Tỉnh/Thành Phố',
+                    'district.required' => 'Không được để trống Quận/Huyện',
+                    'ward.required' => 'Không được để trống Phường/Xã',
+                    'address.required' => 'Không được để trống địa chỉ',
+                    'product_name.required' => 'Không được để trống tên sản phẩm',
+                    'weight.*.required' => 'Không được để trống thuộc tính cân nặng',
+                    'height.*.required' => 'Không được để trống thuộc tính chiều cao',
+                    'quantity.*.required' => 'Không được để trống sớ lượng sản phẩm',
+                    'category.required' => 'Không được để trống danh mục sản phẩm',
+                    // 'fabric.required' => 'Không được để trống loại vải',
+                    // 'fabric_owner.required' => 'Không được để trống nguồn cung cấp vải',
+                    'quality.required' => 'Không được để trống chất lượng sản phẩm',
+                    // 'price.required' => 'Không được để trống giá tiền',
+                    'price.numeric' => 'Giá tiền không hợp lệ',
+                    // 'duration.required' => 'Không được để trống ngày trả đơn',
+                    'image.0.mimes' => 'Định dạng file ảnh không hợp lệ',
+                    'image.0.max' => 'Dung lượng tối đa của hình ảnh không phải nhỏ hơn 3MB'
+                ]
+            );
+    
+            if($validator->fails()){
+                return back()->withInput()->withErrors($validator);   
+            }
+
             $order = Order::create([
                 'TenKhachHang' => $req->fullname,
                 'SoDienThoai' => $req->phone_number,
@@ -111,7 +211,8 @@ class OrderController extends Controller
                 'NguonCungCap' => $req->fabric_owner == 'customer' ? "Khách hàng" : "Công ty",
                 'LoaiHang' => 'Hàng mẫu',
                 'image' => $file_name,
-                'TongTien' => $req->price * $req->quantity,
+                'Gia' => $req->price,
+                'TongTien' => $req->price * array_sum($req->quantity),
                 'VaiChinh' => $req->main,
                 'VaiLot' => $req->lining,
                 'VaiPhu' => $req->extra,
@@ -123,6 +224,7 @@ class OrderController extends Controller
                     'CanNang' => $weight,
                     'ChieuCao' => $req->input('height')[$index],
                     'SoLuong' => $req->input('quantity')[$index],
+                    'KichCo' => $req->input('size')[$index],
                     'id_ChiTiet' => $orderDetail->id
                 ]);
             }
@@ -191,6 +293,7 @@ class OrderController extends Controller
                     'CanNang' => $weight,
                     'ChieuCao' => $req->input('height')[$index],
                     'SoLuong' => $req->input('quantity')[$index],
+                    'KichCo' => $req->input('size')[$index],
                     'id_ChiTiet' => DetailOrder::where('id_DonHang', $id)->first()->id
                 ]);
             }
@@ -222,7 +325,8 @@ class OrderController extends Controller
                 'NguonCungCap' => $req->fabric_owner == 'customer' ? "Khách hàng" : "Công ty",
                 'LoaiHang' => 'Hàng mẫu',
                 'image' => $file_name != null ? $file_name : $oldImg,
-                'TongTien' => $req->price * $req->quantity,
+                'Gia' => $req->price,
+                'TongTien' => $req->price * array_sum($req->quantity),
                 'VaiChinh' => $req->main,
                 'VaiLot' => $req->lining,
                 'VaiPhu' => $req->extra,
@@ -234,6 +338,7 @@ class OrderController extends Controller
                     'CanNang' => $weight,
                     'ChieuCao' => $req->input('height')[$index],
                     'SoLuong' => $req->input('quantity')[$index],
+                    'KichCo' => $req->input('size')[$index],
                     'id_ChiTiet' => DetailOrder::where('id_DonHang', $id)->first()->id
                 ]);
             }
@@ -262,8 +367,8 @@ class OrderController extends Controller
 
     private function validateProductAvailable($req)
     {
-        $this->validate(
-            $req,
+       $validator = Validator::make(
+            $req->all(),
             [
                 'fullname' => 'required',
                 'phone_number' => 'required|numeric|digits:10',
@@ -271,13 +376,13 @@ class OrderController extends Controller
                 'district' => 'required',
                 'ward' => 'required',
                 'address' => 'required',
-                'product_name' => 'required',
+                // 'product_name' => 'required',
                 'weight.*' => 'required',
                 'height.*' => 'required',
                 'quantity.*' => 'min:1',
                 'category' => 'required',
-                'fabric' => 'required',
-                'fabric_owner' => 'required',
+                // 'fabric' => 'required',
+                // 'fabric_owner' => 'required',
                 'quality' => 'required',
                 'totalPrice' => 'required',
                 'duration' => 'required|date',
@@ -292,28 +397,32 @@ class OrderController extends Controller
                 'district.required' => 'Không được để trống Quận/Huyện',
                 'ward.required' => 'Không được để trống Phường/Xã',
                 'address.required' => 'Không được để trống địa chỉ',
-                'product_name.required' => 'Không được để trống tên sản phẩm',
+                // 'product_name.required' => 'Không được để trống tên sản phẩm',
                 'weight.*.required' => 'Không được để trống thuộc tính cân nặng',
                 'height.*.required' => 'Không được để trống thuộc tính chiều cao',
-                'quantity.*.required' => 'Không được để trống sớ lượng sản phẩm',
-                'category.required' => 'Không được để trống danh mục sản phẩm',
-                'fabric.required' => 'Không được để trống loại vải',
-                'fabric_owner.required' => 'Không được để trống nguồn cung cấp vải',
+                // 'quantity.*.required' => 'Không được để trống sớ lượng sản phẩm',
+                // 'category.required' => 'Không được để trống danh mục sản phẩm',
+                // 'fabric.required' => 'Không được để trống loại vải',
+                // 'fabric_owner.required' => 'Không được để trống nguồn cung cấp vải',
                 'quality.required' => 'Không được để trống chất lượng sản phẩm',
                 'totalPrice.required' => 'Không được để trống tổng số tiền',
-                'duration.required' => 'Không được để trống ngày trả đơn',
+                // 'duration.required' => 'Không được để trống ngày trả đơn',
                 'image.0.mimes' => 'Định dạng file ảnh không hợp lệ',
                 'image.0.max' => 'Dung lượng tối đa của hình ảnh phải nhỏ hơn 3MB'
             ]
         );
+
+        if($validator->fails()){
+            return back()->withInput()->withErrors($validator);   
+        }
     }
 
     private function validateProductUnavailable($req)
     {
-        $this->validate(
-            $req,
+        $validator = Validator::make(
+            $req->all(),
             [
-                'fullname' => 'required|min:6',
+                'fullname' => 'required',
                 'phone_number' => 'required|numeric|digits:10',
                 'province' => 'required',
                 'district' => 'required',
@@ -324,9 +433,9 @@ class OrderController extends Controller
                 'height.*' => 'required',
                 'quantity.*' => 'min:1',
                 'category' => 'required',
-                'fabric' => 'required',
-                'fabric_owner' => 'required',
-                'duration' => 'required|date',
+                // 'fabric' => 'required',
+                // 'fabric_owner' => 'required',
+                // 'duration' => 'required|date',
                 'price' => 'required|numeric',
                 'image.0' => 'mimes:jpeg,jpg,png,bmp|max:3000',
             ],
@@ -344,15 +453,23 @@ class OrderController extends Controller
                 'height.*.required' => 'Không được để trống thuộc tính chiều cao',
                 'quantity.*.required' => 'Không được để trống sớ lượng sản phẩm',
                 'category.required' => 'Không được để trống danh mục sản phẩm',
-                'fabric.required' => 'Không được để trống loại vải',
-                'fabric_owner.required' => 'Không được để trống nguồn cung cấp vải',
+                // 'fabric.required' => 'Không được để trống loại vải',
+                // 'fabric_owner.required' => 'Không được để trống nguồn cung cấp vải',
                 'quality.required' => 'Không được để trống chất lượng sản phẩm',
-                'price.required' => 'Không được để trống giá tiền',
+                // 'price.required' => 'Không được để trống giá tiền',
                 'price.numeric' => 'Giá tiền không hợp lệ',
-                'duration.required' => 'Không được để trống ngày trả đơn',
+                // 'duration.required' => 'Không được để trống ngày trả đơn',
                 'image.0.mimes' => 'Định dạng file ảnh không hợp lệ',
                 'image.0.max' => 'Dung lượng tối đa của hình ảnh không phải nhỏ hơn 3MB'
             ]
         );
+
+        if($validator->fails()){
+            return back()->withInput()->withErrors($validator);   
+        }
+    }
+
+    public function export(){
+        return Excel::download(new OrderExport, 'don_hang.xlsx');
     }
 }

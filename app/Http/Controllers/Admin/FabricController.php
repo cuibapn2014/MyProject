@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Fabric;
 use App\Models\Image;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\FabricExport;
+use Illuminate\Support\Facades\Validator;
 
 class FabricController extends Controller
 {
@@ -28,30 +31,34 @@ class FabricController extends Controller
 
     public function store(Request $req)
     {
-        $this->validate(
-            $req,
+        $validator = Validator::make(
+            $req->all(),
             [
-                'name' => 'required',
-                'color' => 'required',
-                'property' => 'required',
-                'price' => 'required|integer',
-                'location' => 'required',
-                'image.*' => 'required',
-                'phone_number' => 'required|numeric|digits:10',
+                // 'name' => 'required',
+                // 'color' => 'required',
+                // 'property' => 'required',
+                'price' => 'integer',
+                // 'location' => 'required',
+                // 'image.*' => 'required',
+                'phone_number' => 'numeric|digits:10',
             ],
             [
-                'name.required' => 'Tên loại vải không được để trống',
-                'color.required' => 'Màu loại vải không được để trống',
-                'property.required' => 'Tính chất loại vải không được để trống',
-                'price.required' => 'Giá tiền không được để trống',
+                // 'name.required' => 'Tên loại vải không được để trống',
+                // 'color.required' => 'Màu loại vải không được để trống',
+                // 'property.required' => 'Tính chất loại vải không được để trống',
+                // 'price.required' => 'Giá tiền không được để trống',
                 'price.integer' => 'Giá tiền phải là số nguyên',
-                'location.required' => 'Địa chỉ mua hàng không được để trống',
-                'image.*.required' => 'Bạn chưa thêm hình ảnh cho loại vải này',
-                'phone_number.required' => 'Số điện thoại không được để trống',
+                // 'location.required' => 'Địa chỉ mua hàng không được để trống',
+                // 'image.*.required' => 'Bạn chưa thêm hình ảnh cho loại vải này',
+                // 'phone_number.required' => 'Số điện thoại không được để trống',
                 'phone_number.numeric' => 'Số điện thoại không hợp lệ',
                 'phone_number.digits' => 'Số điện thoại không hợp lệ',
             ]
         );
+
+        if($validator->fails()){
+            return back()->withErrors($validator)->withInput();   
+        }
 
         $fabric = new Fabric();
         $fabric->Ten = $req->name;
@@ -138,5 +145,9 @@ class FabricController extends Controller
     {
         Fabric::findOrFail($id)->delete();
         return back()->with('success', 'Đã xóa');
+    }
+
+    public function export(){
+        return Excel::download(new FabricExport, 'loai_vai.xlsx');
     }
 }

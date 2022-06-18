@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Cost;
 use Illuminate\Support\Facades\File;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminController extends Controller
 {
@@ -27,7 +28,7 @@ class AdminController extends Controller
         foreach ($costs as $cost) {
             if ($cost->LimitStart <= $quantity && $cost->LimitFinish >= $quantity) $price = $cost->Gia;
         }
-        // $pdf = PDF::loadView('admin.invoice',['order' => $order]);
+        // $pdf = PDF::loadView('admin.invoice',['order' => $order,'cost' => $price])->setOptions(['defaultFont' => 'time-new-roman']);
         // return $pdf->stream('invoice.pdf', array('Attachment'=> 1));         
         return view('admin.invoice', ['order' => $order,'cost' => $price]);
     }

@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@yield('title') - {{ config('app.name') }}</title>
     <base href="{{asset('')}}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('/img/favicons/favicon-16x16.png') }}">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/tailwind.output.css') }}" />
@@ -28,7 +31,9 @@
 </head>
 
 <body>
-    <div id="app" class="flex h-screen bg-gray-50 dark:bg-gray-900" user="{{ auth()->user()->id }}" :class="{ 'overflow-hidden': isSideMenuOpen }">
+    <noscript>Vui lòng bật Javascript của trình duyệt</noscript>
+    <div id="app" class="flex h-screen bg-gray-50 dark:bg-gray-900" user="{{ auth()->user()->id }}"
+        :class="{ 'overflow-hidden': isSideMenuOpen }">
         <!-- Desktop sidebar -->
         @include('layouts.navigate')
         <div class="flex flex-col flex-1 w-full">
@@ -40,7 +45,8 @@
                 [[setIsActive({{$current}})]]
             </main>
         </div>
-        <profile v-if="isModalProfile" class="z-50" :user="{{ auth()->user()->load(['role']) }}" @toggle-profile="toggleProfileModal"></profile>
+        <profile v-if="isModalProfile" class="z-50" :user="{{ auth()->user()->load(['role']) }}"
+            @toggle-profile="toggleProfileModal"></profile>
 
     </div>
     <script src="{{ asset('js/app.js') }}" defer></script>

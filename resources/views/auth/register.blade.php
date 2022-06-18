@@ -10,6 +10,7 @@
     <meta http-equiv="refresh" content="2; url={{ route('login') }}">
     @endif
     <link rel="stylesheet" href="{{ asset('css/app.css')}} " />
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('/img/favicons/favicon-16x16.png') }}">
 
     <title>Register | {{config('app.name')}}</title>
 

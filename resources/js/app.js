@@ -43,15 +43,15 @@ window.axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 const app = new Vue({
     el: '#app',
     mixins: [clickaway],
-    props:[
+    props: [
         'user'
     ],
     delimiters: [
         "[[", "]]"
     ],
     created() {
-        this.user = document.querySelector('#app').getAttribute('user') 
-        this.fetchTask()     
+        this.user = document.querySelector('#app').getAttribute('user')
+        this.fetchTask()
     },
     mounted() {
         this.getTheme()
@@ -85,12 +85,13 @@ const app = new Vue({
             this.getListTask()
 
             await axios.get('/admin/task/get')
-                .then(res => this.dataTask = res.data)
-                .catch(err => console.log(err))
-
-            this.dataTask.map(item => {
-                this.countTask = item.TrangThai == 0 ? this.countTask + 1 : this.countTask
-            })
+                .then(res => {
+                    this.dataTask = res.data
+                    this.dataTask.map(item => {
+                        this.countTask = item.TrangThai == 0 ? this.countTask + 1 : this.countTask
+                    })
+                })
+                .catch(err => console.error(err))
 
             if (this.countTask > 0) {
                 const oldTitle = document.title
@@ -99,14 +100,14 @@ const app = new Vue({
                 }, 1000)
             }
         },
-        getListTask(){
+        getListTask() {
             window.Echo.private(`task.${this.user}`)
-            .listen('TaskEvent', (e) => {
-                console.log(e)
-                this.dataTask.push(e.assign)
-                console.log(this.dataTask)
-                this.countTask += 1
-            })
+                .listen('TaskEvent', (e) => {
+                    console.log(e)
+                    this.dataTask.push(e.assign)
+                    console.log(this.dataTask)
+                    this.countTask += 1
+                })
         },
 
         getThemeFromLocalStorage() {

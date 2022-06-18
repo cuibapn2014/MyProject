@@ -23,6 +23,8 @@
         "
         placeholder="Nguyễn Văn A"
         name="fullname"
+        v-model="this.customer"
+        autocomplete="off"
       />
     </label>
 
@@ -45,6 +47,7 @@
         placeholder="XXXXXXXXXX"
         name="phone_number"
         type="text"
+        v-model="this.phone"
       />
     </label>
 
@@ -75,6 +78,7 @@
             v-for="province in this.dataProvince"
             :key="province.code"
             :value="province.name"
+            :selected="oldprovince != null && province.name == oldprovince"
           >
             {{ province.name }}
           </option>
@@ -102,6 +106,9 @@
           name="district"
         >
           <option selected value="">Chọn Quận/Huyện</option>
+          <option v-if="olddistrict != ''" selected :value="olddistrict">
+            {{ olddistrict }}
+          </option>
           <option
             v-for="district in this.dataDistrict"
             :key="district.code"
@@ -133,10 +140,14 @@
           name="ward"
         >
           <option selected value="">Chọn Phường/Xã</option>
+          <option v-if="oldward != ''" selected :value="oldward">
+            {{ oldward }}
+          </option>
           <option
             v-for="ward in this.dataWard"
             :key="ward.code"
             :value="ward.name"
+            :selected="oldward != null && ward.name == oldward"
           >
             {{ ward.name }}
           </option>
@@ -162,6 +173,7 @@
         placeholder="Tên đường, Hẻm/ngõ.."
         name="address"
         type="text"
+        v-model="this.address"
       />
     </label>
 
@@ -327,37 +339,52 @@
         v-for="(properties, index) in dataProperty"
         :key="index"
       >
-        <label class="block text-sm my-1">
+        <label class="block text-sm mr-2">
           <span class="flex text-gray-700 dark:text-gray-400"
-            >Cân nặng
-            <p class="text-red-500 mx-1">*</p></span
-          >
-          <select
+            >Kilogram(Kg)
+          </span>
+          <input
             class="
               block
               w-full
               mt-1
               text-sm
-              dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
-              form-select
+              dark:border-gray-600 dark:bg-gray-700
               focus:border-purple-400
               focus:outline-none
               focus:shadow-outline-purple
-              dark:focus:shadow-outline-gray
+              dark:text-gray-300 dark:focus:shadow-outline-gray
+              form-input
             "
+            type="number"
+            placeholder=""
             name="weight[]"
-          >
-            <option selected value="">Chọn cân nặng</option>
-            <option v-for="size in dataSize" :key="size" :value="size">
-              {{ size }}
-            </option>
-          </select>
+          />
+        </label>
+        <label class="block text-sm mr-2">
+          <span class="flex text-gray-700 dark:text-gray-400"
+            >Centimet(cm)
+          </span>
+          <input
+            class="
+              block
+              w-full
+              mt-1
+              text-sm
+              dark:border-gray-600 dark:bg-gray-700
+              focus:border-purple-400
+              focus:outline-none
+              focus:shadow-outline-purple
+              dark:text-gray-300 dark:focus:shadow-outline-gray
+              form-input
+            "
+            type="number"
+            placeholder=""
+            name="height[]"
+          />
         </label>
         <label class="block text-sm my-1 mx-2">
-          <span class="flex text-gray-700 dark:text-gray-400"
-            >Chiều cao
-            <p class="text-red-500 mx-1">*</p></span
-          >
+          <span class="flex text-gray-700 dark:text-gray-400">Size</span>
           <select
             class="
               block
@@ -371,9 +398,9 @@
               focus:shadow-outline-purple
               dark:focus:shadow-outline-gray
             "
-            name="height[]"
+            name="size[]"
           >
-            <option selected value="">Chọn chiều cao</option>
+            <option selected value=""></option>
             <option v-for="size in dataSize" :key="size" :value="size">
               {{ size }}
             </option>
@@ -449,8 +476,7 @@
     <div class="flex items-center">
       <label class="block text-sm mr-2">
         <span class="flex text-gray-700 dark:text-gray-400"
-          >Vải chính (Mét)
-          <p class="text-red-500 mx-1">*</p></span
+          >Vải chính (Mét)</span
         >
         <input
           class="
@@ -474,8 +500,7 @@
       <label class="block text-sm mr-2">
         <span class="flex text-gray-700 dark:text-gray-400"
           >Vải phụ (Mét)
-          <p class="text-red-500 mx-1">*</p></span
-        >
+        </span>
         <input
           class="
             block
@@ -498,8 +523,7 @@
       <label class="block text-sm mr-2">
         <span class="flex text-gray-700 dark:text-gray-400"
           >Vải lót (Mét)
-          <p class="text-red-500 mx-1">*</p></span
-        >
+        </span>
         <input
           class="
             block
@@ -520,7 +544,7 @@
         />
       </label>
     </div>
-    <label class="block my-2 text-sm w-2/4 sm:w-full">
+    <!-- <label class="block my-2 text-sm w-2/4 sm:w-full">
       <span class="flex text-gray-700 dark:text-gray-400">
         Nguồn cung cấp vải
         <p class="text-red-500 mx-1">*</p></span
@@ -542,12 +566,9 @@
         <option value="company">Công ty</option>
         <option value="customer">Khách hàng</option>
       </select>
-    </label>
+    </label> -->
     <label class="block my-2 text-sm w-2/4 sm:w-full">
-      <span class="flex text-gray-700 dark:text-gray-400">
-        Phụ liệu
-        <p class="text-red-500 mx-1">*</p></span
-      >
+      <span class="flex text-gray-700 dark:text-gray-400"> Phụ liệu </span>
       <select
         class="
           block
@@ -602,10 +623,7 @@
     </label>
     <div class="flex mt-1" v-if="productType == 'available'">
       <label class="block text-sm my-1">
-        <span class="flex text-gray-700 dark:text-gray-400"
-          >Tiền cọc
-          <p class="text-red-500 mx-1">*</p></span
-        >
+        <span class="flex text-gray-700 dark:text-gray-400">Tiền cọc </span>
         <input
           class="
             block
@@ -637,6 +655,7 @@
             w-full
             mt-1
             text-sm
+            bg-gray-50
             dark:border-gray-600 dark:bg-gray-700
             focus:border-purple-400
             focus:outline-none
@@ -646,10 +665,11 @@
             form-input
           "
           type="number"
-          min="1000"
+          min="0"
           placeholder=""
           name="totalPrice"
-          value="1000"
+          value="0"
+          readonly
           v-model="totalPrice"
           :disabled="this.productType === 'unavailable'"
         />
@@ -711,6 +731,7 @@
           dark:focus:shadow-outline-gray
         "
         rows="3"
+        :value="note"
         placeholder=""
         name="note"
       ></textarea>
@@ -841,7 +862,7 @@
           "
         >
           <a
-            href=""
+            href="/admin/order"
             class="
               w-full
               px-5
@@ -903,6 +924,15 @@ import { mixin as clickaway } from "vue-clickaway";
 import Size from "../data.json";
 export default {
   mixins: [clickaway],
+  props: [
+    "customer",
+    "address",
+    "phone",
+    "oldward",
+    "olddistrict",
+    "oldprovince",
+    "note",
+  ],
   created() {
     this.getApiProvince();
     this.getApiQuality();
@@ -916,7 +946,8 @@ export default {
       (a, b) => a + parseInt(b.quantity),
       0
     );
-    this.getApiCost();
+    if (this.idCategorySelected != 0 && this.idQualitySelected != 0)
+      this.getApiCost();
   },
   components: {
     InputFile,
@@ -928,8 +959,8 @@ export default {
       dataDistrict: null,
       dataWard: null,
       productType: "available",
-      deposit: 1000,
-      totalPrice: 1000,
+      deposit: 0,
+      totalPrice: 0,
       price: null,
       dataQuality: [],
       dataCategory: [],
@@ -939,7 +970,7 @@ export default {
         {
           weight: 0,
           height: 0,
-          quantity: 0,
+          quantity: 1,
         },
       ],
       idCategorySelected: 0,
@@ -1029,7 +1060,7 @@ export default {
       this.dataProperty.push({
         weight: 0,
         height: 0,
-        quantity: 0,
+        quantity: 1,
       });
     },
     handleClickRemoveProperty() {

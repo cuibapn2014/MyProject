@@ -16,10 +16,14 @@ class CostController extends Controller
 
     public function getCost(Request $req, $idChatLuong, $idDanhMuc)
     {
-        foreach (Cost::where('id_ChatLuong', $idChatLuong)->where('id_DanhMuc', $idDanhMuc)->get() as $cost) {
-            if ($cost->LimitStart <= $req->quantity && $cost->LimitFinish >= $req->quantity) return $cost;
+        if ($req->quantity < 20) {
+            $cost = Cost::where('id_ChatLuong', $idChatLuong)->where('id_DanhMuc', $idDanhMuc)->first();
+            $cost->Gia = $cost->Gia * 1.5;
+            return $cost;
+        } else {
+            foreach (Cost::where('id_ChatLuong', $idChatLuong)->where('id_DanhMuc', $idDanhMuc)->get() as $cost) {
+                if ($cost->LimitStart <= $req->quantity && $cost->LimitFinish >= $req->quantity) return $cost;
+            }
         }
-
-        return null;
     }
 }

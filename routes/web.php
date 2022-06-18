@@ -45,6 +45,12 @@ Route::get('/logout', function () {
     return redirect()->route('home');
 })->middleware('auth')->name('logout');
 
+//Forgot password
+Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->name('auth.forgot');
+Route::post('/forgot-password', [AuthController::class, 'postForgotPassword'])->name('auth.forgot.request');
+Route::get('/reset-password/{token}',[AuthController::class, 'resetPassword'])->name('password.reset');
+Route::post('/reset-password',[AuthController::class, 'updatePassword'])->name('auth.password.update');
+
 //Admin Route
 Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
     $route->get('/', [AdminController::class, 'index'])->name('admin.home');
@@ -56,6 +62,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
         $route->get('/update/{id}', [FabricController::class, 'getUpdate'])->name('admin.fabric.update');
         $route->post('/update/{id}', [FabricController::class, 'update'])->name('admin.fabric.request.update');
         $route->get('/delete/{id}', [FabricController::class, 'delete'])->name('admin.fabric.delete');
+        $route->get('/export', [FabricController::class, 'export'])->name('admin.fabric.export');
     });
 
     $route->group(['prefix' => 'ingredient'], function ($route) {
@@ -65,6 +72,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
         $route->get('/update/{id}', [IngredientController::class, 'getUpdate'])->name('admin.ingredient.update');
         $route->post('/update/{id}', [IngredientController::class, 'update'])->name('admin.ingredient.request.update');
         $route->get('/delete/{id}', [IngredientController::class, 'delete'])->name('admin.ingredient.delete');
+        $route->get('/export', [IngredientController::class, 'export'])->name('admin.ingredient.export');
     });
 
     $route->group(['prefix' => 'order'], function ($route) {
@@ -74,6 +82,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
         $route->get('/update/{id}', [OrderController::class, 'edit'])->name('admin.order.update');
         $route->post('/update/{id}', [OrderController::class, 'update'])->name('admin.order.request.update');
         $route->get('/delete/{id}', [OrderController::class, 'delete'])->name('admin.order.delete');
+        $route->get('/export', [OrderController::class, 'export'])->name('admin.order.export');
     });
 
     $route->group(['prefix' => 'task'], function ($route) {
@@ -93,12 +102,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
         $route->get('/', [CostController::class, 'getAll'])->name('admin.cost.index');
         $route->get('/{idChatLuong}/{idDanhMuc}', [CostController::class, 'getCost'])->name('admin.cost.getBy');
     });
-    
+
     $route->get('/invoice/{id}', [AdminController::class, 'getInvoice'])->name('admin.invoice');
 
     $route->get('/image/delete/{type}/{idProvide}/{idImg}', [ImageController::class, 'delete'])->name('admin.image.delete');
 
     $route->post('/image-update/{id}', [AdminController::class, 'updateImageUser'])->name('admin.user.image.update');
     $route->post('/update/{id}', [AdminController::class, 'updateUser'])->name('admin.user.update');
-
 });

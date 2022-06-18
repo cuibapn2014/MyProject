@@ -41,7 +41,8 @@ class TaskController extends Controller
     public function create()
     {
         $this->middleware('admin');
-        return view('admin.manage.task.createTask', ['users' => User::where('id', '!=', auth()->user()->id)->get()]);
+        $user =  User::where('id', '!=', auth()->user()->id)->where('role', '!=', 2)->get();
+        return view('admin.manage.task.createTask', ['users' => $user]);
     }
 
     public function store(Request $req)
@@ -75,7 +76,7 @@ class TaskController extends Controller
                 'id_NguoiNhan' => $user,
                 'id_CongViec' => $task->id
             ]);
-            broadcast(new TaskEvent($assign->load(['task','task.user'])))->toOthers();
+            broadcast(new TaskEvent($assign->load(['task', 'task.user'])))->toOthers();
         }
 
 

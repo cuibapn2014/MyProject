@@ -15,7 +15,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('optimize:clear')->daily();
+        $schedule->command('view:clear')->daily();
+        $schedule->command('auth:clear-resets')->everyFiveMinutes();
     }
 
     /**

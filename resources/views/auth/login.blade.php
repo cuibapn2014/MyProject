@@ -7,6 +7,8 @@
     <meta name="author" content="Quốc An">
     <meta name="description" content="">
     <link rel="stylesheet" href="{{ asset('css/app.css')}} " />
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('/img/favicons/favicon-16x16.png') }}">
+
 
     <title>Login | {{config('app.name')}}</title>
 
@@ -64,7 +66,7 @@
                         <label class="mx-1" for="chk_remember">Nhớ tôi</label>
                     </div>
                     <div class="text-right text-black hover:underline hover:text-gray-500 text-base">
-                        <a href="#" class="">Quên Mật Khẩu?</a>
+                        <a href="{{ route('auth.forgot') }}" class="">Quên Mật Khẩu?</a>
                     </div>
                     <div class="text-right text-black hover:underline hover:text-gray-500 text-base">
                         <a href="{{ route('register') }}">Chưa có Tài Khoản? Đăng Ký!</a>

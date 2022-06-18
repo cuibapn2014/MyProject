@@ -273,6 +273,7 @@
             min="0"
             type="number"
             name="price"
+            v-model="order.detail.Gia"
             autocomplete="off"
           />
           <p
@@ -318,12 +319,12 @@
         name="category"
         @change="handleChangeCategory"
       >
-        <option selected :value="null">Chọn danh mục</option>
+        <option value="">Chọn danh mục</option>
         <option
           v-for="category in this.dataCategory"
           :key="category.id"
           :value="category.id"
-          :selected="order.detail.id_DanhMuc === category.id"
+          :selected="order.detail && order.detail.id_DanhMuc == category.id"
         >
           {{ category.Ten }}
         </option>
@@ -349,37 +350,54 @@
         v-for="(properties, index) in dataProperty"
         :key="index"
       >
-        <label class="block text-sm my-1">
+        <label class="block text-sm mr-2">
           <span class="flex text-gray-700 dark:text-gray-400"
-            >Cân nặng
-            <p class="text-red-500 mx-1">*</p></span
-          >
-          <select
+            >Kilogram(Kg)
+          </span>
+          <input
             class="
               block
               w-full
               mt-1
               text-sm
-              dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
-              form-select
+              dark:border-gray-600 dark:bg-gray-700
               focus:border-purple-400
               focus:outline-none
               focus:shadow-outline-purple
-              dark:focus:shadow-outline-gray
+              dark:text-gray-300 dark:focus:shadow-outline-gray
+              form-input
             "
+            type="number"
+            v-model="properties.CanNang"
+            placeholder=""
             name="weight[]"
-          >
-            <option selected value="">Chọn cân nặng</option>
-            <option v-for="size in dataSize" :key="size" :value="size" :selected="size === properties.CanNang">
-              {{ size }}
-            </option>
-          </select>
+          />
+        </label>
+        <label class="block text-sm mr-2">
+          <span class="flex text-gray-700 dark:text-gray-400"
+            >Centimet(cm)
+          </span>
+          <input
+            class="
+              block
+              w-full
+              mt-1
+              text-sm
+              dark:border-gray-600 dark:bg-gray-700
+              focus:border-purple-400
+              focus:outline-none
+              focus:shadow-outline-purple
+              dark:text-gray-300 dark:focus:shadow-outline-gray
+              form-input
+            "
+            type="number"
+            v-model="properties.ChieuCao"
+            placeholder=""
+            name="height[]"
+          />
         </label>
         <label class="block text-sm my-1 mx-2">
-          <span class="flex text-gray-700 dark:text-gray-400"
-            >Chiều cao
-            <p class="text-red-500 mx-1">*</p></span
-          >
+          <span class="flex text-gray-700 dark:text-gray-400">Size</span>
           <select
             class="
               block
@@ -393,10 +411,15 @@
               focus:shadow-outline-purple
               dark:focus:shadow-outline-gray
             "
-            name="height[]"
+            name="size[]"
           >
-            <option selected value="">Chọn chiều cao</option>
-            <option v-for="size in dataSize" :key="size" :value="size" :selected="properties.ChieuCao">
+            <option selected value=""></option>
+            <option
+              v-for="size in dataSize"
+              :key="size"
+              :value="size"
+              :selected="properties.KichCo && size == properties.KichCo"
+            >
               {{ size }}
             </option>
           </select>
@@ -458,12 +481,12 @@
         "
         name="fabric"
       >
-        <option selected value="">Chọn loại vải</option>
+        <option value="">Chọn loại vải</option>
         <option
           v-for="fabric in this.dataFabric"
           :key="fabric.id"
           :value="fabric.id"
-          :selected="order.detail.fabric.id == fabric.id"
+          :selected="order.detail.fabric && order.detail.fabric.id === fabric.id"
         >
           {{ fabric.Ten }}
         </option>
@@ -473,8 +496,7 @@
       <label class="block text-sm mr-2">
         <span class="flex text-gray-700 dark:text-gray-400"
           >Vải chính (Mét)
-          <p class="text-red-500 mx-1">*</p></span
-        >
+        </span>
         <input
           class="
             block
@@ -498,8 +520,7 @@
       <label class="block text-sm mr-2">
         <span class="flex text-gray-700 dark:text-gray-400"
           >Vải phụ (Mét)
-          <p class="text-red-500 mx-1">*</p></span
-        >
+        </span>
         <input
           class="
             block
@@ -518,14 +539,12 @@
           type="number"
           min="0"
           v-model="order.detail.VaiPhu"
-
         />
       </label>
       <label class="block text-sm mr-2">
         <span class="flex text-gray-700 dark:text-gray-400"
           >Vải lót (Mét)
-          <p class="text-red-500 mx-1">*</p></span
-        >
+        </span>
         <input
           class="
             block
@@ -544,11 +563,10 @@
           type="number"
           min="0"
           v-model="order.detail.VaiLot"
-
         />
       </label>
     </div>
-    <label class="block my-2 text-sm w-2/4 sm:w-full">
+    <!-- <label class="block my-2 text-sm w-2/4 sm:w-full">
       <span class="flex text-gray-700 dark:text-gray-400">
         Nguồn cung cấp vải
         <p class="text-red-500 mx-1">*</p></span
@@ -580,12 +598,9 @@
           Khách hàng
         </option>
       </select>
-    </label>
+    </label> -->
     <label class="block my-2 text-sm w-2/4 sm:w-full">
-      <span class="flex text-gray-700 dark:text-gray-400">
-        Phụ liệu
-        <p class="text-red-500 mx-1">*</p></span
-      >
+      <span class="flex text-gray-700 dark:text-gray-400"> Phụ liệu </span>
       <select
         class="
           block
@@ -599,12 +614,12 @@
         "
         name="ingredient"
       >
-        <option selected value="">Chọn phụ liệu</option>
+        <option value="">Chọn phụ liệu</option>
         <option
           v-for="ingredient in this.dataIngredient"
           :key="ingredient.id"
           :value="ingredient.id"
-          :selected="order.detail.ingredient.id == ingredient.id"
+          :selected="order.detail.ingredient && order.detail.ingredient.id == ingredient.id"
         >
           {{ ingredient.Ten }}
         </option>
@@ -677,16 +692,17 @@
             w-full
             mt-1
             text-sm
+            bg-gray-50
             dark:border-gray-600 dark:bg-gray-700
             focus:border-purple-400
             focus:outline-none
             focus:shadow-outline-purple
-            disabled:bg-gray-50
             dark:text-gray-300 dark:focus:shadow-outline-gray
             form-input
           "
           type="number"
-          min="1000"
+          min="0"
+          readonly
           placeholder=""
           name="totalPrice"
           :value="this.totalPrice"
@@ -955,14 +971,20 @@ export default {
     this.getApiFabric();
     this.getApiIngredient();
     this.getApiCost();
-    this.dataProperty = this.order.detail.properties.length > 0 ? this.order.detail.properties : this.dataProperty
+    this.dataProperty =
+      this.order.detail.properties.length > 0
+        ? this.order.detail.properties
+        : this.dataProperty;
   },
   updated() {
     this.price = this.formatPrice(
       this.order.detail.TongTien - this.order.detail.TienCoc
     );
-    this.quantity = this.dataProperty.reduce((a, b) => a + parseInt(b.SoLuong), 0)
-    this.getApiCost()
+    this.quantity = this.dataProperty.reduce(
+      (a, b) => a + parseInt(b.SoLuong),
+      0
+    );
+    this.getApiCost();
   },
   data() {
     return {
@@ -972,8 +994,8 @@ export default {
       dataWard: null,
       productType:
         this.order.detail.LoaiHang === "Hàng may" ? "available" : "unavailable",
-      deposit: 1000,
-      totalPrice: 1000,
+      deposit: 0,
+      totalPrice: 0,
       price: null,
       dataQuality: [],
       dataCategory: [],

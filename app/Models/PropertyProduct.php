@@ -13,5 +13,5 @@ class PropertyProduct extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['CanNang', 'ChieuCao', 'id_ChiTiet', 'SoLuong'];
+    protected $fillable = ['CanNang', 'ChieuCao', 'KichCo', 'id_ChiTiet', 'SoLuong'];
 }

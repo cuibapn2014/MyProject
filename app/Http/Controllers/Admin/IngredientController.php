@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\IngredientExport;
 use App\Http\Controllers\Controller;
 use App\Models\Image;
 use App\Models\Ingredient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class IngredientController extends Controller
@@ -29,26 +32,31 @@ class IngredientController extends Controller
 
     public function store(Request $req)
     {
-        $this->validate(
-            $req,
+        $validator = Validator::make(
+            $req->all(),
             [
-                'name' => 'required',
-                'image.*' => 'required',
-                'location' => 'required',
-                'phone_number' => 'required|numeric|digits:10',
-                'price' => 'required|integer'
+                // 'name' => 'required',
+                // 'image.*' => 'required',
+                // 'location' => 'required',
+                'phone_number' => 'numeric|digits:10',
+                'price' => 'integer'
             ],
             [
-                'name.required' => 'Tên phụ liệu không được để trống',
-                'price.required' => 'Giá không được để trống',
+                // 'name.required' => 'Tên phụ liệu không được để trống',
+                // 'price.required' => 'Giá không được để trống',
                 'price.integer' => 'Giá phải là số nguyên',
-                'image.*.required' => 'Bạn chưa thêm hình ảnh cho phụ liệu này',
-                'location.required' => 'Địa chỉ mua hàng không được để trống',
+                // 'image.*.required' => 'Bạn chưa thêm hình ảnh cho phụ liệu này',
+                // 'location.required' => 'Địa chỉ mua hàng không được để trống',
                 'phone_number.required' => 'Số điện thoại không được để trống',
                 'phone_number.numeric' => 'Số điện thoại không hợp lệ',
                 'phone_number.digits' => 'Số điện thoại không hợp lệ',
             ]
         );
+
+        if($validator->fails()){
+            return back()->withErrors($validator)->withInput();   
+        }
+
         $ingredient = new Ingredient();
         $ingredient->Ten = $req->name;
         $ingredient->DiaChi = $req->location;
@@ -82,17 +90,17 @@ class IngredientController extends Controller
         $validator =  $this->validate(
             $req,
             [
-                'name' => 'required',
-                'location' => 'required',
-                'phone_number' => 'required|numeric|digits:10',
-                'price' => 'required|integer'
+                // 'name' => 'required',
+                // 'location' => 'required',
+                'phone_number' => 'numeric|digits:10',
+                'price' => 'integer'
             ],
             [
-                'name.required' => 'Tên phụ liệu không được để trống',
-                'price.required' => 'Giá không được để trống',
+                // 'name.required' => 'Tên phụ liệu không được để trống',
+                // 'price.required' => 'Giá không được để trống',
                 'price.integer' => 'Giá phải là số nguyên',
-                'location.required' => 'Địa chỉ mua hàng không được để trống',
-                'phone_number.required' => 'Số điện thoại không được để trống',
+                // 'location.required' => 'Địa chỉ mua hàng không được để trống',
+                // 'phone_number.required' => 'Số điện thoại không được để trống',
                 'phone_number.numeric' => 'Số điện thoại không hợp lệ',
                 'phone_number.digits' => 'Số điện thoại không hợp lệ',
             ]
@@ -136,5 +144,9 @@ class IngredientController extends Controller
         }
         Ingredient::findOrFail($id)->delete();
         return back()->with('success', 'Đã xóa');
+    }
+
+    public function export(){
+        return Excel::download(new IngredientExport, 'phu_lieu.xlsx');
     }
 }

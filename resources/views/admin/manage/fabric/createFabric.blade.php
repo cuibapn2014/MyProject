@@ -21,7 +21,7 @@ $current = 2;
                 <span class="text-gray-700 dark:text-gray-400">Tên loại vải</span>
                 <input
                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    placeholder="" name="name" />
+                    placeholder="" name="name" value="{{ old('name') }}"/>
             </label>
             <div class="upload__image block text-sm my-3">
                 <label class="text-gray-700 dark:text-gray-400">Hình ảnh</label>
@@ -36,37 +36,37 @@ $current = 2;
                 <span class="text-gray-700 dark:text-gray-400">Màu sắc</span>
                 <input
                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    name="color" />
+                    name="color" value="{{ old('color') }}"/>
             </label>
             <label class="block text-sm my-2">
                 <span class="text-gray-700 dark:text-gray-400">Tính chất</span>
                 <input
                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    name="property" />
+                    name="property" value="{{ old('property') }}"/>
             </label>
             <label class="block text-sm my-2">
                 <span class="text-gray-700 dark:text-gray-400">Giá</span>
                 <input
                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    type="number" min="1" name="price" />
+                    type="number" min="1" name="price" value="{{ old('price') }}"/>
             </label>
             <label class="block text-sm my-2">
                 <span class="text-gray-700 dark:text-gray-400">Địa chỉ mua</span>
                 <input
                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    type="text" name="location" />
+                    type="text" name="location" value="{{ old('location') }}"/>
             </label>
             <label class="block text-sm my-2">
                 <span class="text-gray-700 dark:text-gray-400">Số điện thoại liên hệ</span>
                 <input
                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    type="text" name="phone_number" placeholder="XXXXXXXXXX" />
+                    type="text" name="phone_number" placeholder="XXXXXXXXXX"value="{{ old('phone_number') }}" />
             </label>
             <label class="block mt-4 text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Ghi chú</span>
                 <textarea
                     class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                    rows="3" placeholder="" name="note"></textarea>
+                    rows="3" placeholder="" name="note" value="{{ old('note') }}"></textarea>
             </label>
             <button class="mt-4 text-white px-4 py-2 rounded-lg border-0 bg-indigo-600">Thêm</button>
             <a class="mt-4 text-white px-4 py-2 rounded-lg border-0 bg-indigo-600 cursor-pointer"

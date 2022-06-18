@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
+
 
 class AuthController extends Controller
 {
@@ -81,5 +84,58 @@ class AuthController extends Controller
         $user->save();
 
         return back()->with('success', 'Đăng ký thành công!');
+    }
+
+    public function forgotPassword()
+    {
+        return view('auth.forgotPassword');
+    }
+
+    public function postForgotPassword(Request $req)
+    {
+        $this->validate($req, [
+            'email' => 'required|email'
+        ], [
+            'email.required' => 'Email không được để trống',
+            'email.email' => 'Email không hợp lệ'
+        ]);
+
+        $status = Password::sendResetLink(
+            $req->only('email')
+        );
+
+        return $status === Password::RESET_LINK_SENT
+            ? back()->with(['status' => __($status)])
+            : back()->withErrors(['email' => __($status)]);
+    }
+
+    public function resetPassword($token)
+    {
+        return view('auth.resetPassword', ['token' => $token]);
+    }
+
+    public function updatePassword(Request $req)
+    {
+        $req->validate([
+            'token' => 'required',
+            'email' => 'required|email|exists:users',
+            'password' => 'required|string|min:6|confirmed',
+            'password_confirmation' => 'required'
+        ]);
+
+        $status = Password::reset(
+            $req->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->setRememberToken(Str::random(60));
+
+                $user->save();
+            }
+        );
+
+        return $status === Password::PASSWORD_RESET
+            ? redirect()->route('login')->with('status', __($status))
+            : back()->withErrors(['email' => [__($status)]]);
     }
 }
