@@ -85,7 +85,7 @@ class FabricController extends Controller
             }
         }
 
-        return back()->with('success', 'Thêm thành công');
+        return redirect()->route('admin.fabric.index')->with('success', 'Thêm thành công');
     }
 
     public function getUpdate($id)
@@ -138,7 +138,7 @@ class FabricController extends Controller
                 }
             }
         }
-        return back()->with('success', 'Cập nhật thành công');
+        return redirect()->route('admin.fabric.index')->with('success', 'Cập nhật thành công');
     }
 
     public function delete($id)

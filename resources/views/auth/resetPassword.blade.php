@@ -23,7 +23,7 @@
                 <p class="text-green-500">{{ session('status') }}</p>
                 @endif
                 <label>Email</label>
-                <input class="bg-gray-50 p-2 rounded-md border" type="email" value="{{ $email ?? old('email') }}" name="email" autocomplete="email" autofocus>
+                <input class="bg-gray-50 p-2 rounded-md border focus:outline-none" type="email" readonly value="{{ $email ?? old('email') }}" name="email" autocomplete="email" autofocus>
                 <label for="password" class="mt-2">Mật khẩu mới</label>
                 <input class="bg-gray-50 p-2 rounded-md border" id="password" type="password" name="password">
                 <label for="password_confirm" class="mt-2">Xác nhận lại mật khẩu</label>

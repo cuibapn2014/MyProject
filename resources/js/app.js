@@ -42,7 +42,7 @@ window.axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
 const app = new Vue({
     el: '#app',
-    mixins: [clickaway],
+    mixins: [ clickaway ],
     props: [
         'user'
     ],
@@ -204,6 +204,12 @@ const app = new Vue({
         },
         toggleCheckAll() {
             this.checkAll = !this.checkAll
+        },
+        handleClickBackDrop(e){
+            if(e.target == document.querySelector('#backdrop-overlay'))
+            this.closeModal()
+            else if (e.target == document.querySelector('#backdrop-menu-overlay'))
+            this.closeSideMenu()
         }
     }
 });

@@ -21,7 +21,7 @@ class TaskController extends Controller
 
     public function getByUser()
     {
-        if (Auth::user()->role == 2) return redirect()->route('admin.task.index');
+        if (Auth::user()->role == 2) return abort(401);
         $id = Auth::user()->id;
 
         // return view('admin.manage.task.ListTask');
@@ -80,7 +80,7 @@ class TaskController extends Controller
         }
 
 
-        return back()->with('success', 'Thêm công việc thành công');
+        return redirect()->route('admin.task.index')->with('success', 'Thêm công việc thành công');
     }
 
     public function edit($id)
@@ -125,7 +125,7 @@ class TaskController extends Controller
             ]);
         }
 
-        return back()->with('success', 'Cập nhật công việc thành công');
+        return redirect()->route('admin.task.index')->with('success', 'Cập nhật công việc thành công');
     }
 
     public function removeUser($id)

@@ -10,7 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use App\Models\Role;
 use App\Models\Assign;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 

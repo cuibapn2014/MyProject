@@ -77,7 +77,7 @@ class IngredientController extends Controller
             }
         }
 
-        return back()->with('success', 'Thêm mới thành công');
+        return redirect()->route('admin.ingredient.index')->with('success', 'Thêm mới thành công');
     }
 
     public function getUpdate($id)
@@ -130,7 +130,7 @@ class IngredientController extends Controller
                 }
             }
         }
-        return back()->with('success', 'Cập nhật thành công');
+        return redirect()->route('admin.ingredient.index')->with('success', 'Cập nhật thành công');
     }
 
     public function delete($id)

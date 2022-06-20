@@ -13,6 +13,7 @@
         rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/tailwind.output.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
+
     <!-- Font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
         integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
@@ -27,7 +28,6 @@
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" defer></script>
     <script src="{{ asset('js/init-alpine.js') }}"></script>
-
 </head>
 
 <body>
@@ -45,8 +45,10 @@
                 [[setIsActive({{$current}})]]
             </main>
         </div>
-        <profile v-if="isModalProfile" class="z-50" :user="{{ auth()->user()->load(['role']) }}"
-            @toggle-profile="toggleProfileModal"></profile>
+        <transition enter-class="opacity-0" enter-to-class="opacity-100" leave-to-class="opacity-0">
+            <profile v-if="isModalProfile" class="z-50 transition ease-in-out duration-150"
+                :user="{{ auth()->user()->load(['role']) }}" @toggle-profile="toggleProfileModal"></profile>
+        </transition>
 
     </div>
     <script src="{{ asset('js/app.js') }}" defer></script>

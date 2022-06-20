@@ -97,35 +97,36 @@ $current = 2;
                     @endforeach
                 </tbody>
                 @else
-                <div class="text-sm text-center">Không tìm thấy dữ liệu nào</div>
+                <div class="text-sm text-center dark:text-gray-200">Không tìm thấy dữ liệu nào</div>
                 @endif
             </table>
             {{ $fabrics->links() }}
         </div>
     </div>
 </div>
-<div v-if="this.isModalOpen" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0"
-    x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150"
-    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" v-on-clickaway="closeModal" class="
+<transition enter-class="ease-out opacity-0" enter-to-class="opacity-100" leave-class="ease-in opacity-100"
+    leave-to-class="opacity-0">
+    <div v-show="this.isModalOpen" class="
         fixed
         inset-0
         z-30
         flex
         items-end
+        transition duration-150
         bg-black bg-opacity-50
         sm:items-center sm:justify-center
-      ">
-    <!-- Modal -->
-    <div v-if="this.isModalOpen" x-transition:enter="transition ease-out duration-150"
-        x-transition:enter-start="opacity-0 transform translate-y-1/2" x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0  transform translate-y-1/2" @keydown.escape="closeModal" class="
+      " id="backdrop-overlay" @click="handleClickBackDrop">
+        <transition enter-class="ease-out opacity-0 transform translate-y-1/2" enter-to-class="opacity-100"
+            leave-class="ease-in opacity-100" leave-to-class="opacity-0 transform translate-y-1/2">
+            <!-- Modal -->
+            <div v-show="this.isModalOpen" class="
           w-full
           px-6
           py-4
           overflow-hidden
           bg-[#ffffff]
           rounded-t-lg
+          duration-150
           dark:bg-gray-800
           sm:rounded-lg sm:m-4 sm:max-w-xl
         " role="dialog" id="modal">
@@ -219,5 +220,7 @@ $current = 2;
             </button>
         </footer>
     </div>
+    </transition>
 </div>
+</transition>
 @endsection

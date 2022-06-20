@@ -64,7 +64,7 @@ class AuthController extends Controller
             [
                 'fullname' => 'required|min:6',
                 'email' => 'required|email|unique:users',
-                'password' => 'required|min:8'
+                'password' => 'required|min:8|confirmed'
             ],
             [
                 'fullname.min' => 'Tên của bạn ít nhất phải từ 6 ký tự',
@@ -73,7 +73,8 @@ class AuthController extends Controller
                 'email.unique' => 'Địa chỉ email của bạn đã tồn tại trong hệ thống',
                 'email.email' => 'Địa chỉ email của bạn cucng cấp không hợp lệ',
                 'password.required' => 'Mật khẩu của bạn không được để trống',
-                'password.min' => 'Mật khẩu của bạn phải ít nhất từ 8 ký tự'
+                'password.min' => 'Mật khẩu của bạn phải ít nhất từ 8 ký tự',
+                'password.confirmed' => 'Xác nhận mật khẩu không trùng khớp'
             ]
         );
         $user = new User();
@@ -109,9 +110,9 @@ class AuthController extends Controller
             : back()->withErrors(['email' => __($status)]);
     }
 
-    public function resetPassword($token)
+    public function resetPassword(Request $req, $token)
     {
-        return view('auth.resetPassword', ['token' => $token]);
+        return view('auth.resetPassword', ['token' => $token, 'email' => $req->only('email')['email']]);
     }
 
     public function updatePassword(Request $req)
