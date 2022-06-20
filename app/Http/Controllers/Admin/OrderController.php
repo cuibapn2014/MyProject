@@ -401,7 +401,7 @@ class OrderController extends Controller
                 // 'weight.*.required' => 'Không được để trống thuộc tính cân nặng',
                 // 'height.*.required' => 'Không được để trống thuộc tính chiều cao',
                 // 'quantity.*.required' => 'Không được để trống sớ lượng sản phẩm',
-                // 'category.required' => 'Không được để trống danh mục sản phẩm',
+                'category.required' => 'Không được để trống danh mục sản phẩm',
                 // 'fabric.required' => 'Không được để trống loại vải',
                 // 'fabric_owner.required' => 'Không được để trống nguồn cung cấp vải',
                 'quality.required' => 'Không được để trống chất lượng sản phẩm',
