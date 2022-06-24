@@ -100,6 +100,24 @@ $current = 1;
                                         clip-rule="evenodd" />
                                 </svg>
                             </button>
+                            <button title="Xem chi tiết" @click.prevent="handleClickViewOrder({{ $order->load([
+                                'detail',
+                                'detail.category',
+                                'detail.ingredient',
+                                'detail.fabric',
+                                'detail.quality',
+                                'detail.properties'
+                                ]) }})"
+                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                aria-label="Delete">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                    <path fill-rule="evenodd"
+                                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </button>
                         </td>
                     </tr>
                     @endforeach
@@ -111,6 +129,14 @@ $current = 1;
         </div>
     </div>
 </div>
+
+<transition enter-class="ease-in opacity-0" enter-to-class="opacity-100" leave-class="ease-out opacity-100"
+    leave-to-class="opacity-0">
+    <modal-detail v-if="this.isOpenView" @toggle-detail="closeModalView" :order="this.detailOrder"
+        class="transition duration-150">
+    </modal-detail>
+</transition>
+
 <transition enter-class="ease-out opacity-0" enter-to-class="opacity-100" leave-class="ease-in opacity-100"
     leave-to-class="opacity-0">
     <div v-show="this.isModalOpen" class="

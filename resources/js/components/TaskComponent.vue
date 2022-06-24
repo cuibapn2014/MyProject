@@ -6,7 +6,7 @@
       :key="item.id"
     >
     <span
-    v-if="new Date().getTime() - new Date(item.task.created_at).getTime() < 900000" 
+    v-if="getExpired(item)" 
     class="h-2 w-2 animate-ping right-5 top-5 absolute rounded-full bg-red-500 text-white font-bold"></span>
       <div
         class="
@@ -66,6 +66,11 @@
 export default {
   props: {
     assign: Array,
+  },
+  methods:{
+    getExpired(item){
+      return (new Date().getTime() - new Date(item.task.created_at).getTime()) < 900000
+    }
   },
   data() {
     return {

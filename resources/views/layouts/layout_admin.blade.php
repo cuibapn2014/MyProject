@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html :class="{ 'theme-dark': !dark }" lang="vi">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,15 +24,24 @@
         integrity="sha512-xX2rYBFJSj86W54Fyv1de80DWBq7zYLn2z0I9bIhQG+rxIF6XVJUpdGnsNHWRa6AvP89vtFupEPDP8eZAtu9qA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" />
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" defer></script>
-    <script src="{{ asset('js/init-alpine.js') }}"></script>
 </head>
 
 <body>
     <noscript>Vui lòng bật Javascript của trình duyệt</noscript>
     <div id="app" class="flex h-screen bg-gray-50 dark:bg-gray-900" user="{{ auth()->user()->id }}"
         :class="{ 'overflow-hidden': isSideMenuOpen }">
+
+        <!-- Loading -->
+        <transition enter-class="opacity-100" enter-to-class="opaccity-100" leave-class="transition ease-in"
+            leave-to-class="opacity-0">
+            <div v-if="isLoad"
+                class="fixed z-50 duration-150 h-full w-full bg-[#ffffff] flex items-center justify-center flex-col">
+                <img src="{{ asset('/img/lyunhouse.jpg') }}" class="h-48" alt="Loading" loading="lazy">
+                <span class="text-sm my-2">{{ __('Đang tải...') }}</span>
+            </div>
+        </transition>
+
         <!-- Desktop sidebar -->
         @include('layouts.navigate')
         <div class="flex flex-col flex-1 w-full">

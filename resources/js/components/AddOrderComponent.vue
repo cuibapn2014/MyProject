@@ -341,7 +341,7 @@
       >
         <label class="block text-sm mr-2">
           <span class="flex text-gray-700 dark:text-gray-400"
-            >Kilogram(Kg)
+            >Cân nặng (Kg)
           </span>
           <input
             class="
@@ -363,7 +363,7 @@
         </label>
         <label class="block text-sm mr-2">
           <span class="flex text-gray-700 dark:text-gray-400"
-            >Centimet(cm)
+            >Chiều cao (cm)
           </span>
           <input
             class="
@@ -445,6 +445,35 @@
     >
       Xóa
     </button>
+    <label class="block my-2 text-sm w-2/4 sm:w-full">
+      <span class="flex text-gray-700 dark:text-gray-400">
+        Chất lượng hàng
+        <p class="text-red-500 mx-1">*</p></span
+      >
+      <select
+        class="
+          block
+          w-full
+          mt-1
+          text-sm
+          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+          form-select
+          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
+          dark:focus:shadow-outline-gray
+        "
+        name="quality"
+        @change="handleChangeQuality"
+      >
+        <option selected value="">Chọn chất lượng</option>
+        <option
+          v-for="quality in this.dataQuality"
+          :key="quality.id"
+          :value="quality.id"
+        >
+          {{ quality.Ten }}
+        </option>
+      </select>
+    </label>
     <label class="block my-2 text-sm w-2/4 sm:w-full">
       <span class="flex text-gray-700 dark:text-gray-400">
         Loại vải
@@ -589,35 +618,6 @@
           :value="ingredient.id"
         >
           {{ ingredient.Ten }}
-        </option>
-      </select>
-    </label>
-    <label class="block my-2 text-sm w-2/4 sm:w-full">
-      <span class="flex text-gray-700 dark:text-gray-400">
-        Chất lượng hàng
-        <p class="text-red-500 mx-1">*</p></span
-      >
-      <select
-        class="
-          block
-          w-full
-          mt-1
-          text-sm
-          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
-          form-select
-          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
-          dark:focus:shadow-outline-gray
-        "
-        name="quality"
-        @change="handleChangeQuality"
-      >
-        <option selected value="">Chọn chất lượng</option>
-        <option
-          v-for="quality in this.dataQuality"
-          :key="quality.id"
-          :value="quality.id"
-        >
-          {{ quality.Ten }}
         </option>
       </select>
     </label>

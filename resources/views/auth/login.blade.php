@@ -22,8 +22,8 @@
             <div class="absolute bg-black opacity-40 inset-0 z-0"></div>
             <div class="w-full px-24 z-10">
                 <h1 class="text-5xl font-bold text-left tracking-wide"></h1>
-                <p class="text-5xl my-4 text-blod text-center">LYUN HOUSE</p>
-                <p class="text-xl my-4 text-center">The Confidence Of Ladies Makes Beauty And Charm</p>
+                <p class="text-5xl my-4 text-blod text-center">{{ config('app.name') }}</p>
+                <p class="text-xl my-4 text-center">{{ __('Garment Factory Association') }}</p>
             </div>
 
         </div>
@@ -34,8 +34,8 @@
             </div>
             <div class="w-full py-6 z-20 ">
                 <h1 class="my-6">
-                    <div class="w-auto h-7 sm:h-8 inline-flex text-4xl text-blod lg:text-black md:text-white">Xưởng May
-                        Lyun House
+                    <div class="w-auto h-7 sm:h-8 inline-flex text-4xl text-blod lg:text-black md:text-white"> {{
+                        config('app.name') }}
                     </div>
                 </h1>
 
@@ -60,20 +60,20 @@
                         <input class="block w-full p-3 text-lg rounded-lg bg-[#ffffff] text-black" type="password"
                             name="password" id="password" placeholder="Mật Khẩu">
                     </div>
-                    <div class="py-2 text-black flex items-center">
-                        <input class="w-4 h-4 accent-indigo-600 checked:bg-indigo-400" type="checkbox"
-                            name="remember" id="chk_remember" />
-                        <label class="mx-1" for="chk_remember">Nhớ tôi</label>
+                    <div class="py-2 flex items-center">
+                        <input class="w-4 h-4 accent-indigo-600 checked:bg-indigo-400" type="checkbox" name="remember"
+                            id="chk_remember" />
+                        <label class="mx-1 text-[#ffffff] lg:text-black" for="chk_remember">Nhớ tôi</label>
                     </div>
                     <div class="text-right text-black hover:underline hover:text-gray-500 text-base">
-                        <a href="{{ route('auth.forgot') }}" class="">Quên Mật Khẩu?</a>
+                        <a href="{{ route('auth.forgot') }}" class="text-[#ffffff] lg:text-black">Quên Mật Khẩu?</a>
                     </div>
                     <div class="text-right text-black hover:underline hover:text-gray-500 text-base">
-                        <a href="{{ route('register') }}">Chưa có Tài Khoản? Đăng Ký!</a>
+                        <a href="{{ route('register') }}" class="text-[#ffffff] lg:text-black">Chưa có Tài Khoản? Đăng Ký!</a>
                     </div>
                     <div class="my-4">
                         <button
-                            class="uppercase block w-full p-3 text-lg rounded-lg bg-indigo-600 focus:outline-none text-blod">Đăng
+                            class="uppercase block w-full p-3 text-lg rounded-lg bg-indigo-600 hover:bg-indigo-700 duration-150 active:bg-indigo-700 focus:outline-none text-blod">Đăng
                             Nhập</button>
                     </div>
 

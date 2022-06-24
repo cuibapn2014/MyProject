@@ -29,7 +29,7 @@ Vue.component('add-order', require('./components/AddOrderComponent.vue').default
 Vue.component('edit-order', require('./components/EditOrderComponent.vue').default);
 Vue.component('profile', require('./components/ProfileComponent.vue').default);
 Vue.component('task', require('./components/TaskComponent.vue').default);
-
+Vue.component('modal-detail', require('./components/ModalDetail.vue').default);
 
 window.axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
 window.axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
@@ -42,7 +42,7 @@ window.axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
 const app = new Vue({
     el: '#app',
-    mixins: [ clickaway ],
+    mixins: [clickaway],
     props: [
         'user'
     ],
@@ -55,6 +55,9 @@ const app = new Vue({
     },
     mounted() {
         this.getTheme()
+        setTimeout(() => {
+            this.isLoad = false
+        },500)
     },
     updated() {
         this.getTheme()
@@ -64,7 +67,10 @@ const app = new Vue({
             idDelete: 0,
             countTask: 0,
             display: 0,
+            isLoad: true,
             isActive: 0,
+            isOpenView: false,
+            detailOrder: null,
             dark: this.getThemeFromLocalStorage(),
             isSideMenuOpen: false,
             isNotificationsMenuOpen: false,
@@ -205,11 +211,19 @@ const app = new Vue({
         toggleCheckAll() {
             this.checkAll = !this.checkAll
         },
-        handleClickBackDrop(e){
-            if(e.target == document.querySelector('#backdrop-overlay'))
-            this.closeModal()
+        handleClickBackDrop(e) {
+            if (e.target == document.querySelector('#backdrop-overlay'))
+                this.closeModal()
             else if (e.target == document.querySelector('#backdrop-menu-overlay'))
-            this.closeSideMenu()
+                this.closeSideMenu()
+        },
+        handleClickViewOrder(el) {
+            console.log(el)
+            this.detailOrder = el
+            this.isOpenView = true
+        },
+        closeModalView(e) {
+            this.isOpenView = e.isOpen
         }
     }
 });

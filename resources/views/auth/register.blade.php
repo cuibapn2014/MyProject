@@ -25,8 +25,8 @@
             <div class="absolute bg-black opacity-40 inset-0 z-0"></div>
             <div class="w-full px-24 z-10">
                 <h1 class="text-5xl font-bold text-left tracking-wide"></h1>
-                <p class="text-5xl my-4 text-blod text-center">LYUN HOUSE</p>
-                <p class="text-xl my-4 text-center">The Confidence Of Ladies Makes Beauty And Charm</p>
+                <p class="text-5xl my-4 text-blod text-center"> {{ config('app.name') }}</p>
+                <p class="text-xl my-4 text-center">{{ __('Garment Factory Association') }}</p>
             </div>
 
         </div>
@@ -37,8 +37,8 @@
             </div>
             <div class="w-full py-6 z-20 ">
                 <h1 class="my-6">
-                    <div class="w-auto h-7 sm:h-8 inline-flex text-4xl text-blod lg:text-black md:text-white">Xưởng May
-                        Lyun House
+                    <div class="w-auto h-7 sm:h-8 inline-flex text-4xl text-blod lg:text-black md:text-white">
+                        {{ config('app.name') }}
                     </div>
                 </h1>
 
@@ -73,11 +73,11 @@
                             name="password_confirmation" id="password_confirm" placeholder="Xác nhận mật Khẩu">
                     </div>
                     <div class="text-right text-black hover:underline hover:text-gray-500 text-base">
-                        <a href="{{ route('login') }}" class="">Đã có tài khoản? Đăng nhập</a>
+                        <a href="{{ route('login') }}" class="text-[#ffffff] lg:text-black">Đã có tài khoản? Đăng nhập</a>
                     </div>
                     <div class="my-4">
                         <button
-                            class="uppercase block w-full p-3 text-lg rounded-lg bg-indigo-600 focus:outline-none text-blod">
+                            class="uppercase block w-full p-3 text-lg rounded-lg bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none text-blod">
                             Đăng Ký</button>
                     </div>
 
