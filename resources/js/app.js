@@ -218,7 +218,6 @@ const app = new Vue({
                 this.closeSideMenu()
         },
         handleClickViewOrder(el) {
-            console.log(el)
             this.detailOrder = el
             this.isOpenView = true
         },

@@ -98,7 +98,7 @@
                                                 $amount = 0;
                                                 @endphp
                                                 @foreach($order->detail->properties as $properties)
-                                                {{ $amount += $properties->SoLuong }}
+                                                @php $amount += $properties->SoLuong @endphp
                                                 <tr>
                                                     <td>{{ $properties->SoLuong }}</td>
                                                     <td><img src="/img/{{ $order->detail->image }}"

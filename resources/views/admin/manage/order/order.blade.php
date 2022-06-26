@@ -100,14 +100,7 @@ $current = 1;
                                         clip-rule="evenodd" />
                                 </svg>
                             </button>
-                            <button title="Xem chi tiết" @click.prevent="handleClickViewOrder({{ $order->load([
-                                'detail',
-                                'detail.category',
-                                'detail.ingredient',
-                                'detail.fabric',
-                                'detail.quality',
-                                'detail.properties'
-                                ]) }})"
+                            <button title="Xem chi tiết" @click.prevent="handleClickViewOrder({{ $order }})"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Delete">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
@@ -118,6 +111,7 @@ $current = 1;
                                         clip-rule="evenodd" />
                                 </svg>
                             </button>
+
                         </td>
                     </tr>
                     @endforeach
@@ -126,6 +120,7 @@ $current = 1;
                 <div class="text-sm text-center dark:text-gray-200">Không tìm thấy dữ liệu nào</div>
                 @endif
             </table>
+            {{ $orders->links() }}
         </div>
     </div>
 </div>

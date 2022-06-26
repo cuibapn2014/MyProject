@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Order;
 use App\Models\Category;
 use App\Models\PropertyProduct;
+use App\Models\FabricDetail;
+use App\Models\IngredientDetail;
 
 class DetailOrder extends Model
 {
@@ -38,9 +40,19 @@ class DetailOrder extends Model
         return $this->belongsTo(Category::class, 'id_DanhMuc', 'id');
     }
 
-    public function fabric()
+    public function fabric_main()
     {
-        return $this->belongsTo(Fabric::class, 'id_LoaiVai', 'id');
+        return $this->belongsTo(Fabric::class, 'VaiChinh', 'id');
+    }
+
+    public function fabric_extra()
+    {
+        return $this->belongsTo(Fabric::class, 'VaiPhu', 'id');
+    }
+
+    public function fabric_lining()
+    {
+        return $this->belongsTo(Fabric::class, 'VaiLot', 'id');
     }
 
     public function ingredient()
@@ -53,7 +65,18 @@ class DetailOrder extends Model
         return $this->belongsTo(Quality::class, 'id_ChatLuong', 'id');
     }
 
-    public function properties(){
+    public function properties()
+    {
         return $this->hasMany(PropertyProduct::class, 'id_ChiTiet', 'id');
+    }
+
+    public function fabric_detail()
+    {
+        return $this->hasOne(FabricDetail::class, 'id_ChiTiet', 'id');
+    }
+
+    public function ingredient_details()
+    {
+        return $this->hasMany(IngredientDetail::class, 'id_ChiTiet', 'id');
     }
 }

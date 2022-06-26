@@ -48,8 +48,8 @@ Route::get('/logout', function () {
 //Forgot password
 Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->name('auth.forgot');
 Route::post('/forgot-password', [AuthController::class, 'postForgotPassword'])->name('auth.forgot.request');
-Route::get('/reset-password/{token}',[AuthController::class, 'resetPassword'])->name('password.reset');
-Route::post('/reset-password',[AuthController::class, 'updatePassword'])->name('auth.password.update');
+Route::get('/reset-password/{token}', [AuthController::class, 'resetPassword'])->name('password.reset');
+Route::post('/reset-password', [AuthController::class, 'updatePassword'])->name('auth.password.update');
 
 //Admin Route
 Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {

@@ -40,24 +40,64 @@
         <h3 class="font-bold">Thông tin đơn hàng</h3>
         <img
           :src="'img/' + this.order.detail.image"
-          class="product__thumbnail h-16 w-16 object-cover rounded-lg z-50 my-1"
+          class="
+            product__thumbnail
+            h-36
+            max-w-max
+            object-contain
+            rounded-lg
+            z-50
+            my-1
+          "
           loading="lazy"
         />
         <span>Tên sản phẩm: {{ this.order.detail.TenSP }}</span>
         <span>Loại hàng: {{ this.order.detail.LoaiHang }}</span>
-        <span>Danh mục: {{ this.order.detail.category.Ten }}</span>
-        <span>Chất lượng: {{ this.order.detail.quality.Ten }}</span>
-        <span>Loại vải: {{ this.order.detail.fabric.Ten }}</span>
-        <span>Vải chính: {{ this.order.detail.VaiChinh }}m</span>
-        <span>Vải phụ: {{ this.order.detail.VaiPhu }}m</span>
-        <span>Vải lót: {{ this.order.detail.VaiLot }}m</span>
-        <span>Phụ liệu: {{ this.order.detail.ingredient.Ten }}</span>
-        <span>Ghi chú: {{ this.order.detail.GhiChu }}</span>
+        <span
+          >Danh mục:
+          {{
+            this.order.detail.category && this.order.detail.category.Ten
+          }}</span
+        >
+        <span
+          >Chất lượng:
+          {{ this.order.detail.quality && this.order.detail.quality.Ten }}</span
+        >
+        <span
+          >Vải chính:
+          {{
+            this.order.detail.fabric_main && this.order.detail.fabric_main.Ten
+          }}
+          - {{ this.order.detail.fabric_detail.VaiChinh }}m</span
+        >
+        <span
+          >Vải phụ:
+          {{
+            this.order.detail.fabric_extra && this.order.detail.fabric_extra.Ten
+          }}
+          - {{ this.order.detail.fabric_detail.VaiPhu }}m</span
+        >
+        <span
+          >Vải lót:
+          {{
+            this.order.detail.fabric_lining &&
+            this.order.detail.fabric_lining.Ten
+          }}
+          - {{ this.order.detail.fabric_detail.VaiLot }}m</span
+        >
+        <span class="font-bold text-base">Phụ liệu</span>
+        <span
+          v-for="(ingredient, index) in this.order.detail.ingredient_details"
+          :key="ingredient.id"
+        >
+          {{ ++index }}. {{ ingredient.ingredient.Ten }} - Số lượng:
+          {{ ingredient.SoLuong }} cái
+        </span>
         <h3 class="font-bold mt-2">Phân loại thuộc tính</h3>
         <div
           v-for="(properties, index) in this.order.detail.properties"
           :key="properties.id"
-          class="flex items-center justify-between"
+          class="flex items-center justify-between py-2"
         >
           <span>SP{{ index + 1 }}</span>
           <span class="mx-1">Cân nặng: {{ properties.CanNang }}Kg</span>
@@ -65,6 +105,9 @@
           <span class="mx-1">Kích cỡ: {{ properties.KichCo }}</span>
           <span class="mx-1">Số lượng: {{ properties.SoLuong }} cái</span>
         </div>
+        <span class="py-2 border-top"
+          >Ghi chú: {{ this.order.detail.GhiChu }}</span
+        >
       </div>
       <button
         class="p-2 bg-indigo-600 text-white rounded-lg mt-2 float-right"
@@ -87,7 +130,9 @@ export default {
     order: Object,
   },
   mounted() {
-    mediumZoom(document.querySelector(".product__thumbnail"));
+    mediumZoom(document.querySelector(".product__thumbnail"), {
+      background: "rgba(0,0,0,0)",
+    });
   },
   data() {
     return {

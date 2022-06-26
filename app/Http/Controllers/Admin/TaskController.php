@@ -41,7 +41,7 @@ class TaskController extends Controller
     public function create()
     {
         $this->middleware('admin');
-        $user =  User::where('id', '!=', auth()->user()->id)->where('role', '!=', 2)->get();
+        $user =  User::where('id', '!=', auth()->user()->id)->where('role', '<=', 2)->get();
         return view('admin.manage.task.createTask', ['users' => $user]);
     }
 

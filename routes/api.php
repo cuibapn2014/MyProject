@@ -22,8 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/quality', [QualityController::class,'index'])->middleware('api');
+Route::get('/quality', [QualityController::class, 'index'])->middleware('api');
 Route::get('/category', [CategoryController::class, 'index'])->middleware('api');
 Route::get('/fabric', [FabricController::class, 'getAll'])->middleware('api');
 Route::get('/ingredient', [IngredientController::class, 'getAll'])->middleware('api');
-

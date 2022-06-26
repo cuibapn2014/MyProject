@@ -493,42 +493,79 @@
         </option>
       </select>
     </label>
-    <label class="block my-2 text-sm w-2/4 sm:w-full">
-      <span class="flex text-gray-700 dark:text-gray-400">
-        Loại vải
-        <p class="text-red-500 mx-1">*</p></span
-      >
-      <select
-        class="
-          block
-          w-full
-          mt-1
-          text-sm
-          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
-          form-select
-          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
-          dark:focus:shadow-outline-gray
-        "
-        name="fabric"
-      >
-        <option value="">Chọn loại vải</option>
-        <option
-          v-for="fabric in this.dataFabric"
-          :key="fabric.id"
-          :value="fabric.id"
-          :selected="
-            order.detail.fabric && order.detail.fabric.id === fabric.id
-          "
+    <div class="flex mt-1" v-if="productType == 'available'">
+      <label class="block text-sm my-1 mx-2">
+        <span class="flex text-gray-700 dark:text-gray-400 font-bold"
+          >Tổng tiền gia công
+          <p class="text-red-500 mx-1">*</p></span
         >
-          {{ fabric.Ten }}
-        </option>
-      </select>
-    </label>
+        <input
+          class="
+            block
+            w-full
+            mt-1
+            text-sm
+            bg-gray-50
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:text-gray-300 dark:focus:shadow-outline-gray
+            form-input
+          "
+          type="number"
+          min="0"
+          readonly
+          placeholder=""
+          :value="this.totalPrice"
+        />
+      </label>
+    </div>
+    <h3 class="font-bold dark:text-gray-200 text-lg">Chọn vải cho sản phẩm</h3>
     <div class="flex items-center">
+      <label class="block my-1 text-sm w-2/4 sm:w-full mr-2">
+        <span class="flex text-gray-700 dark:text-gray-400">
+          Vải chính
+          <p class="text-red-500 mx-1">*</p></span
+        >
+        <select
+          class="
+            block
+            w-full
+            mt-1
+            text-sm
+            dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+            form-select
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:focus:shadow-outline-gray
+          "
+          name="fabric_main"
+          @change="this.handleChangeMain"
+        >
+          <option selected value="">Chọn loại vải chính</option>
+          <option
+            v-for="fabric in this.dataFabric"
+            :key="fabric.id"
+            :value="fabric.id"
+            :selected="order.detail.VaiChinh === fabric.id"
+          >
+            {{
+              fabric.Ten +
+              " - " +
+              fabric.Gia.toLocaleString("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              })
+            }}
+          </option>
+        </select>
+      </label>
       <label class="block text-sm mr-2">
         <span class="flex text-gray-700 dark:text-gray-400"
-          >Vải chính (Mét)
-        </span>
+          >Chiều dài (Mét)</span
+        >
         <input
           class="
             block
@@ -546,12 +583,79 @@
           name="main"
           type="number"
           min="0"
-          v-model="order.detail.VaiChinh"
+          v-model="fabricMain.quantity"
         />
+      </label>
+      <label class="block text-sm my-1 mx-2">
+        <span class="flex text-gray-700 dark:text-gray-400">Thành tiền</span>
+        <input
+          class="
+            block
+            w-full
+            mt-1
+            text-sm
+            bg-gray-50
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:text-gray-300 dark:focus:shadow-outline-gray
+            disabled:bg-gray-50
+            form-input
+          "
+          type="text"
+          min="0"
+          placeholder=""
+          value="0"
+          readonly
+          :value="this.formatPrice(this.totalMain)"
+          :disabled="true"
+        />
+      </label>
+    </div>
+    <div class="flex items-center">
+      <label class="block my-1 text-sm w-2/4 sm:w-full mr-2">
+        <span class="flex text-gray-700 dark:text-gray-400">
+          Vải phụ
+          <p class="text-red-500 mx-1">*</p></span
+        >
+        <select
+          class="
+            block
+            w-full
+            mt-1
+            text-sm
+            dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+            form-select
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:focus:shadow-outline-gray
+          "
+          name="fabric_extra"
+          @change="this.handleChangeExtra"
+        >
+          <option selected value="">Chọn loại vải phụ</option>
+          <option
+            v-for="fabric in this.dataFabric"
+            :key="fabric.id"
+            :value="fabric.id"
+            :selected="order.detail.VaiPhu === fabric.id"
+          >
+            {{
+              fabric.Ten +
+              " - " +
+              fabric.Gia.toLocaleString("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              })
+            }}
+          </option>
+        </select>
       </label>
       <label class="block text-sm mr-2">
         <span class="flex text-gray-700 dark:text-gray-400"
-          >Vải phụ (Mét)
+          >Chiều dài (Mét)
         </span>
         <input
           class="
@@ -570,12 +674,79 @@
           name="extra"
           type="number"
           min="0"
-          v-model="order.detail.VaiPhu"
+          v-model="fabricExtra.quantity"
         />
+      </label>
+      <label class="block text-sm my-1 mx-2">
+        <span class="flex text-gray-700 dark:text-gray-400">Thành tiền</span>
+        <input
+          class="
+            block
+            w-full
+            mt-1
+            text-sm
+            bg-gray-50
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:text-gray-300 dark:focus:shadow-outline-gray
+            disabled:bg-gray-50
+            form-input
+          "
+          type="text"
+          min="0"
+          placeholder=""
+          value="0"
+          readonly
+          :value="this.formatPrice(this.totalExtra)"
+          :disabled="true"
+        />
+      </label>
+    </div>
+    <div class="flex items-center">
+      <label class="block my-1 text-sm w-2/4 sm:w-full mr-2">
+        <span class="flex text-gray-700 dark:text-gray-400">
+          Vải lót
+          <p class="text-red-500 mx-1">*</p></span
+        >
+        <select
+          class="
+            block
+            w-full
+            mt-1
+            text-sm
+            dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+            form-select
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:focus:shadow-outline-gray
+          "
+          name="fabric_lining"
+          @change="this.handleChangeLining"
+        >
+          <option selected value="">Chọn loại vải lót</option>
+          <option
+            v-for="fabric in this.dataFabric"
+            :key="fabric.id"
+            :value="fabric.id"
+            :selected="order.detail.VaiLot === fabric.id"
+          >
+            {{
+              fabric.Ten +
+              " - " +
+              fabric.Gia.toLocaleString("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              })
+            }}
+          </option>
+        </select>
       </label>
       <label class="block text-sm mr-2">
         <span class="flex text-gray-700 dark:text-gray-400"
-          >Vải lót (Mét)
+          >Chiều dài (Mét)
         </span>
         <input
           class="
@@ -594,10 +765,62 @@
           name="lining"
           type="number"
           min="0"
-          v-model="order.detail.VaiLot"
+          v-model="fabricLining.quantity"
+        />
+      </label>
+      <label class="block text-sm my-1 mx-2">
+        <span class="flex text-gray-700 dark:text-gray-400">Thành tiền</span>
+        <input
+          class="
+            block
+            w-full
+            mt-1
+            text-sm
+            bg-gray-50
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:text-gray-300 dark:focus:shadow-outline-gray
+            disabled:bg-gray-50
+            form-input
+          "
+          type="text"
+          min="0"
+          placeholder=""
+          value="0"
+          readonly
+          :value="this.formatPrice(this.totalLining)"
+          :disabled="true"
         />
       </label>
     </div>
+
+    <label class="block text-sm my-1">
+      <span class="flex text-gray-700 dark:text-gray-400 font-bold"
+        >Tổng tiền vải
+      </span>
+      <input
+        class="
+          block
+          w-full
+          mt-1
+          text-sm
+          dark:border-gray-600 dark:bg-gray-700
+          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
+          dark:text-gray-300 dark:focus:shadow-outline-gray
+          bg-gray-50
+          form-input
+        "
+        type="text"
+        min="0"
+        readonly
+        :value="
+          this.formatPrice(this.totalMain + this.totalExtra + this.totalLining)
+        "
+        placeholder=""
+      />
+    </label>
     <!-- <label class="block my-2 text-sm w-2/4 sm:w-full">
       <span class="flex text-gray-700 dark:text-gray-400">
         Nguồn cung cấp vải
@@ -631,39 +854,45 @@
         </option>
       </select>
     </label> -->
-    <label class="block my-2 text-sm w-2/4 sm:w-full">
-      <span class="flex text-gray-700 dark:text-gray-400"> Phụ liệu </span>
-      <select
-        class="
-          block
-          w-full
-          mt-1
-          text-sm
-          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
-          form-select
-          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
-          dark:focus:shadow-outline-gray
-        "
-        name="ingredient"
-      >
-        <option value="">Chọn phụ liệu</option>
-        <option
-          v-for="ingredient in this.dataIngredient"
-          :key="ingredient.id"
-          :value="ingredient.id"
-          :selected="
-            order.detail.ingredient &&
-            order.detail.ingredient.id == ingredient.id
+    <h3 class="font-bold dark:text-gray-200 text-base">Chọn phụ liệu</h3>
+    <div
+      class="flex items-center"
+      v-for="(item, index) in this.listIngredient"
+      :key="index"
+    >
+      <label class="block my-2 text-sm w-2/4 sm:w-full">
+        <span class="flex text-gray-700 dark:text-gray-400"> Phụ liệu </span>
+        <select
+          class="
+            block
+            w-full
+            mt-1
+            text-sm
+            dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+            form-select
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:focus:shadow-outline-gray
           "
+          @change="handleChangeIngredient($event, index)"
+          name="ingredient[]"
+          v-model="item.ingredient"
         >
-          {{ ingredient.Ten }}
-        </option>
-      </select>
-    </label>   
-    <div class="flex mt-1" v-if="productType == 'available'">
-      <label class="block text-sm my-1">
+          <option selected value="">Chọn phụ liệu</option>
+          <option
+            v-for="ingredient in dataIngredient"
+            :key="ingredient.id"
+            :value="ingredient.id"
+            :selected="item.ingredient === ingredient.id"
+          >
+            {{ ingredient.Ten }}
+          </option>
+        </select>
+      </label>
+      <label class="block text-sm my-1 mx-2">
         <span class="flex text-gray-700 dark:text-gray-400"
-          >Tiền cọc
+          >Số lượng
           <p class="text-red-500 mx-1">*</p></span
         >
         <input
@@ -680,17 +909,14 @@
             form-input
           "
           type="number"
-          min="0"
+          min="1"
           placeholder=""
-          name="deposit"
-          v-model="order.detail.TienCoc"
+          name="ingredient_quantity[]"
+          v-model="item.quantity"
         />
       </label>
       <label class="block text-sm my-1 mx-2">
-        <span class="flex text-gray-700 dark:text-gray-400"
-          >Tổng tiền
-          <p class="text-red-500 mx-1">*</p></span
-        >
+        <span class="flex text-gray-700 dark:text-gray-400">Thành tiền</span>
         <input
           class="
             block
@@ -703,40 +929,123 @@
             focus:outline-none
             focus:shadow-outline-purple
             dark:text-gray-300 dark:focus:shadow-outline-gray
-            form-input
-          "
-          type="number"
-          min="0"
-          readonly
-          placeholder=""
-          name="totalPrice"
-          :value="this.totalPrice"
-        />
-      </label>
-      <label class="block text-sm my-1 mx-2">
-        <span class="flex text-gray-700 dark:text-gray-400">Tiền còn lại </span>
-        <input
-          class="
-            block
-            w-full
-            mt-1
-            text-sm
             disabled:bg-gray-50
-            dark:border-gray-600 dark:bg-gray-700
-            focus:border-purple-400
-            focus:outline-none
-            focus:shadow-outline-purple
-            dark:text-gray-300 dark:focus:shadow-outline-gray
             form-input
           "
           type="text"
+          min="0"
           placeholder=""
-          v-model="price"
-          disabled
+          value="0"
+          readonly
+          :value="formatPrice(item.quantity * item.price)"
+          :disabled="true"
         />
       </label>
     </div>
+    <button
+      class="p-2 bg-indigo-600 text-white my-2 rounded-lg"
+      @click.prevent="handleClickAddIngredient"
+    >
+      Thêm phụ liệu
+    </button>
+    <button
+      class="p-2 bg-indigo-600 text-white my-2 rounded-lg"
+      @click.prevent="handleClickRemoveIngredient"
+    >
+      Xóa phụ liệu
+    </button>
+    <label class="block text-sm my-1">
+      <span class="flex text-gray-700 dark:text-gray-400 font-bold"
+        >Tổng tiền phụ liệu
+      </span>
+      <input
+        class="
+          block
+          w-full
+          mt-1
+          text-sm
+          dark:border-gray-600 dark:bg-gray-700
+          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
+          dark:text-gray-300 dark:focus:shadow-outline-gray
+          bg-gray-50
+          form-input
+        "
+        type="text"
+        min="0"
+        readonly
+        :value="this.formatPrice(this.totalPriceIngredient)"
+        placeholder=""
+      />
+    </label>
 
+    <label class="block text-sm my-1">
+      <span class="flex text-gray-700 dark:text-gray-400"
+        >Tiền cọc
+        <p class="text-red-500 mx-1">*</p></span
+      >
+      <input
+        class="
+          block
+          w-full
+          mt-1
+          text-sm
+          dark:border-gray-600 dark:bg-gray-700
+          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
+          dark:text-gray-300 dark:focus:shadow-outline-gray
+          form-input
+        "
+        type="number"
+        min="0"
+        placeholder=""
+        name="deposit"
+        v-model="deposit"
+        :max="this.total"
+      />
+    </label>
+    <label class="block text-sm my-1">
+      <span class="flex text-gray-700 dark:text-gray-400 font-bold"
+        >Tổng thành tiền
+      </span>
+      <input
+        class="
+          block
+          w-full
+          mt-1
+          text-sm
+          dark:border-gray-600 dark:bg-gray-700
+          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
+          dark:text-gray-300 dark:focus:shadow-outline-gray
+          bg-gray-50
+          form-input
+        "
+        type="number"
+        min="0"
+        readonly
+        name="totalPrice"
+        placeholder=""
+        :value="this.total + this.totalPriceIngredient"
+      />
+    </label>
+    <label class="block text-sm my-1">
+      <span class="flex text-gray-700 dark:text-gray-400">Tiền còn lại </span>
+      <input
+        class="
+          block
+          w-full
+          mt-1
+          text-sm
+          disabled:bg-gray-50
+          dark:border-gray-600 dark:bg-gray-700
+          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
+          dark:text-gray-300 dark:focus:shadow-outline-gray
+          form-input
+        "
+        type="text"
+        placeholder=""
+        :value="this.formatPrice(this.total + this.totalPriceIngredient - this.deposit)"
+        disabled
+      />
+    </label>
     <label class="block text-sm my-1 lg:w-1/4">
       <span class="flex text-gray-700 dark:text-gray-400">Ngày trả đơn </span>
       <input
@@ -992,6 +1301,15 @@ export default {
         ? this.order.detail.properties
         : this.dataProperty;
   },
+  mounted() {
+    this.order.detail.ingredient_details.map((item) => {
+      this.listIngredient.push({
+        ingredient: item.id_PhuLieu,
+        quantity: item.SoLuong,
+        price: item.ingredient.Gia,
+      });
+    });
+  },
   updated() {
     this.price = this.formatPrice(
       this.order.detail.TongTien - this.order.detail.TienCoc
@@ -1002,6 +1320,32 @@ export default {
     );
     this.getApiCost();
   },
+  computed: {
+    totalMain() {
+      return this.fabricMain.quantity * this.fabricMain.price;
+    },
+    totalExtra() {
+      return this.fabricExtra.quantity * this.fabricExtra.price;
+    },
+    totalLining() {
+      return this.fabricLining.quantity * this.fabricLining.price;
+    },
+    total() {
+      return (
+        this.fabricMain.quantity * this.fabricMain.price +
+        this.fabricExtra.quantity * this.fabricExtra.price +
+        this.fabricLining.quantity * this.fabricLining.price +
+        this.totalPrice
+      );
+    },
+    totalPriceIngredient() {
+      let total = 0;
+      this.listIngredient.map((item) => {
+        total += item.quantity * item.price;
+      });
+      return total;
+    },
+  },
   data() {
     return {
       isModalOpen: false,
@@ -1010,13 +1354,14 @@ export default {
       dataWard: null,
       productType:
         this.order.detail.LoaiHang === "Hàng may" ? "available" : "unavailable",
-      deposit: 0,
+      deposit: this.order.detail.TienCoc,
       totalPrice: 0,
       price: null,
       dataQuality: [],
       dataCategory: [],
       dataFabric: [],
       dataIngredient: [],
+      listIngredient: [],
       idCategorySelected: this.order.detail.id_DanhMuc,
       idQualitySelected: this.order.detail.id_ChatLuong,
       quantity: 0,
@@ -1027,6 +1372,24 @@ export default {
           SoLuong: 0,
         },
       ],
+      fabricMain: {
+        price:
+          this.order.detail.fabric_main != null &&
+          this.order.detail.fabric_main.Gia,
+        quantity: this.order.detail.fabric_detail.VaiChinh,
+      },
+      fabricExtra: {
+        price:
+          this.order.detail.fabric_extra != null &&
+          this.order.detail.fabric_extra.Gia,
+        quantity: this.order.detail.fabric_detail.VaiPhu,
+      },
+      fabricLining: {
+        price:
+          this.order.detail.fabric_lining != null &&
+          this.order.detail.fabric_lining.Gia,
+        quantity: this.order.detail.fabric_detail.VaiPhu,
+      },
       dataSize: Size,
       display:
         this.order.detail.properties.length <= 0
@@ -1128,6 +1491,39 @@ export default {
     handleClickBackDrop(e) {
       if (e.target == document.querySelector("#backdrop-overlay"))
         this.closeModal();
+    },
+    handleChangeMain(e) {
+      let price = 0;
+      this.dataFabric.map((item) => {
+        if (item.id == e.target.value) {
+          price = item.Gia;
+          return;
+        }
+      });
+      this.fabricMain.price = price;
+    },
+    handleChangeExtra(e) {
+      let price = 0;
+
+      this.dataFabric.map((item) => {
+        if (item.id == e.target.value) {
+          price = item.Gia;
+          return;
+        }
+      });
+
+      this.fabricExtra.price = price;
+    },
+    handleChangeLining(e) {
+      let price = 0;
+      this.dataFabric.map((item) => {
+        if (item.id == e.target.value) {
+          price = item.Gia;
+          return;
+        }
+      });
+
+      this.fabricLining.price = price;
     },
   },
 };

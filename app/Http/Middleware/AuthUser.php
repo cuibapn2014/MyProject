@@ -18,7 +18,7 @@ class AuthUser
     public function handle(Request $request, Closure $next)
     {
         if (Auth::check()) {
-            if (Auth::user()->role < 3)
+            if (Auth::user()->role < 4)
                 return $next($request);
         }
         return redirect()->route('login');

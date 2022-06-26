@@ -24,9 +24,11 @@ class AdminController extends Controller
         $order = Order::findOrFail($id);
         $costs = Cost::where('id_ChatLuong', $order->detail->id_ChatLuong)->where('id_DanhMuc', $order->detail->id_DanhMuc)->get();
         $quantity = $order->detail->properties->sum('SoLuong');
+        $min = 20;
         $price = 0;
         foreach ($costs as $cost) {
             if ($cost->LimitStart <= $quantity && $cost->LimitFinish >= $quantity) $price = $cost->Gia;
+            else if($quantity < $min && $cost->LimitStart = $min) $price = $cost->Gia; break;
         }
         // $pdf = PDF::loadView('admin.invoice',['order' => $order,'cost' => $price])->setOptions(['defaultFont' => 'time-new-roman']);
         // return $pdf->stream('invoice.pdf', array('Attachment'=> 1));         
