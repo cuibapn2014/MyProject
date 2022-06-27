@@ -102,7 +102,8 @@ class OrderController extends Controller
                 'SoDienThoai' => $req->phone_number,
                 'DiaChi' => $address,
                 'NgayTraDon' => $req->duration,
-                'id_NhanVien' => Auth::user()->id
+                'id_NhanVien' => Auth::user()->id,
+                'TongTien' => $req->totalPrice
             ]);
 
             if ($req->hasFile('image')) {
@@ -124,16 +125,18 @@ class OrderController extends Controller
                 // 'id_LoaiVai' => $req->fabric,
                 // 'id_PhuLieu' => $req->ingredient,
                 'id_ChatLuong' => $req->quality,
-                'TongTien' => $req->totalPrice,
+                'TongTien' => $req->total,
                 'TienCoc' => $req->deposit,
                 'NguonCungCap' => $req->fabric_owner == 'customer' ? "Khách hàng" : "Công ty",
                 'LoaiHang' => 'Hàng may',
                 'image' => $file_name,
+                'Gia' => $req->price,
                 'VaiChinh' => $req->fabric_main,
                 'VaiLot' => $req->fabric_lining,
                 'VaiPhu' => $req->fabric_extra,
                 'GhiChu' => $req->note
             ]);
+
             FabricDetail::create([
                 'id_ChiTiet' => $orderDetail->id,
                 'VaiChinh' => $req->main,
@@ -143,21 +146,25 @@ class OrderController extends Controller
 
 
             foreach ($req->input('weight') as $index => $weight) {
-                PropertyProduct::create([
-                    'CanNang' => $weight,
-                    'ChieuCao' => $req->input('height')[$index],
-                    'SoLuong' => $req->input('quantity')[$index],
-                    'KichCo' => $req->input('size')[$index],
-                    'id_ChiTiet' => $orderDetail->id
-                ]);
+                if ($weight != null &&  $req->input('size')[$index] != null &&  $req->input('height')[$index] != null) {
+                    PropertyProduct::create([
+                        'CanNang' => $weight,
+                        'ChieuCao' => $req->input('height')[$index],
+                        'SoLuong' => $req->input('quantity')[$index],
+                        'KichCo' => $req->input('size')[$index],
+                        'id_ChiTiet' => $orderDetail->id
+                    ]);
+                }
             }
 
             foreach ($req->input('ingredient') as $key => $item) {
-                IngredientDetail::create([
-                    'id_ChiTiet' => $orderDetail->id,
-                    'id_PhuLieu' => $item,
-                    'SoLuong' => $req->ingredient_quantity[$key]
-                ]);
+                if ($item != null) {
+                    IngredientDetail::create([
+                        'id_ChiTiet' => $orderDetail->id,
+                        'id_PhuLieu' => $item,
+                        'SoLuong' => $req->ingredient_quantity[$key]
+                    ]);
+                }
             }
         } else {
             $validator = Validator::make(
@@ -214,7 +221,8 @@ class OrderController extends Controller
                 'SoDienThoai' => $req->phone_number,
                 'DiaChi' => $address,
                 'NgayTraDon' => $req->duration,
-                'id_NhanVien' => Auth::user()->id
+                'id_NhanVien' => Auth::user()->id,
+                'TongTien' => $req->totalPrice
             ]);
 
             if ($req->hasFile('image')) {
@@ -240,7 +248,7 @@ class OrderController extends Controller
                 'LoaiHang' => 'Hàng mẫu',
                 'image' => $file_name,
                 'Gia' => $req->price,
-                'TongTien' => $req->price * array_sum($req->quantity),
+                'TongTien' => $req->total,
                 'VaiChinh' => $req->fabric_main,
                 'VaiLot' => $req->fabric_lining,
                 'VaiPhu' => $req->fabric_extra,
@@ -255,21 +263,25 @@ class OrderController extends Controller
             ]);
 
             foreach ($req->input('weight') as $index => $weight) {
-                PropertyProduct::create([
-                    'CanNang' => $weight,
-                    'ChieuCao' => $req->input('height')[$index],
-                    'SoLuong' => $req->input('quantity')[$index],
-                    'KichCo' => $req->input('size')[$index],
-                    'id_ChiTiet' => $orderDetail->id
-                ]);
+                if ($weight != null &&  $req->input('size')[$index] != null &&  $req->input('height')[$index] != null) {
+                    PropertyProduct::create([
+                        'CanNang' => $weight,
+                        'ChieuCao' => $req->input('height')[$index],
+                        'SoLuong' => $req->input('quantity')[$index],
+                        'KichCo' => $req->input('size')[$index],
+                        'id_ChiTiet' => $orderDetail->id
+                    ]);
+                }
             }
 
             foreach ($req->input('ingredient') as $key => $item) {
-                IngredientDetail::create([
-                    'id_ChiTiet' => $orderDetail->id,
-                    'id_PhuLieu' => $item,
-                    'SoLuong' => $req->ingredient_quantity[$key]
-                ]);
+                if ($item != null) {
+                    IngredientDetail::create([
+                        'id_ChiTiet' => $orderDetail->id,
+                        'id_PhuLieu' => $item,
+                        'SoLuong' => $req->ingredient_quantity[$key]
+                    ]);
+                }
             }
         }
 
@@ -325,7 +337,8 @@ class OrderController extends Controller
                 // 'id_LoaiVai' => $req->fabric,
                 // 'id_PhuLieu' => $req->ingredient,
                 'id_ChatLuong' => $req->quality,
-                'TongTien' => $req->totalPrice,
+                'TongTien' => $req->total,
+                'Gia' => $req->price,
                 'NguonCungCap' => $req->fabric_owner == 'customer' ? "Khách hàng" : "Công ty",
                 'TienCoc' => $req->deposit,
                 'LoaiHang' => 'Hàng may',
@@ -343,23 +356,27 @@ class OrderController extends Controller
             ]);
 
             foreach ($req->input('weight') as $index => $weight) {
-                PropertyProduct::create([
-                    'CanNang' => $weight,
-                    'ChieuCao' => $req->input('height')[$index],
-                    'SoLuong' => $req->input('quantity')[$index],
-                    'KichCo' => $req->input('size')[$index],
-                    'id_ChiTiet' => DetailOrder::where('id_DonHang', $id)->first()->id
-                ]);
+                if ($weight != null &&  $req->input('size')[$index] != null &&  $req->input('height')[$index] != null) {
+                    PropertyProduct::create([
+                        'CanNang' => $weight,
+                        'ChieuCao' => $req->input('height')[$index],
+                        'SoLuong' => $req->input('quantity')[$index],
+                        'KichCo' => $req->input('size')[$index],
+                        'id_ChiTiet' => DetailOrder::where('id_DonHang', $id)->first()->id
+                    ]);
+                }
             }
 
             IngredientDetail::where('id_ChiTiet', $detail->id)->delete();
 
             foreach ($req->input('ingredient') as $key => $item) {
-                IngredientDetail::create([
-                    'id_ChiTiet' => $detail->id,
-                    'id_PhuLieu' => $item,
-                    'SoLuong' => $req->ingredient_quantity[$key]
-                ]);
+                if ($item != null) {
+                    IngredientDetail::create([
+                        'id_ChiTiet' => $detail->id,
+                        'id_PhuLieu' => $item,
+                        'SoLuong' => $req->ingredient_quantity[$key]
+                    ]);
+                }
             }
         } else {
             $this->validateProductUnavailable($req);
@@ -390,7 +407,7 @@ class OrderController extends Controller
                 'LoaiHang' => 'Hàng mẫu',
                 'image' => $file_name != null ? $file_name : $oldImg,
                 'Gia' => $req->price,
-                'TongTien' => $req->price * array_sum($req->quantity),
+                'TongTien' => $req->total,
                 'VaiChinh' => $req->main,
                 'VaiChinh' => $req->fabric_main,
                 'VaiLot' => $req->fabric_lining,
@@ -405,23 +422,27 @@ class OrderController extends Controller
             ]);
 
             foreach ($req->input('weight') as $index => $weight) {
-                PropertyProduct::create([
-                    'CanNang' => $weight,
-                    'ChieuCao' => $req->input('height')[$index],
-                    'SoLuong' => $req->input('quantity')[$index],
-                    'KichCo' => $req->input('size')[$index],
-                    'id_ChiTiet' => DetailOrder::where('id_DonHang', $id)->first()->id
-                ]);
+                if ($weight != null &&  $req->input('size')[$index] != null &&  $req->input('height')[$index] != null) {
+                    PropertyProduct::create([
+                        'CanNang' => $weight,
+                        'ChieuCao' => $req->input('height')[$index],
+                        'SoLuong' => $req->input('quantity')[$index],
+                        'KichCo' => $req->input('size')[$index],
+                        'id_ChiTiet' => DetailOrder::where('id_DonHang', $id)->first()->id
+                    ]);
+                }
             }
-
+            
             IngredientDetail::where('id_ChiTiet', $detail->id)->delete();
 
             foreach ($req->input('ingredient') as $key => $item) {
-                IngredientDetail::where('id_ChiTiet', $detail->id)->update([
-                    'id_ChiTiet' => $detail->id,
-                    'id_PhuLieu' => $item,
-                    'SoLuong' => $req->ingredient_quantity[$key]
-                ]);
+                if ($item != null) {
+                    IngredientDetail::create([
+                        'id_ChiTiet' => $detail->id,
+                        'id_PhuLieu' => $item,
+                        'SoLuong' => $req->ingredient_quantity[$key]
+                    ]);
+                }
             }
         }
 
@@ -431,6 +452,7 @@ class OrderController extends Controller
             'SoDienThoai' => $req->phone_number,
             'DiaChi' => $address,
             'NgayTraDon' => $req->duration,
+            'TongTien' => $req->totalPrice
         ]);
 
         $order->updated_at = now();
@@ -445,7 +467,9 @@ class OrderController extends Controller
         IngredientDetail::where('id_ChiTiet', $order->detail->id)->delete();
         FabricDetail::where('id_ChiTiet', $order->detail->id)->delete();
         PropertyProduct::where('id_ChiTiet', $order->detail->id)->delete();
-        DetailOrder::where('id_DonHang', $order->id)->delete();
+        $detail = DetailOrder::where('id_DonHang', $order->id)->first();
+        File::delete(public_path("img/".$detail->image));
+        $detail->delete();
         $order->delete();
         return back()->with('success', 'Đã xóa');
     }

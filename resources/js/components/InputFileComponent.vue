@@ -1,11 +1,17 @@
 <template>
   <div class="flex flex-row items-center justify-start input__image my-2">
     <img
-      v-if="urlImg != null"
-      class="w-16 h-16 rounded-lg mr-2 object-cover object-center"
-      :src="this.urlImg"
+      class="
+        img__thumbnail
+        w-16
+        h-16
+        rounded-lg
+        mr-2
+        object-cover object-center
+        z-50
+      "
+      :src="this.urlImg ? this.urlImg : 'img/placeholder.jpg'"
     />
-
     <input
       @change="handleChangeFile"
       class="
@@ -27,7 +33,10 @@
       type="file"
       name="image[]"
     />
-    <a class="bg-gray-100 mx-2 rounded-lg p-1 cursor-pointer" @click="handleReload">
+    <a
+      class="bg-gray-100 mx-2 rounded-lg p-1 cursor-pointer"
+      @click="handleReload"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6"
@@ -46,7 +55,13 @@
   </div>
 </template>
 <script>
+import mediumZoom from "medium-zoom";
 export default {
+  mounted() {
+    mediumZoom(document.querySelectorAll(".img__thumbnail"), {
+      background: "rgba(0,0,0,0.5)",
+    });
+  },
   data() {
     return {
       urlImg: null,
@@ -54,16 +69,16 @@ export default {
   },
   methods: {
     handleChangeFile(e) {
-      const image = e.target.files[0]
+      const image = e.target.files[0];
       this.urlImg = URL.createObjectURL(image);
     },
-    handleReload(e){
-        e.preventDefault()
-        const input = this.$refs.fileImage
-        input.type = 'text'
-        input.type = 'file'
-        this.urlImg = null
-    }
+    handleReload(e) {
+      e.preventDefault();
+      const input = this.$refs.fileImage;
+      input.type = "text";
+      input.type = "file";
+      this.urlImg = null;
+    },
   },
 };
 </script>

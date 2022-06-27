@@ -15,13 +15,13 @@ class TaskController extends Controller
     //
     public function index()
     {
-        if (Auth::user()->role != 2) return redirect()->route('admin.task.user.index');
+        if (Auth::user()->role < 2) return redirect()->route('admin.task.user.index');
         return view('admin.manage.task.task', ['tasks' => Task::paginate(25)]);
     }
 
     public function getByUser()
     {
-        if (Auth::user()->role == 2) return abort(401);
+        if (Auth::user()->role > 2) return abort(401);
         $id = Auth::user()->id;
 
         // return view('admin.manage.task.ListTask');
@@ -41,7 +41,7 @@ class TaskController extends Controller
     public function create()
     {
         $this->middleware('admin');
-        $user =  User::where('id', '!=', auth()->user()->id)->where('role', '<=', 2)->get();
+        $user =  User::where('id', '!=', auth()->user()->id)->where('role', '<', 3)->get();
         return view('admin.manage.task.createTask', ['users' => $user]);
     }
 

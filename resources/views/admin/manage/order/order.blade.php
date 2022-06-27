@@ -32,18 +32,19 @@ $current = 1;
         </button>
     </div>
     <div class="w-full overflow-hidden rounded-lg shadow-xs">
-        <div class="w-full overflow-x-auto">
+        <div class="w-full overflow-x-auto" v-dragscroll>
             <table class="w-full whitespace-no-wrap">
                 @if($orders->count() > 0)
                 <thead>
                     <tr
                         class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                         <th class="px-4 py-3 font-bold">#</th>
-                        <th class="px-4 py-3">Tên khách hàng</th>
-                        <th class="px-4 py-3">Số điện thoại</th>
-                        <th class="px-4 py-3">Nhân viên</th>
+                        <th class="px-4 py-3">Khách hàng</th>
+                        <th class="px-4 py-3">Liên hệ</th>
+                        <th class="px-4 py-3">Tạo bởi</th>
                         <th class="px-4 py-3">Thành tiền</th>
-                        <th class="px-4 py-3">Ngày cập nhật</th>
+                        <th class="px-4 py-3">Tiền còn lại</th>
+                        <th class="px-4 py-3">Cập nhật</th>
                         <th class="px-4 py-3">Hành động</th>
                     </tr>
                 </thead>
@@ -61,14 +62,21 @@ $current = 1;
                             {{ $order->SoDienThoai }}
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{ $order->user->name }}
+                            @php
+                            $arr = explode(" ", $order->user->name);
+                            $length = count($arr);
+                            @endphp
+                            {{ implode(" ", array($arr[$length - 2],  $arr[$length - 1])) }}
+                        </td>
+                        <td class="px-4 py-3 text-sm font-bold text-green-500">
+                            {{ number_format($order->TongTien) }} VND
+                        </td>
+                        <td class="px-4 py-3 text-sm text-red-500 font-bold">
+                            {{ number_format($order->TongTien - $order->detail->TienCoc) }} VND
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{ number_format($order->detail->TongTien) }} VND
-                        </td>
-                        <td class="px-4 py-3 text-sm">
-                            {{ \Carbon\Carbon::parse($order->updated_at)->timezone('Asia/Ho_Chi_Minh')->format('H:i:s
-                            d/m/Y') }}
+                            {{ \Carbon\Carbon::parse($order->updated_at)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y')
+                            }}
                         </td>
                         <td class="px-4 py-3 text-sm flex items-center">
                             <button title="Chỉnh sửa"

@@ -22,7 +22,7 @@ class DetailOrder extends Model
         'id_DanhMuc', 'id_LoaiVai',
         'id_PhuLieu', 'SoLuong',
         'KichThuoc', 'id_ChatLuong',
-        'TongTien', 'TienCoc',
+        'TongTien', 'TienCoc', 'Gia',
         'NguonCungCap', 'image',
         'VaiChinh', 'VaiPhu', 'VaiLot',
         'GhiChu'

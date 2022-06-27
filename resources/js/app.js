@@ -8,8 +8,11 @@ require('./bootstrap');
 import axios from 'axios';
 import { mixin as clickaway } from 'vue-clickaway'
 import Echo from 'laravel-echo';
+import VueDragscroll from 'vue-dragscroll'
+import { dragscroll } from 'vue-dragscroll'
 
 window.Vue = require('vue').default;
+Vue.use(VueDragscroll)
 
 /**
  * The following block of code may be used to automatically register your
@@ -43,6 +46,9 @@ window.axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 const app = new Vue({
     el: '#app',
     mixins: [clickaway],
+    directives:{
+        'dragscroll': dragscroll
+    },
     props: [
         'user'
     ],

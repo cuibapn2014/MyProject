@@ -37,7 +37,7 @@
         <transition enter-class="opacity-100" enter-to-class="opaccity-100" leave-class="transition ease-in"
             leave-to-class="opacity-0">
             <div v-if="this.isLoad"
-                class="fixed z-50 duration-150 h-full w-full bg-[#ffffff] flex items-center justify-center flex-col">
+                class="fixed z-[100] duration-150 h-full w-full bg-[#ffffff] flex items-center justify-center flex-col">
                 <img src="{{ asset('/img/lyunhouse.jpg') }}" class="h-48" alt="Loading" loading="lazy">
                 <span class="text-sm my-2">
                     {{ __('Đang tải...') }}

@@ -273,7 +273,9 @@
             min="0"
             type="number"
             name="price"
-            v-model="order.detail.Gia"
+            v-model="price"
+            @change="handleUpdatePrice"
+            @keyup="handleUpdatePrice"
             autocomplete="off"
           />
           <p
@@ -336,7 +338,7 @@
         <input type="hidden" name="old_image" :value="order.detail.image" />
         <img
           :src="'img/' + order.detail.image"
-          class="w-16 h-16 object-cover rounded-lg mx-2"
+          class="old__thumbnail w-16 h-16 object-cover rounded-lg mx-2 z-50"
         />
       </div>
       <InputFile />
@@ -447,6 +449,7 @@
             placeholder=""
             name="quantity[]"
             v-model="properties.SoLuong"
+            @change="handleUpdatePrice"
           />
         </label>
       </div>
@@ -493,9 +496,62 @@
         </option>
       </select>
     </label>
-    <div class="flex mt-1" v-if="productType == 'available'">
+    <div class="flex mt-1 items-center" v-show="productType == 'available'">
+      <label>
+        <span class="dark:text-gray-200 flex font-bold"
+          >Giá/Sản phẩm
+          <p class="text-red-500 mx-1">*</p></span
+        >
+        <div class="relative text-gray-500 focus-within:text-purple-600">
+          <input
+            class="
+              block
+              w-full
+              pr-20
+              text-sm text-[#000000]
+              dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+              focus:border-purple-400
+              focus:outline-none
+              focus:shadow-outline-purple
+              dark:focus:shadow-outline-gray
+              form-input
+              dark:text-gray-200
+              text-base
+              font-bold
+            "
+            placeholder=""
+            min="0"
+            type="number"
+            v-model="price"
+            name="price"
+            @change="handleUpdatePrice"
+            @keydown="handleUpdatePrice"
+            autocomplete="off"
+          />
+          <p
+            class="
+              absolute
+              inset-y-0
+              right-0
+              px-4
+              font-medium
+              leading-5
+              text-white
+              transition-colors
+              duration-150
+              bg-indigo-600
+              rounded-r-md
+              focus:outline-none focus:shadow-outline-purple
+              flex
+              items-center
+            "
+          >
+            VND
+          </p>
+        </div>
+      </label>
       <label class="block text-sm my-1 mx-2">
-        <span class="flex text-gray-700 dark:text-gray-400 font-bold"
+        <span class="flex text-gray-700 dark:text-gray-200 font-bold"
           >Tổng tiền gia công
           <p class="text-red-500 mx-1">*</p></span
         >
@@ -504,22 +560,48 @@
             block
             w-full
             mt-1
-            text-sm
             bg-gray-50
             dark:border-gray-600 dark:bg-gray-700
             focus:border-purple-400
             focus:outline-none
+            text-base
+            font-bold
             focus:shadow-outline-purple
-            dark:text-gray-300 dark:focus:shadow-outline-gray
+            text-green-500 dark:focus:shadow-outline-gray
             form-input
+            focus:dark:bg-green-500
+            focus:bg-green-500
+            hover:dark:bg-green-500
+            hover:bg-green-500
+            focus:text-white
+            hover:text-white
+            duration-150 ease-in
+            text-end
           "
           type="number"
           min="0"
-          readonly
+          name="total"
           placeholder=""
-          :value="this.totalPrice"
+          v-model="totalPrice"
         />
       </label>
+      <button class="rounded-lg p-2 h-auto bg-gray-50 mt-4"
+      @click.prevent="totalPrice = priceCustom">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+          />
+        </svg>
+      </button>
     </div>
     <h3 class="font-bold dark:text-gray-200 text-lg">Chọn vải cho sản phẩm</h3>
     <div class="flex items-center">
@@ -549,15 +631,16 @@
             v-for="fabric in this.dataFabric"
             :key="fabric.id"
             :value="fabric.id"
-            :selected="order.detail.VaiChinh === fabric.id"
+            :selected="order.detail.VaiChinh == fabric.id"
           >
             {{
+              fabric &&
               fabric.Ten +
-              " - " +
-              fabric.Gia.toLocaleString("vi-VN", {
-                style: "currency",
-                currency: "VND",
-              })
+                " - " +
+                fabric.Gia.toLocaleString("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                })
             }}
           </option>
         </select>
@@ -640,15 +723,16 @@
             v-for="fabric in this.dataFabric"
             :key="fabric.id"
             :value="fabric.id"
-            :selected="order.detail.VaiPhu === fabric.id"
+            :selected="order.detail.VaiPhu == fabric.id"
           >
             {{
+              fabric &&
               fabric.Ten +
-              " - " +
-              fabric.Gia.toLocaleString("vi-VN", {
-                style: "currency",
-                currency: "VND",
-              })
+                " - " +
+                fabric.Gia.toLocaleString("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                })
             }}
           </option>
         </select>
@@ -731,15 +815,16 @@
             v-for="fabric in this.dataFabric"
             :key="fabric.id"
             :value="fabric.id"
-            :selected="order.detail.VaiLot === fabric.id"
+            :selected="order.detail.VaiLot == fabric.id"
           >
             {{
+              fabric &&
               fabric.Ten +
-              " - " +
-              fabric.Gia.toLocaleString("vi-VN", {
-                style: "currency",
-                currency: "VND",
-              })
+                " - " +
+                fabric.Gia.toLocaleString("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                })
             }}
           </option>
         </select>
@@ -801,17 +886,29 @@
         >Tổng tiền vải
       </span>
       <input
-        class="
-          block
-          w-full
-          mt-1
-          text-sm
-          dark:border-gray-600 dark:bg-gray-700
-          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
-          dark:text-gray-300 dark:focus:shadow-outline-gray
-          bg-gray-50
-          form-input
-        "
+       class="
+            block
+            w-full
+            mt-1
+            bg-gray-50
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            text-base
+            font-bold
+            cursor-pointer
+            focus:shadow-outline-purple
+            text-green-500 dark:focus:shadow-outline-gray
+            form-input
+            focus:dark:bg-green-500
+            focus:bg-green-500
+            hover:dark:bg-green-500
+            hover:bg-green-500
+            focus:text-white
+            hover:text-white
+            duration-150 ease-in
+            text-end
+          "
         type="text"
         min="0"
         readonly
@@ -877,7 +974,6 @@
           "
           @change="handleChangeIngredient($event, index)"
           name="ingredient[]"
-          v-model="item.ingredient"
         >
           <option selected value="">Chọn phụ liệu</option>
           <option
@@ -959,17 +1055,29 @@
         >Tổng tiền phụ liệu
       </span>
       <input
-        class="
-          block
-          w-full
-          mt-1
-          text-sm
-          dark:border-gray-600 dark:bg-gray-700
-          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
-          dark:text-gray-300 dark:focus:shadow-outline-gray
-          bg-gray-50
-          form-input
-        "
+       class="
+            block
+            w-full
+            mt-1
+            bg-gray-50
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            text-base
+            font-bold
+            cursor-pointer
+            focus:shadow-outline-purple
+            text-green-500 dark:focus:shadow-outline-gray
+            form-input
+            focus:dark:bg-green-500
+            focus:bg-green-500
+            hover:dark:bg-green-500
+            hover:bg-green-500
+            focus:text-white
+            hover:text-white
+            duration-150 ease-in
+            text-end
+          "
         type="text"
         min="0"
         readonly
@@ -1008,16 +1116,28 @@
       </span>
       <input
         class="
-          block
-          w-full
-          mt-1
-          text-sm
-          dark:border-gray-600 dark:bg-gray-700
-          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
-          dark:text-gray-300 dark:focus:shadow-outline-gray
-          bg-gray-50
-          form-input
-        "
+            block
+            w-full
+            mt-1
+            bg-gray-50
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            text-base
+            font-bold
+            focus:shadow-outline-purple
+            text-green-500 dark:focus:shadow-outline-gray
+            form-input
+            cursor-pointer
+            focus:dark:bg-green-500
+            focus:bg-green-500
+            hover:dark:bg-green-500
+            hover:bg-green-500
+            focus:text-white
+            hover:text-white
+            duration-150 ease-in
+            text-end
+          "
         type="number"
         min="0"
         readonly
@@ -1029,20 +1149,36 @@
     <label class="block text-sm my-1">
       <span class="flex text-gray-700 dark:text-gray-400">Tiền còn lại </span>
       <input
-        class="
-          block
-          w-full
-          mt-1
-          text-sm
-          disabled:bg-gray-50
-          dark:border-gray-600 dark:bg-gray-700
-          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
-          dark:text-gray-300 dark:focus:shadow-outline-gray
-          form-input
-        "
+       class="
+            block
+            w-full
+            mt-1
+            bg-gray-50
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            text-base
+            font-bold
+            focus:shadow-outline-purple
+            text-red-500 dark:focus:shadow-outline-gray
+            form-input
+            cursor-pointer
+            focus:dark:bg-red-500
+            focus:bg-red-500
+            hover:dark:bg-red-500
+            hover:bg-red-500
+            focus:text-white
+            hover:text-white
+            duration-150 ease-in
+            text-end
+          "
         type="text"
         placeholder=""
-        :value="this.formatPrice(this.total + this.totalPriceIngredient - this.deposit)"
+        :value="
+          this.formatPrice(
+            this.total + this.totalPriceIngredient - this.deposit
+          )
+        "
         disabled
       />
     </label>
@@ -1281,6 +1417,8 @@ import axios from "axios";
 import InputFile from "./InputFileComponent.vue";
 import { mixin as clickaway } from "vue-clickaway";
 import Size from "../data.json";
+import mediumZoom from "medium-zoom";
+
 export default {
   mixins: [clickaway],
   props: {
@@ -1295,30 +1433,46 @@ export default {
     this.getApiCategory();
     this.getApiFabric();
     this.getApiIngredient();
-    this.getApiCost();
+    // this.getApiCost();
     this.dataProperty =
       this.order.detail.properties.length > 0
         ? this.order.detail.properties
         : this.dataProperty;
   },
   mounted() {
-    this.order.detail.ingredient_details.map((item) => {
-      this.listIngredient.push({
-        ingredient: item.id_PhuLieu,
-        quantity: item.SoLuong,
-        price: item.ingredient.Gia,
+    this.totalPrice =
+      this.order.LoaiHang == "Hàng mẫu"
+        ? this.order.detail.Gia
+        : this.order.detail.TongTien;
+    if (this.order.detail.ingredient_details.length > 0) {
+      this.order.detail.ingredient_details.map((item) => {
+        this.listIngredient.push({
+          ingredient: item.id_PhuLieu,
+          quantity: item.SoLuong,
+          price: item.ingredient.Gia,
+        });
       });
+    } else {
+      this.listIngredient.push({
+        ingredient: "",
+        quantity: 1,
+        price: 0,
+      });
+    }
+
+    mediumZoom(document.querySelector(".old__thumbnail"), {
+      background: "rgba(0,0,0,0.5)",
     });
   },
   updated() {
-    this.price = this.formatPrice(
-      this.order.detail.TongTien - this.order.detail.TienCoc
-    );
+    // this.price = this.formatPrice(
+    //   this.order.detail.TongTien - this.order.detail.TienCoc
+    // );
     this.quantity = this.dataProperty.reduce(
       (a, b) => a + parseInt(b.SoLuong),
       0
     );
-    this.getApiCost();
+    // this.getApiCost();
   },
   computed: {
     totalMain() {
@@ -1335,7 +1489,7 @@ export default {
         this.fabricMain.quantity * this.fabricMain.price +
         this.fabricExtra.quantity * this.fabricExtra.price +
         this.fabricLining.quantity * this.fabricLining.price +
-        this.totalPrice
+        parseInt(this.totalPrice)
       );
     },
     totalPriceIngredient() {
@@ -1348,15 +1502,17 @@ export default {
   },
   data() {
     return {
+      counts: 0,
       isModalOpen: false,
       dataProvince: null,
       dataDistrict: null,
       dataWard: null,
+      priceCustom: this.order.detail.TongTien,
       productType:
         this.order.detail.LoaiHang === "Hàng may" ? "available" : "unavailable",
       deposit: this.order.detail.TienCoc,
-      totalPrice: 0,
-      price: null,
+      totalPrice: this.order.detail.TongTien,
+      price: this.order.detail.Gia,
       dataQuality: [],
       dataCategory: [],
       dataFabric: [],
@@ -1435,23 +1591,32 @@ export default {
         .catch((err) => console.log(err));
     },
     async getApiCost() {
+      let total = 0;
       await axios
         .get(
           `admin/cost/${this.idQualitySelected}/${this.idCategorySelected}?quantity=${this.quantity}`
         )
         .then((res) => {
-          if (res.data.Gia != null)
-            this.totalPrice = res.data.Gia * this.quantity;
+          if (res.data.Gia != null) total = res.data.Gia * this.quantity;
         })
         .catch((err) => console.log(err));
+      this.totalPrice =
+        this.productType == "unavailable"
+          ? this.quantity * parseInt(this.price)
+          : total;
+      this.totalPrice = this.counts == 0 ? this.priceCustom : this.totalPrice;
+
+      this.totalPrice = this.totalPrice.toString();
+
+      this.counts++;
     },
     handleChangeQuality(e) {
       this.idQualitySelected = e.target.value;
-      this.getApiCost();
+      // this.getApiCost();
     },
     handleChangeCategory(e) {
       this.idCategorySelected = e.target.value;
-      this.getApiCost();
+      // this.getApiCost();
     },
     handleChangeProvince(e) {
       this.dataProvince.forEach((ele) => {
@@ -1486,7 +1651,18 @@ export default {
     handleClickRemoveProperty() {
       if (this.dataProperty.length > 1)
         this.dataProperty.splice(this.dataProperty.length - 1, 1);
-      this.getApiCost();
+      // this.getApiCost();
+    },
+    handleClickRemoveIngredient(e) {
+      if (this.listIngredient.length > 1)
+        this.listIngredient.splice(this.listIngredient.length - 1, 1);
+    },
+    handleClickAddIngredient(e) {
+      this.listIngredient.push({
+        ingredient: "",
+        quantity: 1,
+        price: 0,
+      });
     },
     handleClickBackDrop(e) {
       if (e.target == document.querySelector("#backdrop-overlay"))
@@ -1524,6 +1700,16 @@ export default {
       });
 
       this.fabricLining.price = price;
+    },
+    handleChangeIngredient(e, index) {
+      let price = 0;
+      this.dataIngredient.map((item) => {
+        if (item.id == e.target.value) price = item.Gia;
+      });
+      this.listIngredient[index].price = price;
+    },
+    handleUpdatePrice() {
+      this.totalPrice = this.price * this.quantity;
     },
   },
 };

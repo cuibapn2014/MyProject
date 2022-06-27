@@ -270,6 +270,7 @@
             placeholder=""
             min="0"
             type="number"
+            v-model="price"
             name="price"
             autocomplete="off"
           />
@@ -474,9 +475,64 @@
         </option>
       </select>
     </label>
-    <div class="flex mt-1" v-if="productType == 'available'">
+    <div
+      class="flex mt-1 items-center justify-start"
+      v-show="productType == 'available'"
+    >
+      <label>
+        <span class="dark:text-gray-200 flex font-bold"
+          >Giá/Sản phẩm
+          <p class="text-red-500 mx-1">*</p></span
+        >
+        <div class="relative text-gray-500 focus-within:text-purple-600">
+          <input
+            class="
+              block
+              w-full
+              pr-20
+              text-base
+              font-bold
+              text-[#000000]
+              dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+              focus:border-purple-400
+              focus:outline-none
+              focus:shadow-outline-purple
+              dark:focus:shadow-outline-gray
+              form-input
+              dark:text-gray-200
+            "
+            placeholder=""
+            min="0"
+            type="number"
+            name="price"
+            v-model="price"
+            autocomplete="off"
+          />
+          <p
+            class="
+              absolute
+              inset-y-0
+              right-0
+              px-4
+              text-sm
+              font-medium
+              leading-5
+              text-white
+              transition-colors
+              duration-150
+              bg-indigo-600
+              rounded-r-md
+              focus:outline-none focus:shadow-outline-purple
+              flex
+              items-center
+            "
+          >
+            VND
+          </p>
+        </div>
+      </label>
       <label class="block text-sm my-1 mx-2">
-        <span class="flex text-gray-700 dark:text-gray-400 font-bold"
+        <span class="flex text-gray-700 dark:text-gray-200 font-bold"
           >Tổng tiền gia công
           <p class="text-red-500 mx-1">*</p></span
         >
@@ -485,20 +541,28 @@
             block
             w-full
             mt-1
-            text-sm
             bg-gray-50
             dark:border-gray-600 dark:bg-gray-700
             focus:border-purple-400
             focus:outline-none
+            text-base
+            font-bold
             focus:shadow-outline-purple
-            dark:text-gray-300 dark:focus:shadow-outline-gray
+            text-green-500 dark:focus:shadow-outline-gray
             form-input
+            focus:dark:bg-green-500
+            focus:bg-green-500
+            hover:dark:bg-green-500
+            hover:bg-green-500
+            focus:text-white
+            hover:text-white
+            duration-150 ease-in
           "
           type="number"
           min="0"
-          readonly
+          name="total"
           placeholder=""
-          :value="this.totalPrice"
+          :value="sum"
         />
       </label>
     </div>
@@ -780,16 +844,28 @@
       </span>
       <input
         class="
-          block
-          w-full
-          mt-1
-          text-sm
-          dark:border-gray-600 dark:bg-gray-700
-          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
-          dark:text-gray-300 dark:focus:shadow-outline-gray
-          bg-gray-50
-          form-input
-        "
+            block
+            w-full
+            mt-1
+            bg-gray-50
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            text-base
+            font-bold
+            cursor-pointer
+            focus:shadow-outline-purple
+            text-green-500 dark:focus:shadow-outline-gray
+            form-input
+            focus:dark:bg-green-500
+            focus:bg-green-500
+            hover:dark:bg-green-500
+            hover:bg-green-500
+            focus:text-white
+            hover:text-white
+            duration-150 ease-in
+            text-end
+          "
         type="text"
         min="0"
         readonly
@@ -935,22 +1011,32 @@
       </span>
       <input
         class="
-          block
-          w-full
-          mt-1
-          text-sm
-          dark:border-gray-600 dark:bg-gray-700
-          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
-          dark:text-gray-300 dark:focus:shadow-outline-gray
-          bg-gray-50
-          form-input
-        "
+            block
+            w-full
+            mt-1
+            bg-gray-50
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            text-base
+            font-bold
+            cursor-pointer
+            focus:shadow-outline-purple
+            text-green-500 dark:focus:shadow-outline-gray
+            form-input
+            focus:dark:bg-green-500
+            focus:bg-green-500
+            hover:dark:bg-green-500
+            hover:bg-green-500
+            focus:text-white
+            hover:text-white
+            duration-150 ease-in
+            text-end
+          "
         type="text"
         min="0"
         readonly
-        :value="
-          this.formatPrice(this.totalPriceIngredient)
-        "
+        :value="this.formatPrice(this.totalPriceIngredient)"
         placeholder=""
       />
     </label>
@@ -984,16 +1070,28 @@
       </span>
       <input
         class="
-          block
-          w-full
-          mt-1
-          text-sm
-          dark:border-gray-600 dark:bg-gray-700
-          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
-          dark:text-gray-300 dark:focus:shadow-outline-gray
-          bg-gray-50
-          form-input
-        "
+            block
+            w-full
+            mt-1
+            bg-gray-50
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            text-base
+            font-bold
+            cursor-pointer
+            focus:shadow-outline-purple
+            text-green-500 dark:focus:shadow-outline-gray
+            form-input
+            focus:dark:bg-green-500
+            focus:bg-green-500
+            hover:dark:bg-green-500
+            hover:bg-green-500
+            focus:text-white
+            hover:text-white
+            duration-150 ease-in
+            text-end
+          "
         type="number"
         min="0"
         readonly
@@ -1006,19 +1104,35 @@
       <span class="flex text-gray-700 dark:text-gray-400">Tiền còn lại </span>
       <input
         class="
-          block
-          w-full
-          mt-1
-          text-sm
-          disabled:bg-gray-50
-          dark:border-gray-600 dark:bg-gray-700
-          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
-          dark:text-gray-300 dark:focus:shadow-outline-gray
-          form-input
-        "
+            block
+            w-full
+            mt-1
+            bg-gray-50
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            text-base
+            font-bold
+            focus:shadow-outline-purple
+            text-red-500 dark:focus:shadow-outline-gray
+            form-input
+            cursor-pointer
+            focus:dark:bg-red-500
+            focus:bg-red-500
+            hover:dark:bg-red-500
+            hover:bg-red-500
+            focus:text-white
+            hover:text-white
+            duration-150 ease-in
+            text-end
+          "
         type="text"
         placeholder=""
-        :value="this.formatPrice(this.total + this.totalPriceIngredient - this.deposit)"
+        :value="
+          this.formatPrice(
+            this.total + this.totalPriceIngredient - this.deposit
+          )
+        "
         disabled
       />
     </label>
@@ -1276,13 +1390,13 @@ export default {
     this.getApiIngredient();
   },
   updated() {
-    this.price = this.formatPrice(this.totalPrice - this.deposit);
+    // this.price = this.formatPrice(this.totalPrice - this.deposit);
     this.quantity = this.dataProperty.reduce(
       (a, b) => a + parseInt(b.quantity),
       0
     );
-    if (this.idCategorySelected != 0 && this.idQualitySelected != 0)
-      this.getApiCost();
+    // if (this.idCategorySelected != 0 && this.idQualitySelected != 0)
+    //   this.getApiCost();
   },
   components: {
     InputFile,
@@ -1302,8 +1416,12 @@ export default {
         this.fabricMain.quantity * this.fabricMain.price +
         this.fabricExtra.quantity * this.fabricExtra.price +
         this.fabricLining.quantity * this.fabricLining.price +
-        this.totalPrice
+        parseInt(this.totalPrice)
       );
+    },
+    sum() {
+      this.totalPrice = this.price * this.quantity;
+      return this.totalPrice;
     },
     totalPriceIngredient() {
       let total = 0;
@@ -1322,7 +1440,7 @@ export default {
       productType: "available",
       deposit: 0,
       totalPrice: 0,
-      price: null,
+      price: 0,
       dataQuality: [],
       dataCategory: [],
       dataFabric: [],
@@ -1407,15 +1525,21 @@ export default {
         .catch((err) => console.log(err));
     },
     async getApiCost() {
+      let total = 0;
       await axios
         .get(
           `admin/cost/${this.idQualitySelected}/${this.idCategorySelected}?quantity=${this.quantity}`
         )
         .then((res) => {
-          if (res.data.Gia != null)
-            this.totalPrice = res.data.Gia * this.quantity;
+          if (res.data.Gia != null) total = res.data.Gia * this.quantity;
         })
         .catch((err) => console.log(err));
+
+      this.totalPrice =
+        this.productType == "unavailable"
+          ? this.quantity * parseInt(this.price)
+          : total;
+      this.totalPrice = this.totalPrice.toString();
     },
     handleChangeProvince(e) {
       this.dataProvince.map((ele) => {
@@ -1434,11 +1558,11 @@ export default {
     },
     handleChangeQuality(e) {
       this.idQualitySelected = e.target.value;
-      this.getApiCost();
+      // this.getApiCost();
     },
     handleChangeCategory(e) {
       this.idCategorySelected = e.target.value;
-      this.getApiCost();
+      // this.getApiCost();
     },
     formatPrice(value) {
       let val = (value / 1).toFixed(0).replace(".", ",");
@@ -1457,7 +1581,6 @@ export default {
     handleClickRemoveProperty() {
       if (this.dataProperty.length > 1)
         this.dataProperty.splice(this.dataProperty.length - 1, 1);
-      this.getApiCost();
     },
     handleClickBackDrop(e) {
       if (e.target == document.querySelector("#backdrop-overlay"))

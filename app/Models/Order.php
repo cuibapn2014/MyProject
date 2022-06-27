@@ -14,7 +14,7 @@ class Order extends Model
 
     protected $table = 'don_hang';
 
-    protected $fillable = ['TenKhachHang', 'SoDienThoai', 'DiaChi', 'NgayTraDon', 'id_NhanVien'];
+    protected $fillable = ['TenKhachHang', 'SoDienThoai', 'DiaChi', 'NgayTraDon', 'id_NhanVien', 'TongTien'];
 
     public function user()
     {

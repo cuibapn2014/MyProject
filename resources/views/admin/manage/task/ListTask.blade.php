@@ -14,5 +14,4 @@ $current = 4;
     <task v-if="this.dataTask.length > 0" :assign="this.dataTask"></task>
     <p v-else class="dark:text-gray-200 text-center">Không tìm thấy dữ liệu nào</p>
 </div>
-
 @endsection

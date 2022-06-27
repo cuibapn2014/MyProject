@@ -30,7 +30,15 @@
         overflow-auto
       "
     >
-      <h2 class="text-xl border-bottom py-1">Chi tiết đơn hàng</h2>
+      <div class="flex items-center justify-between border-bottom">
+        <h2 class="text-xl py-1">Chi tiết đơn hàng</h2>
+        <span class="flex items-center">
+          tạo bởi <strong class="ml-1">{{ this.order.user.name }}</strong>
+          <img
+            :src="'/img/user/' + this.order.user.image"
+            class="h-7 w-7 rounded-full object-cover mx-1"
+        /></span>
+      </div>
       <div class="w-full border-bottom py-2 flex flex-col">
         <span class="w-100">Tên khách hàng: {{ this.order.TenKhachHang }}</span>
         <span class="w-100">Số điện thoại: {{ this.order.SoDienThoai }}</span>
@@ -71,27 +79,36 @@
           - {{ this.order.detail.fabric_detail.VaiChinh }}m</span
         >
         <span
-          >Vải phụ:
-          {{
-            this.order.detail.fabric_extra && this.order.detail.fabric_extra.Ten
-          }}
-          - {{ this.order.detail.fabric_detail.VaiPhu }}m</span
+          ><p v-if="this.order.detail.fabric_extra">
+            Vải phụ:
+            {{
+              this.order.detail.fabric_extra &&
+              this.order.detail.fabric_extra.Ten
+            }}
+            - {{ this.order.detail.fabric_detail.VaiPhu }}m
+          </p></span
         >
-        <span
-          >Vải lót:
-          {{
-            this.order.detail.fabric_lining &&
-            this.order.detail.fabric_lining.Ten
-          }}
-          - {{ this.order.detail.fabric_detail.VaiLot }}m</span
+        <span>
+          <p v-if="this.order.detail.fabric_lining">
+            Vải lót:
+            {{
+              this.order.detail.fabric_lining &&
+              this.order.detail.fabric_lining.Ten
+            }}
+            - {{ this.order.detail.fabric_detail.VaiLot }}m
+          </p></span
         >
+
         <span class="font-bold text-base">Phụ liệu</span>
         <span
           v-for="(ingredient, index) in this.order.detail.ingredient_details"
           :key="ingredient.id"
         >
-          {{ ++index }}. {{ ingredient.ingredient.Ten }} - Số lượng:
-          {{ ingredient.SoLuong }} cái
+          <div>
+            {{ ++index }}.
+            {{ ingredient.ingredient && ingredient.ingredient.Ten }} - Số lượng:
+            {{ ingredient.ingredient && ingredient.SoLuong }} cái
+          </div>
         </span>
         <h3 class="font-bold mt-2">Phân loại thuộc tính</h3>
         <div
@@ -108,13 +125,59 @@
         <span class="py-2 border-top"
           >Ghi chú: {{ this.order.detail.GhiChu }}</span
         >
+        <h3 class="font-bold text-base dark:text-gray-200">Thanh toán</h3>
+        <ul>
+          <li>
+            Tổng thành tiền:
+            <span class="font-bold text-base text-green-500">{{
+              this.formatPrice(this.order.TongTien)
+            }}</span>
+          </li>
+          <li>
+            Đã thanh toán:
+            <span class="font-bold text-base text-green-500">{{
+              this.formatPrice(this.order.detail.TienCoc)
+            }}</span>
+          </li>
+          <li>
+            Còn lại:
+            <span class="font-bold text-base text-red-500">{{
+              this.formatPrice(this.order.TongTien - this.order.detail.TienCoc)
+            }}</span>
+          </li>
+        </ul>
       </div>
-      <button
-        class="p-2 bg-indigo-600 text-white rounded-lg mt-2 float-right"
-        @click="closeModal"
-      >
-        Đóng
-      </button>
+      <div class="flex items-center justify-between">
+        <span class="text-base flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 mr-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          Hạn giao:
+          <span
+            class="mx-2"
+            :class="{ 'text-red-500 font-bold': expireTime <= 2 }"
+          >
+            {{ expireTime > 0 ? `Còn ${expireTime} ngày` : "Hết hạn" }}
+          </span></span
+        >
+        <button
+          class="p-2 bg-indigo-600 text-white rounded-lg mt-2"
+          @click="closeModal"
+        >
+          Đóng
+        </button>
+      </div>
     </div>
     <div
       class="w-full h-full absolute left-0 top-0 bg-gray-800 opacity-50 z-0"
@@ -139,12 +202,27 @@ export default {
       isOpen: false,
     };
   },
+  computed: {
+    expireTime() {
+      const now = Date.now();
+      const expire = this.order.NgayTraDon && new Date(this.order.NgayTraDon);
+      const result = Math.abs(expire - now);
+      return Math.ceil(result / (1000 * 60 * 60 * 24)) - 1;
+    },
+  },
   methods: {
     closeModal() {
       this.isOpen = false;
       this.$emit("toggle-detail", {
         isOpen: this.isOpen,
       });
+    },
+    formatPrice(value) {
+      let val = (value / 1).toFixed(0).replace(".", ",");
+      return val
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+        .concat("đ");
     },
   },
 };
