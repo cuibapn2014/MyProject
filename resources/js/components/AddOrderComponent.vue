@@ -1040,7 +1040,7 @@
         placeholder=""
       />
     </label>
-    <label class="block text-sm my-1">
+    <label class="block text-sm my-1" v-if="this.productType == 'available'">
       <span class="flex text-gray-700 dark:text-gray-400"
         >Tiền cọc
         <p class="text-red-500 mx-1">*</p></span
@@ -1062,6 +1062,43 @@
         name="deposit"
         v-model="deposit"
         :max="this.total"
+      />
+    </label>
+    <label class="block text-sm my-1">
+      <span class="flex text-gray-700 dark:text-gray-400"
+        >Thanh toán bổ sung
+        <p class="text-red-500 mx-1">*</p></span
+      >
+      <input
+       class="
+            block
+            w-full
+            mt-1
+            bg-gray-50
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            text-base
+            font-bold
+            cursor-pointer
+            focus:shadow-outline-purple
+            text-green-500 dark:focus:shadow-outline-gray
+            form-input
+            focus:dark:bg-green-500
+            focus:bg-green-500
+            hover:dark:bg-green-500
+            hover:bg-green-500
+            focus:text-white
+            hover:text-white
+            duration-150 ease-in
+            text-end
+          "
+        type="number"
+        min="0"
+        placeholder=""
+        name="paid"
+        v-model="paid"
+        :max="this.total + this.totalPriceIngredient - this.deposit"
       />
     </label>
     <label class="block text-sm my-1">
@@ -1130,7 +1167,7 @@
         placeholder=""
         :value="
           this.formatPrice(
-            this.total + this.totalPriceIngredient - this.deposit
+            this.total + this.totalPriceIngredient - this.deposit - this.paid
           )
         "
         disabled
@@ -1441,6 +1478,7 @@ export default {
       deposit: 0,
       totalPrice: 0,
       price: 0,
+      paid:0,
       dataQuality: [],
       dataCategory: [],
       dataFabric: [],

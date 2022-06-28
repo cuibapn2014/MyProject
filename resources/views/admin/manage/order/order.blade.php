@@ -41,9 +41,10 @@ $current = 1;
                         <th class="px-4 py-3 font-bold">#</th>
                         <th class="px-4 py-3">Khách hàng</th>
                         <th class="px-4 py-3">Liên hệ</th>
-                        <th class="px-4 py-3">Tạo bởi</th>
                         <th class="px-4 py-3">Thành tiền</th>
                         <th class="px-4 py-3">Tiền còn lại</th>
+                        <th class="px-4 py-3">Đã thanh toán</th>
+                        <th class="px-4 py-3">Tạo bởi</th>
                         <th class="px-4 py-3">Cập nhật</th>
                         <th class="px-4 py-3">Hành động</th>
                     </tr>
@@ -61,18 +62,21 @@ $current = 1;
                         <td class="px-4 py-3 text-sm">
                             {{ $order->SoDienThoai }}
                         </td>
+                        <td class="px-4 py-3 text-sm font-bold text-green-500">
+                            {{ number_format($order->TongTien) }} VND
+                        </td>
+                        <td class="px-4 py-3 text-sm text-red-500 font-bold">
+                            {{ number_format($order->TongTien - $order->detail->TienCoc - $order->detail->ThanhToanBS) }} VND
+                        </td>
+                        <td class="px-4 py-3 text-sm font-bold text-green-500">
+                            {{ number_format($order->detail->ThanhToanBS) }} VND
+                        </td>
                         <td class="px-4 py-3 text-sm">
                             @php
                             $arr = explode(" ", $order->user->name);
                             $length = count($arr);
                             @endphp
-                            {{ implode(" ", array($arr[$length - 2],  $arr[$length - 1])) }}
-                        </td>
-                        <td class="px-4 py-3 text-sm font-bold text-green-500">
-                            {{ number_format($order->TongTien) }} VND
-                        </td>
-                        <td class="px-4 py-3 text-sm text-red-500 font-bold">
-                            {{ number_format($order->TongTien - $order->detail->TienCoc) }} VND
+                            {{ implode(" ", array($arr[$length - 2], $arr[$length - 1])) }}
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{ \Carbon\Carbon::parse($order->updated_at)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y')

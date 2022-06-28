@@ -137,7 +137,7 @@
             Đã thanh toán:
             <span class="font-bold text-base text-green-500">{{
               this.formatPrice(this.order.detail.TienCoc)
-            }}</span>
+            }} <small class="text-[#000000] dark:text-gray-200">(Tiền cọc) +</small> {{ this.formatPrice(this.order.detail.ThanhToanBS) }} <small class="text-[#000000] dark:text-gray-200">(Thanh toán bổ sung)</small></span>
           </li>
           <li>
             Còn lại:
@@ -207,7 +207,7 @@ export default {
       const now = Date.now();
       const expire = this.order.NgayTraDon && new Date(this.order.NgayTraDon);
       const result = Math.abs(expire - now);
-      return Math.ceil(result / (1000 * 60 * 60 * 24)) - 1;
+      return Math.ceil(result / (1000 * 60 * 60 * 24));
     },
   },
   methods: {

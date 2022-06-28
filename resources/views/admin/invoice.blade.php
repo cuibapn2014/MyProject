@@ -114,6 +114,15 @@
                                             </tbody>
                                             <thead>
                                                 <tr>
+                                                    <th>Giá áp dụng </th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th>{{ number_format($order->detail->Gia) }}đ/sản phẩm</th>
+                                                </tr>
+                                                <tr>
                                                     <th>Tổng số lượng </th>
                                                     <th></th>
                                                     <th></th>
@@ -122,16 +131,45 @@
                                                     <th></th>
                                                     <th>{{ $amount }} sản phẩm</th>
                                                 </tr>
+                                                <tr>
+                                                    <th>Tổng tiền gia công </th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th class="text-success">+ {{ number_format($order->detail->TongTien) }}đ</th>
+                                                </tr>
                                             </thead>
                                             <thead>
+
                                                 <tr>
-                                                    <th>Giá áp dụng </th>
+                                                    <th>Tiền vải </th>
                                                     <th></th>
                                                     <th></th>
                                                     <th></th>
                                                     <th></th>
                                                     <th></th>
-                                                    <th>{{ number_format($cost) }}đ/sản phẩm</th>
+                                                    <th class="text-success">+ {{ number_format(
+                                                        ($order->detail->fabric_main ? $order->detail->fabric_main->Gia
+                                                        * $order->detail->fabric_detail->VaiChinh : 0)
+                                                        + ($order->detail->fabric_extra ?
+                                                        $order->detail->fabric_extra->Gia *
+                                                        $order->detail->fabric_detail->VaiPhu : 0)
+                                                        + ($order->detail->fabric_lining ?
+                                                        $order->detail->fabric_lining->Gia *
+                                                        $order->detail->fabric_detail->VaiLot : 0)) }}đ</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Tiền phụ liệu </th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th class="text-success">+ {{
+                                                        number_format($order->detail->ingredient_details->sum('ingredient.Gia'))
+                                                        }}đ</th>
                                                 </tr>
                                             </thead>
                                             <thead>
@@ -142,7 +180,7 @@
                                                     <th></th>
                                                     <th></th>
                                                     <th></th>
-                                                    <th>{{ number_format($order->detail->TongTien) }}đ</th>
+                                                    <th>{{ number_format($order->TongTien) }}đ</th>
                                                 </tr>
                                             </thead>
                                         </table>
