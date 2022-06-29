@@ -24,7 +24,7 @@ class AdminController extends Controller
         ->get();
         $debt = Order::selectRaw('sum(don_hang.TongTien - chi_tiet_don_hang.TienCoc - chi_tiet_don_hang.ThanhToanBS) as debt')
         ->join('chi_tiet_don_hang', 'don_hang.id', '=', 'chi_tiet_don_hang.id_DonHang')
-        ->first();
+        ->get();
         return view('admin.home',['revenue' => $revenue,'countOrder' => $countOrder,'countClient' => $countClient,'debt' => $debt]);
     }
 
@@ -86,7 +86,7 @@ class AdminController extends Controller
     }
 
     public function getRevenue(){
-        return Order::selectRaw('month(don_hang.created_at) as month, sum(chi_tiet_don_hang.TienCoc + chi_tiet_don_hang.ThanhToanBS) as total')
+        return Order::selectRaw('month(don_hang.created_at) as month, (chi_tiet_don_hang.TienCoc + chi_tiet_don_hang.ThanhToanBS) as total')
         ->join('chi_tiet_don_hang', 'don_hang.id', '=', 'chi_tiet_don_hang.id_DonHang')
         ->whereYear('don_hang.created_at', date('Y'))
         ->groupBy('month')

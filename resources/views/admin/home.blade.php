@@ -39,7 +39,7 @@ $current = 0;
             </div>
             <div>
                 <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                    Doanh thu của bạn
+                    Doanh thu
                 </p>
                 <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
                     {{ number_format($revenue->total) }} VND
@@ -78,7 +78,7 @@ $current = 0;
                     Nợ công
                 </p>
                 <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                    {{ number_format($debt->total) }} VND
+                    {{ number_format($debt->first()->debt) }} VND
                 </p>
             </div>
         </div>

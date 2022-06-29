@@ -10,7 +10,7 @@ $role = auth()->user()->role;
     @if(session('success'))
     <p class="p-2 rounded-md my-2 bg-green-100 text-green-400 text-sm">{{ session('success') }}</p>
     @endif
-    <div v-if="{{ $role }} < 3" class="container grid py-2">
+    <div v-if="{{ $role }} < 3" class="grid py-2">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
             Công việc cho bạn
         </h2>
