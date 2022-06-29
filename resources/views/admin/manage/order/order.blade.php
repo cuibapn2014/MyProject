@@ -31,7 +31,7 @@ $current = 1;
             </svg>
         </button>
     </div>
-    <div class="w-full overflow-hidden rounded-lg shadow-xs">
+    <div class="w-full overflow-hidden rounded-lg shadow-xs mb-4">
         <div class="w-full overflow-x-auto" v-dragscroll>
             <table class="w-full whitespace-no-wrap">
                 @if($orders->count() > 0)

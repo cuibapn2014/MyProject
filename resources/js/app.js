@@ -10,6 +10,11 @@ import { mixin as clickaway } from 'vue-clickaway'
 import Echo from 'laravel-echo';
 import VueDragscroll from 'vue-dragscroll'
 import { dragscroll } from 'vue-dragscroll'
+import { chartLine } from './charts-lines'
+import { pieChart } from './charts-pie'
+import { barChart } from './charts-bars'
+
+
 
 window.Vue = require('vue').default;
 Vue.use(VueDragscroll)
@@ -64,6 +69,9 @@ const app = new Vue({
         setTimeout(() => {
             this.isLoad = false
         },500)
+        this.fetchRevenue()
+        this.fetchDebt()
+        this.fetchCountProductType()
     },
     updated() {
         this.getTheme()
@@ -92,6 +100,21 @@ const app = new Vue({
     methods: {
         setIsActive(index) {
             this.isActive = index
+        },
+        async fetchRevenue(){
+            await axios.get('/revenue/get')
+            .then(res => chartLine(res.data))
+            .catch(err => console.log(err))
+        },
+        async fetchDebt(){
+            await axios.get('/debt/get')
+            .then(res => barChart(res.data))
+            .catch(err => console.log(err))
+        },
+        async fetchCountProductType(){
+            await axios.get('/product-type/count')
+            .then(res => pieChart(res.data))
+            .catch(err => console.log(err))
         },
         async fetchTask() {
             this.getListTask()

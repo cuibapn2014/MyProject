@@ -110,3 +110,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
     $route->post('/image-update/{id}', [AdminController::class, 'updateImageUser'])->name('admin.user.image.update');
     $route->post('/update/{id}', [AdminController::class, 'updateUser'])->name('admin.user.update');
 });
+
+//Resource
+Route::get('/revenue/get',[AdminController::class ,'getRevenue'])->name('revenue');
+Route::get('/debt/get',[AdminController::class ,'getDebt'])->name('debt');
+Route::get('/product-type/count',[AdminController::class ,'countTypeOrder'])->name('count.product-type');

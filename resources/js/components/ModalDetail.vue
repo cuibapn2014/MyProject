@@ -142,7 +142,7 @@
           <li>
             Còn lại:
             <span class="font-bold text-base text-red-500">{{
-              this.formatPrice(this.order.TongTien - this.order.detail.TienCoc)
+              this.formatPrice(this.order.TongTien - this.order.detail.TienCoc - this.order.detail.ThanhToanBS)
             }}</span>
           </li>
         </ul>
