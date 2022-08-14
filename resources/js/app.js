@@ -9,15 +9,19 @@ import axios from 'axios';
 import { mixin as clickaway } from 'vue-clickaway'
 import Echo from 'laravel-echo';
 import VueDragscroll from 'vue-dragscroll'
+import VTooltip from 'v-tooltip'
 import { dragscroll } from 'vue-dragscroll'
 import { chartLine } from './charts-lines'
 import { pieChart } from './charts-pie'
 import { barChart } from './charts-bars'
+import mediumZoom from "medium-zoom";
+
 
 
 
 window.Vue = require('vue').default;
 Vue.use(VueDragscroll)
+Vue.use(VTooltip)
 
 /**
  * The following block of code may be used to automatically register your
@@ -38,6 +42,8 @@ Vue.component('edit-order', require('./components/EditOrderComponent.vue').defau
 Vue.component('profile', require('./components/ProfileComponent.vue').default);
 Vue.component('task', require('./components/TaskComponent.vue').default);
 Vue.component('modal-detail', require('./components/ModalDetail.vue').default);
+Vue.component('plan-detail', require('./components/PlanDetail.vue').default);
+
 
 window.axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
 window.axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
@@ -51,7 +57,7 @@ window.axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 const app = new Vue({
     el: '#app',
     mixins: [clickaway],
-    directives:{
+    directives: {
         'dragscroll': dragscroll
     },
     props: [
@@ -68,10 +74,21 @@ const app = new Vue({
         this.getTheme()
         setTimeout(() => {
             this.isLoad = false
-        },500)
+        }, 500)
         this.fetchRevenue()
         this.fetchDebt()
         this.fetchCountProductType()
+        this.isActive = sessionStorage.getItem('selected_menu') && parseInt(sessionStorage.getItem('selected_menu'))
+        if (this.isSaleActive())
+            this.toggleSaleMenu()
+        if (this.isWarehouseActive())
+            this.toggleWarehouseMenu()
+        if (this.isProductionActive())
+            this.toggleProductionsMenu()
+        // this.isActive > 0 && this.isActive < 2 && this.toggleSaleMenu()
+        mediumZoom(document.querySelectorAll(".img__mthumbnail"), {
+            background: "rgba(0,0,0,0.5)",
+        });
     },
     updated() {
         this.getTheme()
@@ -89,7 +106,9 @@ const app = new Vue({
             isSideMenuOpen: false,
             isNotificationsMenuOpen: false,
             isProfileMenuOpen: false,
-            isPagesMenuOpen: false,
+            isSalesMenuOpen: false,
+            isProductionMenuOpen: false,
+            isWarehouseMenuOpen: false,
             isModalOpen: false,
             isModalProfile: false,
             trapCleanup: null,
@@ -101,20 +120,20 @@ const app = new Vue({
         setIsActive(index) {
             this.isActive = index
         },
-        async fetchRevenue(){
+        async fetchRevenue() {
             await axios.get('/revenue/get')
-            .then(res => chartLine(res.data))
-            .catch(err => console.log(err))
+                .then(res => chartLine(res.data))
+                .catch(err => console.log(err))
         },
-        async fetchDebt(){
+        async fetchDebt() {
             await axios.get('/debt/get')
-            .then(res => barChart(res.data))
-            .catch(err => console.log(err))
+                .then(res => barChart(res.data))
+                .catch(err => console.log(err))
         },
-        async fetchCountProductType(){
+        async fetchCountProductType() {
             await axios.get('/product-type/count')
-            .then(res => pieChart(res.data))
-            .catch(err => console.log(err))
+                .then(res => pieChart(res.data))
+                .catch(err => console.log(err))
         },
         async fetchTask() {
             this.getListTask()
@@ -135,6 +154,7 @@ const app = new Vue({
                 }, 1000)
             }
         },
+
         getListTask() {
             window.Echo.private(`task.${this.user}`)
                 .listen('TaskEvent', (e) => {
@@ -167,6 +187,10 @@ const app = new Vue({
             this.setThemeToLocalStorage(this.dark)
         },
 
+        setSelectedMenu(index) {
+            sessionStorage.setItem('selected_menu', index)
+        },
+
         toggleSideMenu() {
             this.isSideMenuOpen = !this.isSideMenuOpen
         },
@@ -186,12 +210,36 @@ const app = new Vue({
             this.isProfileMenuOpen = !this.isProfileMenuOpen
             this.closeNotificationsMenu()
         },
+
+        isWarehouseActive() {
+            const arr = [2, 3, 5];
+            return arr.includes(this.isActive)
+        },
+
+        isSaleActive() {
+            const arr = [1, 6];
+            return arr.includes(this.isActive)
+        },
+
+        isProductionActive() {
+            const arr = [11, 12];
+            return arr.includes(this.isActive)
+        },
+
         closeProfileMenu() {
             this.isProfileMenuOpen = false
         },
 
-        togglePagesMenu() {
-            this.isPagesMenuOpen = !this.isPagesMenuOpen
+        toggleSaleMenu() {
+            this.isSalesMenuOpen = !this.isSalesMenuOpen
+        },
+
+        toggleWarehouseMenu() {
+            this.isWarehouseMenuOpen = !this.isWarehouseMenuOpen
+        },
+
+        toggleProductionsMenu() {
+            this.isProductionMenuOpen = !this.isProductionMenuOpen
         },
         // Modal
 
@@ -227,6 +275,9 @@ const app = new Vue({
         },
         handleDeleteTask(id) {
             location.href = `/admin/task/delete/${id}`
+        },
+        handleDelete(url) {
+            location.href = url + this.idDelete
         },
         handlePrintClick() {
             window.print()

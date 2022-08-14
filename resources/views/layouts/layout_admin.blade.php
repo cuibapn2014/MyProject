@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html :class="{ 'theme-dark': !dark }" lang="vi">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8" />
@@ -13,6 +13,7 @@
         rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/tailwind.output.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/tooltip.css') }}">
 
     <!-- Font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
@@ -30,7 +31,7 @@
 
 <body>
     <noscript>Vui lòng bật Javascript của trình duyệt</noscript>
-    <div id="app" class="flex h-screen bg-gray-50 dark:bg-gray-900" user="{{ auth()->user()->id }}"
+    <div id="app" class="flex h-screen bg-gray-50 dark:bg-gray-900" user="{{ auth()->user()->id ?? 0 }}"
         :class="{ 'overflow-hidden': isSideMenuOpen }">
 
         <!-- Loading -->
@@ -51,16 +52,15 @@
             <header class="z-10 py-2 bg-[#ffffff] shadow-md dark:bg-gray-800">
                 @include('layouts.header')
             </header>
-            <main class="h-full overflow-y-auto">
+            <main class="h-full overflow-y-auto">             
                 @yield('main')
-                [[setIsActive({{$current}})]]
             </main>
         </div>
         <transition enter-class="opacity-0" enter-to-class="opacity-100" leave-to-class="opacity-0">
             <profile v-if="isModalProfile" class="z-50 transition ease-in-out duration-150"
                 :user="{{ auth()->user()->load(['role']) }}" @toggle-profile="toggleProfileModal"></profile>
         </transition>
-
+        [[ setSelectedMenu({{ $current }}) ]]
     </div>
     <script src="{{ asset('js/app.js') }}" defer></script>
     @yield('script')

@@ -14,7 +14,7 @@ class PhuLieu extends Migration
     public function up()
     {
         //
-        Schema::create('phu_lieu', function (Blueprint $table){
+        Schema::create('ingredients', function (Blueprint $table){
             $table->id();
             $table->string('Ten')->unique();
             $table->string('GhiChu')->nullable();
@@ -29,6 +29,6 @@ class PhuLieu extends Migration
     public function down()
     {
         //
-        Schema::dropIfExists('phu_lieu');
+        Schema::dropIfExists('ingredients');
     }
 }

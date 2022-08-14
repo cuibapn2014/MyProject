@@ -6,6 +6,7 @@ use App\Exports\IngredientExport;
 use App\Http\Controllers\Controller;
 use App\Models\Image;
 use App\Models\Ingredient;
+use App\Models\Provider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
@@ -27,7 +28,8 @@ class IngredientController extends Controller
 
     public function getStore()
     {
-        return view('admin.manage.ingredient.createIngredient');
+        $providers = Provider::where('status','Đang hợp tác')->get();
+        return view('admin.manage.ingredient.createIngredient', compact('providers'));
     }
 
     public function store(Request $req)
@@ -35,21 +37,15 @@ class IngredientController extends Controller
         $validator = Validator::make(
             $req->all(),
             [
-                // 'name' => 'required',
+                'name' => 'required',
                 // 'image.*' => 'required',
-                // 'location' => 'required',
-                'phone_number' => 'numeric|digits:10',
                 'price' => 'integer'
             ],
             [
-                // 'name.required' => 'Tên phụ liệu không được để trống',
+                'name.required' => 'Tên phụ liệu không được để trống',
                 // 'price.required' => 'Giá không được để trống',
                 'price.integer' => 'Giá phải là số nguyên',
                 // 'image.*.required' => 'Bạn chưa thêm hình ảnh cho phụ liệu này',
-                // 'location.required' => 'Địa chỉ mua hàng không được để trống',
-                'phone_number.required' => 'Số điện thoại không được để trống',
-                'phone_number.numeric' => 'Số điện thoại không hợp lệ',
-                'phone_number.digits' => 'Số điện thoại không hợp lệ',
             ]
         );
 
@@ -59,9 +55,8 @@ class IngredientController extends Controller
 
         $ingredient = new Ingredient();
         $ingredient->Ten = $req->name;
-        $ingredient->DiaChi = $req->location;
-        $ingredient->SoDienThoai = $req->phone_number;
-        $ingredient->Gia = $req->price;
+        $ingredient->id_provider = $req->provider;
+        $ingredient->GhiChu = $req->note;
 
         $ingredient->save();
         foreach ($req->file('image') as $image) {
@@ -82,7 +77,9 @@ class IngredientController extends Controller
 
     public function getUpdate($id)
     {
-        return view('admin.manage.ingredient.editIngredient', ['ingredient' => Ingredient::findOrFail($id)]);
+        $providers = Provider::all();
+        $ingredient = Ingredient::findOrFail($id);
+        return view('admin.manage.ingredient.editIngredient', compact('providers', 'ingredient'));
     }
 
     public function update(Request $req, $id)
@@ -90,30 +87,22 @@ class IngredientController extends Controller
         $validator =  $this->validate(
             $req,
             [
-                // 'name' => 'required',
-                // 'location' => 'required',
-                'phone_number' => 'numeric|digits:10',
+                'name' => 'required',
                 'price' => 'integer'
             ],
             [
-                // 'name.required' => 'Tên phụ liệu không được để trống',
+                'name.required' => 'Tên phụ liệu không được để trống',
                 // 'price.required' => 'Giá không được để trống',
                 'price.integer' => 'Giá phải là số nguyên',
-                // 'location.required' => 'Địa chỉ mua hàng không được để trống',
-                // 'phone_number.required' => 'Số điện thoại không được để trống',
-                'phone_number.numeric' => 'Số điện thoại không hợp lệ',
-                'phone_number.digits' => 'Số điện thoại không hợp lệ',
             ]
         );
         if ($req->input('old_image') == null && !$req->hasFile('image'))
             return back()->with('error', 'Bạn không được để trống mục hình ảnh');
-
-
         $ingredient = Ingredient::findOrFail($id);
         $ingredient->Ten = $req->name;
-        $ingredient->DiaChi = $req->location;
-        $ingredient->SoDienThoai = $req->phone_number;
         $ingredient->Gia = $req->price;
+        $ingredient->GhiChu = $req->note;
+        $ingredient->id_provider = $req->provider;
         $ingredient->save();
 
         if ($req->hasFile('image')) {

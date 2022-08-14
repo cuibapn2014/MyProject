@@ -1,12 +1,12 @@
 @extends('layouts.layout_admin')
-@section('title', 'Quản lý phụ liệu')
+@section('title', 'Phụ liệu')
 @section('main')
 @php
 $current = 3;
 @endphp
 <div class="container px-6 mx-auto grid">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-        Quản lý phụ liệu
+        Kho phụ liệu
     </h2>
     @if(session('success'))
     <p class="p-2 rounded-md my-2 bg-green-100 text-green-400 text-sm">{{ session('success') }}</p>
@@ -40,9 +40,10 @@ $current = 3;
                         class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                         <th class="px-4 py-3">Hình ảnh</th>
                         <th class="px-4 py-3">Tên</th>
+                        <th class="px-4 py-3">Cung cấp bởi</th>
                         <th class="px-4 py-3">Giá</th>
                         <th class="px-4 py-3">Địa chỉ</th>
-                        <th class="px-4 py-3">Số điện thoại</th>
+                        <th class="px-4 py-3">Liên hệ</th>
                         <th class="px-4 py-3">Ghi Chú</th>
                         <th class="px-4 py-3">Hành động</th>
                     </tr>
@@ -52,7 +53,7 @@ $current = 3;
                     @foreach($ingredient as $ingredient)
                     <tr class="text-gray-700 dark:text-gray-400">
                         <td class="px-4 py-3">
-                            <img class="w-16 h-16 rounded-lg object-cover"
+                            <img class="w-16 h-16 rounded-lg object-cover img__mthumbnail"
                                 src="{{ $ingredient->images->first() != null ? asset('img/'.$ingredient->images->first()->urlImage) : 'img/placeholder.jpg'}}"
                                 alt="{{$ingredient->Ten}}" />
                         </td>
@@ -60,19 +61,22 @@ $current = 3;
                             {{$ingredient->Ten}}
                         </td>
                         <td class="px-4 py-3 text-sm">
+                            {{$ingredient->provider->name ?? null}}
+                        </td>
+                        <td class="px-4 py-3 text-sm">
                             {{number_format($ingredient->Gia)}}VND
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{$ingredient->DiaChi}}
+                            {{$ingredient->provider->address ?? null}}
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{$ingredient->SoDienThoai}}
+                            {{$ingredient->provider->phone_number ?? null}}
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{$ingredient->GhiChu}}
                         </td>
                         <td class="px-4 py-3 text-sm flex items-center">
-                            <button title="Chỉnh sửa"
+                            <button v-tooltip="'Chỉnh sửa'" title="Chỉnh sửa"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Edit"
                                 onclick="location.href='{{ route('admin.ingredient.update',['id' => $ingredient->id]) }}'">
@@ -82,7 +86,7 @@ $current = 3;
                                     </path>
                                 </svg>
                             </button>
-                            <button title="Xóa" @click="openModal({{$ingredient->id}})"
+                            <button v-tooltip="'Xóa'" title="Xóa" @click="openModal({{$ingredient->id}})"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Delete">
                                 <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">

@@ -5,33 +5,33 @@
 $current = 4;
 $role = auth()->user()->role;
 @endphp
-<div class="container px-6 mx-auto grid">
 
+<div class="container px-6 mx-auto grid">
     @if(session('success'))
     <p class="p-2 rounded-md my-2 bg-green-100 text-green-400 text-sm">{{ session('success') }}</p>
     @endif
     <div v-if="{{ $role }} < 3" class="grid py-2">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Công việc cho bạn
+            Cần làm
         </h2>
         <task v-if="this.dataTask.length > 0" :assign="this.dataTask"></task>
-        <p v-else class="dark:text-gray-200 text-center">Không tìm thấy dữ liệu nào</p>
+        <p v-else class="dark:text-gray-200 text-center">Hiện không có công việc nào được giao cho bạn</p>
     </div>
+    <hr class="my-4">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
         Quản lí công việc
     </h2>
     <div class="flex justify-end py-2">
         <button onclick="location.href='{{ route('admin.task.create') }}'"
             class="flex items-center px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border-0 rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-            Thêm mới
+            Giao việc
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>
         </button>
     </div>
-    <div class="w-full overflow-hidden rounded-lg shadow-xs my-2">
+    <div class="w-full overflow-hidden rounded-lg shadow-xs mt-2 mb-4">
         <div class="w-full overflow-x-auto" v-dragscroll>
             <table class="w-full whitespace-no-wrap">
                 @if($tasks->count() > 0)
@@ -39,7 +39,7 @@ $role = auth()->user()->role;
                     <tr
                         class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                         <th class="px-4 py-3 font-bold">#</th>
-                        <th class="px-4 py-3">Người giao</th>
+                        <th class="px-4 py-3">Tạo bởi</th>
                         <th class="px-4 py-3">Tiêu đề</th>
                         <th class="px-4 py-3">Thời hạn</th>
                         <th class="px-4 py-3">Ngày tạo</th>
@@ -47,16 +47,18 @@ $role = auth()->user()->role;
                     </tr>
                 </thead>
                 <tbody class="bg-[#ffffff] divide-y dark:divide-gray-700 dark:bg-gray-800">
-
+                    @php
+                    $index = $tasks->firstItem();
+                    @endphp
                     @foreach($tasks as $task)
                     <tr class="text-gray-700 dark:text-gray-400">
                         <td class="px-4 py-3">
-                            {{ $task->id }}
+                            {{ $index }}
                         </td>
                         <td class="px-4 py-3 text-sm flex items-center">
-                            <img src="{{asset('/img/user').'/'.$task->user->image}}"
+                            <img v-tooltip.top-start="'{{ $task->user->name }}'"
+                                src="{{asset('/img/user').'/'.$task->user->image}}"
                                 class="h-12 w-12 object-cover object-center rounded-full" />
-                            <span class="mx-2">{{ $task->user->name }}</span>
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{ $task->tieu_de }}
@@ -92,6 +94,9 @@ $role = auth()->user()->role;
                             </button>
                         </td>
                     </tr>
+                    @php
+                    $index++;
+                    @endphp
                     @endforeach
                 </tbody>
                 @else

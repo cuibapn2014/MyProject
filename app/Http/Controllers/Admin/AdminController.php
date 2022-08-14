@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Cost;
+use App\Models\Customer;
 use App\Models\DetailOrder;
 use Illuminate\Support\Facades\File;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -19,9 +20,7 @@ class AdminController extends Controller
     {
         $revenue = DetailOrder::selectRaw('sum(TienCoc + ThanhToanBS) as total')->first();
         $countOrder = Order::selectRaw('count(id) as total')->first();
-        $countClient = Order::selectRaw('count(id) as total, SoDienThoai')
-        ->groupBy('SoDienThoai')
-        ->get();
+        $countClient = Customer::all();
         $debt = Order::selectRaw('sum(don_hang.TongTien - chi_tiet_don_hang.TienCoc - chi_tiet_don_hang.ThanhToanBS) as debt')
         ->join('chi_tiet_don_hang', 'don_hang.id', '=', 'chi_tiet_don_hang.id_DonHang')
         ->get();
@@ -86,7 +85,7 @@ class AdminController extends Controller
     }
 
     public function getRevenue(){
-        return Order::selectRaw('month(don_hang.created_at) as month, (chi_tiet_don_hang.TienCoc + chi_tiet_don_hang.ThanhToanBS) as total')
+        return Order::selectRaw('month(don_hang.created_at) as month, sum(chi_tiet_don_hang.TienCoc + chi_tiet_don_hang.ThanhToanBS) as total')
         ->join('chi_tiet_don_hang', 'don_hang.id', '=', 'chi_tiet_don_hang.id_DonHang')
         ->whereYear('don_hang.created_at', date('Y'))
         ->groupBy('month')

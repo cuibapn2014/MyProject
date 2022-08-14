@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-div.medium-zoom-overlay{
+div.medium-zoom-overlay, img.medium-zoom-image{
     z-index: 50 !important;
 }
+

@@ -14,7 +14,7 @@ class LoaiVai extends Migration
     public function up()
     {
         //
-        Schema::create('loai_vai', function (Blueprint $table) {
+        Schema::create('fabrics', function (Blueprint $table) {
             $table->id();
             $table->string('Ten')->unique()->max(50);
             $table->string('MauSac')->max(50);
@@ -34,6 +34,6 @@ class LoaiVai extends Migration
     public function down()
     {
         //
-        Schema::dropIfExists('loai_vai');
+        Schema::dropIfExists('fabrics');
     }
 }

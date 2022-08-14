@@ -8,6 +8,7 @@ use App\Models\Image;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\FabricExport;
+use App\Models\Provider;
 use Illuminate\Support\Facades\Validator;
 
 class FabricController extends Controller
@@ -25,7 +26,8 @@ class FabricController extends Controller
 
     public function getStore()
     {
-        return view('admin.manage.fabric.createFabric');
+        $providers = Provider::where('status','Đang hợp tác')->get();
+        return view('admin.manage.fabric.createFabric', compact('providers'));
     }
 
 
@@ -66,8 +68,7 @@ class FabricController extends Controller
         $fabric->TinhChat = $req->property;
         $fabric->GhiChu = $req->GhiChu;
         $fabric->Gia = $req->price;
-        $fabric->DiaChiMua = $req->location;
-        $fabric->SoDienThoai = $req->phone_number;
+        $fabric->id_provider = $req->provider;
         $fabric->save();
 
         if ($req->hasFile('image')) {
@@ -90,7 +91,8 @@ class FabricController extends Controller
 
     public function getUpdate($id)
     {
-        return view('admin.manage.fabric.editFabric', ['fabric' => Fabric::findOrFail($id)]);
+        $providers = Provider::all();
+        return view('admin.manage.fabric.editFabric', ['fabric' => Fabric::findOrFail($id), 'providers' => $providers]);
     }
 
     public function update(Request $req, $id)
@@ -120,8 +122,7 @@ class FabricController extends Controller
         $fabric->TinhChat = $req->property;
         $fabric->GhiChu = $req->note;
         $fabric->Gia = $req->price;
-        $fabric->DiaChiMua = $req->location;
-        $fabric->SoDienThoai = $req->phone_number;
+        $fabric->id_provider = $req->provider;
         $fabric->save();
 
         if ($req->hasFile('image')) {

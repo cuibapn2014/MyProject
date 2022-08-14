@@ -1,12 +1,12 @@
 @extends('layouts.layout_admin')
-@section('title', 'Chỉnh sửa |Quản lý loại vải')
+@section('title', 'Chỉnh sửa |Vải')
 @section('main')
 @php
 $current = 2;
 @endphp
 <div class="container px-6 mx-auto grid">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-        Quản lý loại vải - Chỉnh sửa
+        Vải - Chỉnh sửa
     </h2>
     @if(session('success'))
     <p class="p-2 rounded-md my-2 bg-green-100 text-green-400 text-sm">{{ session('success') }}</p>
@@ -57,17 +57,26 @@ $current = 2;
                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                     type="number" min="1" value="{{$fabric->Gia}}" name="price" />
             </label>
-            <label class="block text-sm my-2">
-                <span class="text-gray-700 dark:text-gray-400">Địa chỉ mua</span>
-                <input
-                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    type="text" value="{{$fabric->DiaChiMua}}" name="location" />
-            </label>
-            <label class="block text-sm my-2">
-                <span class="text-gray-700 dark:text-gray-400">Số điện thoại liên hệ</span>
-                <input
-                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    type="text" value="{{ $fabric->SoDienThoai }}" name="phone_number" placeholder="XXXXXXXXXX" />
+            <label class="block text-sm mt-4 mb-2">
+                <span class="text-gray-700 dark:text-gray-400">Nhà cung cấp</span>
+                <select class="block
+                w-full
+                mt-1
+                text-sm
+                dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+                form-select
+                focus:border-purple-400
+                focus:outline-none
+                focus:shadow-outline-purple
+                dark:focus:shadow-outline-gray" name="provider" id="provider" aria-placeholder="Chọn nhà cung cấp">
+                    <option value="">-- Chọn nhà cung cấp --</option>
+                    @foreach($providers as $provider)
+                    <option value="{{ $provider->id }}" {{ $provider->id == $fabric->id_provider ? 'selected' : null}}>{{ $provider->name }} - {{ $provider->status }}</option>
+                    @endforeach
+                </select>
+                @if($fabric->provider && $fabric->provider->status == 'Ngưng hợp tác')
+                <span class="text-red-500 text-sm my-2">Đã ngưng hợp tác với nhà cung cấp <strong>{{ $fabric->provider->name }}</strong>. Vui lòng chọn nhà cung cấp khác</span>
+                @endif
             </label>
             <label class="block mt-4 text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Ghi chú</span>

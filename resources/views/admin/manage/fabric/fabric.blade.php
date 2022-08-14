@@ -1,12 +1,12 @@
 @extends('layouts.layout_admin')
-@section('title', 'Quản lý loại vải')
+@section('title', 'Vải')
 @section('main')
 @php
 $current = 2;
 @endphp
 <div class="container px-6 mx-auto grid">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-        Quản lý loại vải
+        Kho vải
     </h2>
     @if(session('success'))
     <p class="p-2 rounded-md my-2 bg-green-100 text-green-400 text-sm">{{ session('success') }}</p>
@@ -40,6 +40,7 @@ $current = 2;
                         class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                         <th class="px-4 py-3">Hình ảnh</th>
                         <th class="px-4 py-3">Tên</th>
+                        <th class="px-4 py-3">Cung cấp bởi</th>
                         <th class="px-4 py-3">Màu sắc</th>
                         <th class="px-4 py-3">Tính chất</th>
                         <th class="px-4 py-3">Giá</th>
@@ -52,12 +53,15 @@ $current = 2;
                     @foreach($fabrics as $fabric)
                     <tr class="text-gray-700 dark:text-gray-400">
                         <td class="px-4 py-3">
-                            <img class="w-16 h-16 rounded-lg object-cover"
+                            <img class="w-16 h-16 rounded-lg object-cover img__mthumbnail"
                                 src="{{ $fabric->images->first() != null ? asset('img/'.$fabric->images->first()->urlImage) : 'img/placeholder.jpg'}}"
                                 alt="{{$fabric->Ten}}" />
                         </td>
                         <td class="px-4 py-3">
                             {{$fabric->Ten}}
+                        </td>
+                        <td class="px-4 py-3">
+                            {{$fabric->provider ? $fabric->provider->name : 'Chưa cập nhật'}}
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{$fabric->MauSac}}
@@ -73,7 +77,7 @@ $current = 2;
                             {{$fabric->GhiChu}}
                         </td>
                         <td class="px-4 py-3 text-sm flex items-center">
-                            <button title="Chỉnh sửa"
+                            <button v-tooltip="'Chỉnh sửa'" title="Chỉnh sửa"
                                 onClick="location.href='{{ route('admin.fabric.update',['id' => $fabric->id]) }}'"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Edit">
@@ -83,7 +87,7 @@ $current = 2;
                                     </path>
                                 </svg>
                             </button>
-                            <button title="Xóa" @click="openModal({{$fabric->id}})" :key="{{$fabric->id}}"
+                            <button v-tooltip="'Xóa'" title="Xóa" @click="openModal({{$fabric->id}})" :key="{{$fabric->id}}"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Delete">
                                 <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">

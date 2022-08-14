@@ -2,7 +2,7 @@
   <div>
     <div class="w-16 h-16 relative mx-2" :key="this.data.id">
       <img
-        class="w-full h-full object-cover rounded-lg"
+        class="w-full h-full object-cover rounded-lg img__mthumbnail"
         :src="'img/' + this.data.urlImage"
       />
       <span class="absolute top-0 right-0 cursor-pointer" title="Xóa ảnh">

@@ -338,7 +338,7 @@
         <input type="hidden" name="old_image" :value="order.detail.image" />
         <img
           :src="'img/' + order.detail.image"
-          class="old__thumbnail w-16 h-16 object-cover rounded-lg mx-2 z-50"
+          class="old__thumbnail img__mthumbnail w-16 h-16 object-cover rounded-lg mx-2 z-50"
         />
       </div>
       <InputFile />
@@ -1391,7 +1391,7 @@
               "
             >
               <a
-                href=""
+                href="/admin/order"
                 class="
                   w-full
                   px-5
@@ -1453,7 +1453,6 @@ import axios from "axios";
 import InputFile from "./InputFileComponent.vue";
 import { mixin as clickaway } from "vue-clickaway";
 import Size from "../data.json";
-import mediumZoom from "medium-zoom";
 
 export default {
   mixins: [clickaway],
@@ -1495,10 +1494,6 @@ export default {
         price: 0,
       });
     }
-
-    mediumZoom(document.querySelector(".old__thumbnail"), {
-      background: "rgba(0,0,0,0.5)",
-    });
   },
   updated() {
     // this.price = this.formatPrice(

@@ -31,13 +31,13 @@ $current = 1;
             </svg>
         </button>
     </div>
-    <div class="w-full overflow-hidden rounded-lg shadow-xs mb-4">
-        <div class="w-full overflow-x-auto" v-dragscroll>
+    <div class="w-full overflow-x-auto rounded-lg shadow-xs mb-4" v-dragscroll style="max-height: 600px;">
+        <div class="w-full">
             <table class="w-full whitespace-no-wrap">
                 @if($orders->count() > 0)
                 <thead>
                     <tr
-                        class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                        class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 sticky top-0">
                         <th class="px-4 py-3 font-bold">#</th>
                         <th class="px-4 py-3">Khách hàng</th>
                         <th class="px-4 py-3">Liên hệ</th>
@@ -50,11 +50,13 @@ $current = 1;
                     </tr>
                 </thead>
                 <tbody class="bg-[#ffffff] divide-y dark:divide-gray-700 dark:bg-gray-800">
-
+                    @php
+                    $index = $orders->firstItem();
+                    @endphp
                     @foreach($orders as $order)
                     <tr class="text-gray-700 dark:text-gray-400">
-                        <td class="px-4 py-3">
-                            {{ $order->id }}
+                        <td class="px-4 py-3 flex">  
+                            {{ $index }}                     
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{ $order->TenKhachHang }}
@@ -63,27 +65,36 @@ $current = 1;
                             {{ $order->SoDienThoai }}
                         </td>
                         <td class="px-4 py-3 text-sm font-bold text-green-500">
-                            {{ number_format($order->TongTien) }} VND
+                            {{ number_format($order->TongTien) }} đ
                         </td>
+                        @if($order->TongTien - $order->detail->TienCoc - $order->detail->ThanhToanBS > 0)
                         <td class="px-4 py-3 text-sm text-red-500 font-bold">
-                            {{ number_format($order->TongTien - $order->detail->TienCoc - $order->detail->ThanhToanBS) }} VND
+                            {{ number_format($order->TongTien - $order->detail->TienCoc - $order->detail->ThanhToanBS) }} đ
                         </td>
+                        @else
+                        <td class="px-4 py-3 text-sm text-green-500 font-bold">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                class="h-5 w-5 mx-auto">
+                                <path fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </td>
+                        @endif
                         <td class="px-4 py-3 text-sm font-bold text-green-500">
-                            {{ number_format($order->detail->ThanhToanBS) }} VND
+                            {{ number_format($order->detail->ThanhToanBS + $order->detail->TienCoc) }} đ
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            @php
-                            $arr = explode(" ", $order->user->name);
-                            $length = count($arr);
-                            @endphp
-                            {{ implode(" ", array($arr[$length - 2], $arr[$length - 1])) }}
+                            <img v-tooltip.top-start="'{{ $order->user->name }}'"
+                                src="{{asset('/img/user').'/'.$order->user->image }}"
+                                class="h-12 w-12 object-cover object-center rounded-full" />
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{ \Carbon\Carbon::parse($order->updated_at)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y')
                             }}
                         </td>
                         <td class="px-4 py-3 text-sm flex items-center">
-                            <button title="Chỉnh sửa"
+                            <button title="Chỉnh sửa" v-tooltip="'Chỉnh sửa'"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Edit"
                                 onclick="location.href='{{ route('admin.order.update',['id' => $order->id]) }}'">
@@ -93,7 +104,7 @@ $current = 1;
                                     </path>
                                 </svg>
                             </button>
-                            <button title="Xóa" @click="openModal({{$order->id}})"
+                            <button v-tooltip="'Xóa'" title="Xóa" @click="openModal({{$order->id}})"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Delete">
                                 <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
@@ -102,7 +113,8 @@ $current = 1;
                                         clip-rule="evenodd"></path>
                                 </svg>
                             </button>
-                            <button title="Xuất PDF" @click="this.location.href='/admin/invoice/{{$order->id}}'"
+                            <button v-tooltip="'Xuất PDF'" title="Xuất PDF"
+                                @click="this.location.href='/admin/invoice/{{$order->id}}'"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Delete">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
@@ -112,7 +124,8 @@ $current = 1;
                                         clip-rule="evenodd" />
                                 </svg>
                             </button>
-                            <button title="Xem chi tiết" @click.prevent="handleClickViewOrder({{ $order }})"
+                            <button v-tooltip="'Xem chi tiết'" title="Xem chi tiết"
+                                @click.prevent="handleClickViewOrder({{ $order }})"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Delete">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
@@ -126,6 +139,9 @@ $current = 1;
 
                         </td>
                     </tr>
+                    @php
+                    $index++;
+                    @endphp
                     @endforeach
                 </tbody>
                 @else

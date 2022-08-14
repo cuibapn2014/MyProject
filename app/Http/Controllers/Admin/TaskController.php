@@ -16,7 +16,7 @@ class TaskController extends Controller
     public function index()
     {
         if (Auth::user()->role < 2) return redirect()->route('admin.task.user.index');
-        return view('admin.manage.task.task', ['tasks' => Task::paginate(25)]);
+        return view('admin.manage.task.task', ['tasks' => Task::orderByDesc('created_at')->paginate(25)]);
     }
 
     public function getByUser()

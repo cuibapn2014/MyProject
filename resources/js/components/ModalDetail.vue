@@ -206,7 +206,7 @@ export default {
     expireTime() {
       const now = Date.now();
       const expire = this.order.NgayTraDon && new Date(this.order.NgayTraDon);
-      const result = Math.abs(expire - now);
+      const result = expire - now;
       return Math.ceil(result / (1000 * 60 * 60 * 24));
     },
   },
