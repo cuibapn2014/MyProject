@@ -22,4 +22,9 @@ class PlanProductionDetail extends Model
     {
         return $this->belongsTo(\App\Models\Ingredient::class, 'id_ingredient', 'id');
     }
+
+    public function production_request()
+    {
+        return $this->belongsTo(\App\Models\ProductionRequest::class, 'id_production_request', 'id');
+    }
 }

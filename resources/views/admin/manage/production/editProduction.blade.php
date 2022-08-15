@@ -11,7 +11,7 @@ $current = 11;
     @if(session('success'))
     <p class="p-2 rounded-md my-2 bg-green-100 text-green-400 text-sm">{{ session('success') }}</p>
     @endif
-    <form action="{{ route('admin.production.request.create') }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('admin.production.request.update', ['id' => $production->id]) }}" method="post" enctype="multipart/form-data">
         @csrf
         <label class="block text-sm mt-4 mb-2">
             <span class="text-gray-700 dark:text-gray-400">Chọn đơn hàng <span class="text-red-500">*</span></span>
@@ -25,7 +25,7 @@ $current = 11;
             focus:outline-none
             focus:shadow-outline-purple
             dark:focus:shadow-outline-gray
-            mb-1" name="detail_order_id" id="provider" aria-placeholder="Chọn đơn hàng">
+            mb-1" aria-placeholder="Chọn đơn hàng" disabled>
                 <option value="" disabled selected>-- Chọn đơn hàng --</option>
                 @foreach($orders as $order)
                 <option value="{{ $order->detail->id }}" {{ $production->detail_order_id == $order->detail->id ? 'selected' :
@@ -41,13 +41,14 @@ $current = 11;
             <input
                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                 placeholder="Nhập mã sản phẩm" name="code"
-                value="{{ $production->code ?? __('PRC') . rand(100000, 999999) }}" />
+                value="{{ $production->code ?? __('PRC') . rand(100000, 999999) }}" disabled/>
             @error('code')
             <span class="text-red-500 pt-2">{{ $message }}</span>
             @enderror
         </label>
         <div class="upload__image block text-sm mb-3">
             <label class="text-gray-700 dark:text-gray-400">Hình ảnh</label>
+            <img src="{{ asset('/img_product/') . '/' . $production->image }}" class="img__mthumbnail h-14 rounded-lg">
             <input-file></input-file>
             @error('image.0')
             <span class="text-red-500 pt-2">{{ $message }}</span>
@@ -79,7 +80,7 @@ $current = 11;
                 <span class="text-gray-700 dark:text-gray-400">Số lượng <span class="text-red-500">*</span></span>
                 <input
                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    type="number" placeholder="Nhập số lượng" min="1" value="1" name="amount" />
+                    type="number" placeholder="Nhập số lượng" min="1" value="{{ $production->amount ?? 1 }}" name="amount" />
                 @error('amount')
                 <span class="text-red-500 pt-2">{{ $message }}</span>
                 @enderror

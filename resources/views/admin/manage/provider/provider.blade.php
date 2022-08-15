@@ -40,7 +40,7 @@ $current = 7;
                         class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                         <th class="px-4 py-3">#</th>
                         <th class="px-4 py-3">Tên</th>
-                        <th class="px-4 py-3">Liên hệ</th>
+                        <th class="px-2 py-3">Liên hệ</th>
                         <th class="px-4 py-3">Địa chỉ</th>
                         <th class="px-4 py-3">Trạng thái</th>
                         <th class="px-4 py-3">Ghi Chú</th>
@@ -59,7 +59,7 @@ $current = 7;
                         <td class="px-4 py-3">
                             {{ $provider->name }}
                         </td>
-                        <td class="px-4 py-3 text-sm">
+                        <td class="px-2 py-3 text-sm">
                             {{ $provider->phone_number }}
                         </td>
                         <td class="px-4 py-3 text-sm text-ellipsis overflow-hidden w-48"

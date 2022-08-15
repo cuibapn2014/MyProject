@@ -235,7 +235,7 @@
                     class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
                     aria-hidden="true"></span>
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                    href="javascript:void(0)"
+                    href="{{ route('admin.employee.index') }}"
                     :class="{ 'text-gray-800' : this.isActive == 9, 'dark:text-gray-100' : this.isActive == 9 }">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="2">

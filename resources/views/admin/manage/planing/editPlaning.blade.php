@@ -1,23 +1,29 @@
 @extends('layouts.layout_admin')
-@section('title', 'Chỉnh sửa |Đề nghị sản xuất')
+@section('title', 'Chỉnh sửa |Kế hoạch sản xuất')
 @section('main')
 @php
-$current = 11;
+$current = 12;
 @endphp
 <div class="container px-6 mx-auto grid">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-        Đề nghị sản xuất - Chỉnh sửa
+        Kế hoạch sản xuất - Chỉnh sửa
     </h2>
     @if(session('success'))
     <p class="p-2 rounded-md my-2 bg-green-100 text-green-400 text-sm">{{ session('success') }}</p>
     @endif
-    <form action="{{ route('admin.production.request.create') }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('admin.plan.request.update', ['id' => $planProduction->id]) }}" method="post" enctype="multipart/form-data">
         @csrf
-        <label class="block text-sm mt-4 mb-2">
-            <span class="text-gray-700 dark:text-gray-400">Chọn đơn hàng <span class="text-red-500">*</span></span>
-            <select class=" block
+        <div class="flex items-center mb-2 flex-wrap">
+            <img src="{{ asset('/img_product/') . '/' . $planProduction->production_request->image }}"
+                class="w-36 rounded-lg object-fit mr-2 my-2 img__mthumbnail" alt="">
+
+            <label class="block text-sm my-2 grow">
+                <span class="text-gray-700 dark:text-gray-400">Đề nghị sản xuất <span
+                        class="text-red-500">*</span></span>
+                <select class=" block
             w-full
             mt-1
+            h-10
             text-sm
             dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
             form-select
@@ -25,75 +31,100 @@ $current = 11;
             focus:outline-none
             focus:shadow-outline-purple
             dark:focus:shadow-outline-gray
-            mb-1" name="detail_order_id" id="provider" aria-placeholder="Chọn đơn hàng">
-                <option value="" disabled selected>-- Chọn đơn hàng --</option>
-                @foreach($orders as $order)
-                <option value="{{ $order->detail->id }}" {{ $production->detail_order_id == $order->detail->id ? 'selected' :
-                    null }}>{{ $order->TenKhachHang . __(' - ') . $order->detail->TenSP }}</option>
-                @endforeach
-            </select>
-            @error('detail_order_id')
-            <span class="text-red-500 pt-2">{{ $message }}</span>
-            @enderror
-        </label>
-        <label class="block text-sm mb-2">
-            <span class="text-gray-700 dark:text-gray-400">Mã sản phẩm <span class="text-red-500">*</span></span>
-            <input
-                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                placeholder="Nhập mã sản phẩm" name="code"
-                value="{{ $production->code ?? __('PRC') . rand(100000, 999999) }}" />
-            @error('code')
-            <span class="text-red-500 pt-2">{{ $message }}</span>
-            @enderror
-        </label>
-        <div class="upload__image block text-sm mb-3">
-            <label class="text-gray-700 dark:text-gray-400">Hình ảnh</label>
-            <input-file></input-file>
-            @error('image.0')
-            <span class="text-red-500 pt-2">{{ $message }}</span>
-            @enderror
-        </div>
-        <label class="block text-sm">
-            <span class="text-gray-700 dark:text-gray-400">Tên sản phẩm <span class="text-red-500">*</span></span>
-            <input
-                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                placeholder="Nhập tên sản phẩm" name="name" value="{{ $production->name }}" />
-            @error('name')
-            <span class="text-red-500 pt-2">{{ $message }}</span>
-            @enderror
-        </label>
-        <div class="flex">
-            <label class="block text-sm my-2">
-                <span class="text-gray-700 dark:text-gray-400">Kích thước</span>
-                <input
-                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    placeholder="Nhập kích thước" name="size" value="{{ $production->size }}" />
-            </label>
-            <label class="block text-sm my-2 mx-2">
-                <span class="text-gray-700 dark:text-gray-400">Màu sắc</span>
-                <input
-                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    placeholder="Nhập màu sắc" name="color" value="{{ $production->color }}" />
-            </label>
-            <label class="block text-sm my-2">
-                <span class="text-gray-700 dark:text-gray-400">Số lượng <span class="text-red-500">*</span></span>
-                <input
-                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    type="number" placeholder="Nhập số lượng" min="1" value="1" name="amount" />
-                @error('amount')
+            mb-1" aria-placeholder="Chọn đề nghị sản xuất" disabled>
+                    <option value="" disabled selected>-- Chọn đề nghị sản xuất --</option>
+                    <option value="{{ $planProduction->production_request->id }}" selected>
+                        {{ $planProduction->production_request->code . __(' - ') . $planProduction->production_request->name }}
+                    </option>
+                </select>
+                @error('id_production_request')
                 <span class="text-red-500 pt-2">{{ $message }}</span>
                 @enderror
             </label>
+            <label class="block text-sm mx-2 grow my-2">
+                <span class="text-gray-700 dark:text-gray-400">Mã kế hoạch <span class="text-red-500">*</span></span>
+                <input
+                    class="block w-full mt-1 h-10 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                    placeholder="Nhập mã kế hoạch"
+                    value="{{ $planProduction->code }}" disabled />
+                @error('code')
+                <span class="text-red-500 pt-2">{{ $message }}</span>
+                @enderror
+            </label>
+            <label class="block text-sm my-2 mr-2">
+                <span class="text-gray-700 dark:text-gray-400">Công đoạn <span class="text-red-500">*</span></span>
+                <select class=" block
+            w-full
+            mt-1
+            h-10
+            text-sm
+            dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+            form-select
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:focus:shadow-outline-gray
+            mb-1" name="stage" id="stage" aria-placeholder="Chọn công đoạn">
+                    <option value="0" {{ $planProduction->stage == 0 ? 'selected' : null }}>Cắt</option>
+                    <option value="1" {{ $planProduction->stage == 1 ? 'selected' : null }}>Bán thành phẩm</option>
+                    <option value="2" {{ $planProduction->stage == 2 ? 'selected' : null }}>Hoàn thiện</option>
+                </select>
+            </label>
+            <label class="block text-sm my-2">
+                <span class="text-gray-700 dark:text-gray-400">Mức độ ưu tiên <span class="text-red-500">*</span></span>
+                <select class=" block
+            w-full
+            mt-1
+            h-10
+            text-sm
+            dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+            form-select
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:focus:shadow-outline-gray
+            mb-1" name="priority" id="priority" aria-placeholder="Chọn mức độ ưu tiên">
+                    <option value="0" {{ $planProduction->priority == 0 ? 'selected' : null }}>Thấp</option>
+                    <option value="1" {{ $planProduction->priority == 1 ? 'selected' : null }}>Trung bình</option>
+                    <option value="2" {{ $planProduction->priority == 2 ? 'selected' : null }}>Cao</option>
+                </select>
+            </label>
         </div>
-        <label class="block mt-4 text-sm">
+        <div class="flex items-center">
+            <label class="block text-sm grow">
+                <span class="text-gray-700 dark:text-gray-400">Tên sản phẩm <span
+                        class="text-red-500">*</span></span>
+                <input
+                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                    placeholder="Nhập tên sản phẩm (vd: Tay áo, cổ áo,...)" name="name_product"
+                    value="{{ $planProduction->name_product }}" />
+                @error('name_product')
+                <span class="text-red-500 pt-2">{{ $message }}</span>
+                @enderror
+            </label>
+            <label class="block text-sm my-2 mx-2">
+                <span class="text-gray-700 dark:text-gray-400">Số lượng/Sản phẩm <span class="text-red-500">*</span></span>
+                <input
+                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                    type="number" placeholder="Nhập số lượng" min="1" value="{{ $planProduction->quota ?? 1 }}" name="quota" />
+                @error('quota')
+                <span class="text-red-500 pt-2">{{ $message }}</span>
+                @enderror
+            </label>   
+        </div>
+        <plan-detail-edit :ingredients="{{ $ingredient }}" :selecteds="{{ json_encode($planProduction->plan_production_detail) }}"></plan-detail-edit>
+        @error('id_ingredient.0')
+        <span class="text-red-500 pt-2 mt-2">{{ $message }}</span>
+        @enderror
+        <label class="block mt-3 text-sm">
             <span class="text-gray-700 dark:text-gray-400">Ghi chú</span>
             <textarea
                 class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                rows="3" placeholder="Nhập ghi chú" name="note">{{ $production->note }}</textarea>
+                rows="3" placeholder="Nhập ghi chú" name="note">{{ $planProduction->note }}</textarea>
         </label>
         <div class="flex justify-start">
             <button class="mt-4 text-white px-4 py-2 rounded-md border-0 bg-indigo-600 mx-2">Lưu</button>
-            <button type="button" class="mt-4 text-white px-4 py-2 rounded-md border-0 bg-indigo-600 cursor-pointer"
+            <button type="button" class="mt-4 text-white px-4 py-2 rounded-md border-0 bg-yellow-400 cursor-pointer"
                 @click="openModal">Quay về</button>
         </div>
     </form>
@@ -149,7 +180,7 @@ $current = 11;
                 </div>
                 <footer
                     class="flex flex-row items-center justify-end px-6 py-3 -mx-6 -mb-4 space-y-4 sm:space-y-0 sm:space-x-6 sm:flex-row bg-gray-50 dark:bg-gray-800">
-                    <a href="{{ route('admin.production.index') }}"
+                    <a href="{{ route('admin.plan.index') }}"
                         class="w-full px-5 py-3 text-center bg-purple-600 active:bg-purple-600 hover:bg-purple-700 focus:shadow-outline-purple text-white text-sm font-medium decoration-transparent leading-5 text-gray-700 transition-colors duration-150 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray">
                         Chắc chắn
                     </a>

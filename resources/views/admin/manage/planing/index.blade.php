@@ -32,10 +32,11 @@ $current = 12;
                         <th class="px-4 py-3 font-bold">#</th>
                         <th class="px-4 py-3">Mã sản xuất</th>
                         <th class="px-4 py-3">Mã sản phẩm</th>
-                        <th class="px-4 py-3">Tên sản phẩm</th>
-                        <th class="px-4 py-3">Số lượng yêu cầu</th>
-                        <th class="px-4 py-3">Đã hoàn thành</th>
+                        <th class="px-4 py-3">Sản phẩm</th>
+                        <th class="px-4 py-3">Yêu cầu</th>
+                        <th class="px-4 py-3">Hoàn thành</th>
                         <th class="px-4 py-3">Ưu tiên</th>
+                        <th class="px-4 py-3">Trạng thái</th>
                         <th class="px-4 py-3">Ngày tạo</th>
                         <th class="px-4 py-3">Hành động</th>
                     </tr>
@@ -68,26 +69,64 @@ $current = 12;
                         <td class="px-4 py-3 text-sm flex items-center">
                             @if($plan->priority == 0)
                             <span>Thấp</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" />
-                              </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-400" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
                             @elseif($plan->priority == 1)
                             <span>Trung bình</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M4.293 15.707a1 1 0 010-1.414l5-5a1 1 0 011.414 0l5 5a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414 0zm0-6a1 1 0 010-1.414l5-5a1 1 0 011.414 0l5 5a1 1 0 01-1.414 1.414L10 5.414 5.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                              </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M4.293 15.707a1 1 0 010-1.414l5-5a1 1 0 011.414 0l5 5a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414 0zm0-6a1 1 0 010-1.414l5-5a1 1 0 011.414 0l5 5a1 1 0 01-1.414 1.414L10 5.414 5.707 9.707a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
                             @else
                             <span>Cao</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M4.293 15.707a1 1 0 010-1.414l5-5a1 1 0 011.414 0l5 5a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414 0zm0-6a1 1 0 010-1.414l5-5a1 1 0 011.414 0l5 5a1 1 0 01-1.414 1.414L10 5.414 5.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                              </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M4.293 15.707a1 1 0 010-1.414l5-5a1 1 0 011.414 0l5 5a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414 0zm0-6a1 1 0 010-1.414l5-5a1 1 0 011.414 0l5 5a1 1 0 01-1.414 1.414L10 5.414 5.707 9.707a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
                             @endif
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                            @switch($plan->production_request->status)
+                            @case(1)
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
+                                Chờ xử lý
+                            </span>
+                            @break
+                            @case(2)
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-orange-100 text-orange-700 dark:bg-orange-600">
+                                Đang sản xuất
+                            </span>
+                            @break
+                            @case(3)
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-green-100 text-green-700 dark:bg-green-600">
+                                Hoàn thành
+                            </span>
+                            @break
+                            @case(4)
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-red-100 text-red-700 dark:bg-red-600">
+                                Ngưng sản xuất
+                            </span>
+                            @break
+                            @endswitch
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{ \Carbon\Carbon::parse($plan->updated_at)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y')
                             }}
                         </td>
                         <td class="px-4 py-3 text-sm flex items-center">
+                            @if($plan->production_request->status == 1)
                             <button title="Chỉnh sửa" v-tooltip="'Chỉnh sửa'"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Edit"
@@ -107,19 +146,7 @@ $current = 12;
                                         clip-rule="evenodd"></path>
                                 </svg>
                             </button>
-                            <button v-tooltip="'Xem chi tiết'" title="Xem chi tiết"
-                                @click.prevent="handleClickViewOrder({{ $plan }})"
-                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                                aria-label="Delete">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                    <path fill-rule="evenodd"
-                                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </button>
-
+                            @endif
                         </td>
                     </tr>
                     @php
@@ -232,7 +259,7 @@ $current = 12;
               active:bg-purple-600
               hover:bg-purple-700
               focus:outline-none focus:shadow-outline-purple
-            " @click="handleDelete('/admin/plan/delete/' + idDelete)">
+            " @click="handleDelete('/admin/plan/delete/')">
                         Chắc chắn
                     </button>
                     <button @click="closeModal" class="

@@ -43,6 +43,8 @@ Vue.component('profile', require('./components/ProfileComponent.vue').default);
 Vue.component('task', require('./components/TaskComponent.vue').default);
 Vue.component('modal-detail', require('./components/ModalDetail.vue').default);
 Vue.component('plan-detail', require('./components/PlanDetail.vue').default);
+Vue.component('plan-detail-edit', require('./components/PlanDetailEdit.vue').default);
+
 
 
 window.axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
@@ -222,7 +224,7 @@ const app = new Vue({
         },
 
         isProductionActive() {
-            const arr = [11, 12];
+            const arr = [11, 12, 13];
             return arr.includes(this.isActive)
         },
 

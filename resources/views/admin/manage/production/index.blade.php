@@ -44,11 +44,12 @@ $current = 11;
                         <th class="px-4 py-3 font-bold">#</th>
                         <th class="px-4 py-3">Hình ảnh</th>
                         <th class="px-4 py-3">Mã sản phẩm</th>
-                        <th class="px-4 py-3">Tên sản phẩm</th>
+                        <th class="px-4 py-3">Sản phẩm</th>
                         <th class="px-4 py-3">Kích thước</th>
                         <th class="px-4 py-3">Màu sắc</th>
-                        <th class="px-4 py-3">Số lượng yêu cầu</th>
-                        <th class="px-4 py-3">Đã hoàn thành</th>
+                        <th class="px-4 py-3">Yêu cầu</th>
+                        <th class="px-4 py-3">Hoàn thành</th>
+                        <th class="px-4 py-3">Trạng thái</th>
                         <th class="px-4 py-3">Người tạo</th>
                         <th class="px-4 py-3">Ngày tạo</th>
                         <th class="px-4 py-3">Hành động</th>
@@ -86,7 +87,37 @@ $current = 11;
                             {{ number_format($production->completed) }} cái
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{ $production->user->name }}
+                            @switch($production->status)
+                            @case(1)
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
+                                Chờ xử lý
+                            </span>
+                            @break
+                            @case(2)
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-orange-100 text-orange-700 dark:bg-orange-600">
+                                Đang sản xuất
+                            </span>
+                            @break
+                            @case(3)
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-green-100 text-green-700 dark:bg-green-600">
+                                Hoàn thành
+                            </span>
+                            @break
+                            @case(4)
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-red-100 text-red-700 dark:bg-red-600">
+                                Ngưng sản xuất
+                            </span>
+                            @break
+                            @endswitch
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                            <img v-tooltip.top-start="'{{ $production->user->name }}'"
+                                src="{{asset('/img/user').'/'.$production->user->image }}"
+                                class="h-12 w-12 object-cover object-center rounded-full" />
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{
@@ -94,6 +125,7 @@ $current = 11;
                             }}
                         </td>
                         <td class="px-4 py-3 text-sm flex items-center">
+                            @if($production->status == 1)
                             <button title="Chỉnh sửa" v-tooltip="'Chỉnh sửa'"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Edit"
@@ -113,7 +145,8 @@ $current = 11;
                                         clip-rule="evenodd"></path>
                                 </svg>
                             </button>
-                            <button v-tooltip="'Tạo yêu cầu mua hàng'" title="Tạo yêu cầu mua hàng" onclick="location.href='{{ route('admin.buy.create',['id' => $production->id]) }}'"
+                            <button v-tooltip="'Tạo yêu cầu mua hàng'" title="Tạo yêu cầu mua hàng"
+                                onclick="location.href='{{ route('admin.buy.create',['id' => $production->id]) }}'"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Delete">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -122,7 +155,16 @@ $current = 11;
                                         d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
                             </button>
-
+                            @else
+                            <button v-tooltip="'Cập nhật trạng thái'"
+                            class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path
+                                        d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z" />
+                                </svg>
+                            </button>
+                            @endif
                         </td>
                     </tr>
                     @php

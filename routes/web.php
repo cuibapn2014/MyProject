@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\ProviderController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\RequirementController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -31,7 +32,7 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/', function () {
-    // return view('welcome');
+    return view('home');
     return redirect()->route('admin.home');
 })->name('home');
 
@@ -171,6 +172,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
     $route->post('/update/{id}', [AdminController::class, 'updateUser'])->name('admin.user.update');
 
     $route->get('/requirement', [RequirementController::class, 'index'])->name('admin.requirement.index');
+
+    $route->group(['prefix' => 'employee'], function ($route) {
+        $route->get('/', [UserController::class, 'index'])->name('admin.employee.index');
+    });
 });
 
 //Resource
