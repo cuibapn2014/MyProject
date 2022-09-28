@@ -113,7 +113,7 @@
                                 <a class="w-full hover:text-gray-800 dark:hover:text-gray-200"
                                     :class="{ 'text-gray-800' : this.isActive == 12, 'dark:text-gray-100' : this.isActive == 12 }"
                                     href="{{ route('admin.plan.index') }}">
-                                    Kế hoạch sản xuất
+                                    Lệnh sản xuất
                                 </a>
                             </li>
                             <li
@@ -161,8 +161,8 @@
                                 class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
                                 <a class="w-full hover:text-gray-800 dark:hover:text-gray-200"
                                     :class="{ 'text-gray-800' : this.isActive == 2, 'dark:text-gray-100' : this.isActive == 2 }"
-                                    href="{{ route('admin.fabric.index') }}">
-                                    Vải
+                                    href="#">
+                                    Nhập/Xuất kho hàng
                                 </a>
                             </li>
                             <li
@@ -170,17 +170,17 @@
                                 <a class="w-full hover:text-gray-800 dark:hover:text-gray-200"
                                     :class="{ 'text-gray-800' : this.isActive == 3, 'dark:text-gray-100' : this.isActive == 3 }"
                                     href="{{ route('admin.ingredient.index') }}">
-                                    Phụ liệu
+                                    Nguyên phụ liệu
                                 </a>
                             </li>
-                            <li
+                            <!-- <li
                                 class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
                                 <a class="w-full hover:text-gray-800 dark:hover:text-gray-200"
                                     :class="{ 'text-gray-800' : this.isActive == 5, 'dark:text-gray-100' : this.isActive == 5 }"
                                     href="javascript:void(0)">
                                     Sản phẩm
                                 </a>
-                            </li>
+                            </li> -->
                         </ul>
                     </template>
                 </transition>
@@ -247,9 +247,9 @@
             </li>
         </ul>
     </div>
-    <h2 class="w-full h-auto text-sm px-3 dark:text-gray-200">{{\Carbon\Carbon::parse(now())->format('Y')}} © Copyright
-        by LyunHouse</h2>
-    <h2 class="w-full h-auto text-sm px-3 dark:text-gray-200">Developed by A&T</h2>
+    <h2 class="w-full h-auto text-sm px-3 dark:text-gray-200">{{\Carbon\Carbon::parse(now())->format('Y')}} ©
+        All right Reserved</h2>
+    <h2 class="w-full h-auto text-sm px-3 dark:text-gray-200">Developed by Manh Tuan</h2>
 </aside>
 <!-- Mobile sidebar -->
 <!-- Backdrop -->
@@ -310,7 +310,7 @@
                         aria-hidden="true"></span>
                     <a @click="setIsActive(2)"
                         class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                        href="{{ route('admin.fabric.index') }}"
+                        href=""
                         :class="{ 'text-gray-800' : this.isActive == 2, 'dark:text-gray-100' : this.isActive == 2 }">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor" stroke-width="2">
@@ -333,7 +333,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                         </svg>
-                        <span class="ml-4">Phụ liệu</span>
+                        <span class="ml-4">Nguyên phụ liệu</span>
                     </a>
                 </li>
                 <li class="relative px-6 py-3">
@@ -355,8 +355,7 @@
             </ul>
         </div>
         <h2 class="w-full h-auto text-sm px-3 dark:text-gray-200">{{\Carbon\Carbon::parse(now())->format('Y')}} ©
-            Copyright
-            by LyunHouse</h2>
-        <h2 class="w-full h-auto text-sm px-3 dark:text-gray-200">Developed by A&T</h2>
+            All right Reserved</h2>
+        <h2 class="w-full h-auto text-sm px-3 dark:text-gray-200">Developed by Manh Tuan</h2>
     </aside>
 </transition>

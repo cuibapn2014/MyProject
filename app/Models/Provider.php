@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\User;
-use App\Models\Fabric;
 use App\Models\Ingredient;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,10 +19,6 @@ class Provider extends Model
 
     public function user(){
         return $this->belongsTo(User::class, 'id_user', 'id');
-    }
-
-    public function fabrics(){
-        return $this->hasMany(Fabric::class, 'id_provider', 'id');
     }
 
     public function ingredients(){

@@ -15,7 +15,7 @@ import { chartLine } from './charts-lines'
 import { pieChart } from './charts-pie'
 import { barChart } from './charts-bars'
 import mediumZoom from "medium-zoom";
-
+import Toastify from "toastify-js";
 
 
 
@@ -40,6 +40,7 @@ Vue.component('image-modal', require('./components/ImageModalComponent.vue').def
 Vue.component('add-order', require('./components/AddOrderComponent.vue').default);
 Vue.component('edit-order', require('./components/EditOrderComponent.vue').default);
 Vue.component('profile', require('./components/ProfileComponent.vue').default);
+Vue.component('quota-modal', require('./components/QuotaModal.vue').default);
 Vue.component('task', require('./components/TaskComponent.vue').default);
 Vue.component('modal-detail', require('./components/ModalDetail.vue').default);
 Vue.component('plan-detail', require('./components/PlanDetail.vue').default);
@@ -113,9 +114,13 @@ const app = new Vue({
             isWarehouseMenuOpen: false,
             isModalOpen: false,
             isModalProfile: false,
+            isModalQuota: false,
+            isCustomModal: false,
             trapCleanup: null,
             checkAll: false,
-            dataTask: []
+            dataTask: [],
+            objProduct: null,
+            objRequestProduct: null
         }
     },
     methods: {
@@ -156,7 +161,39 @@ const app = new Vue({
                 }, 1000)
             }
         },
+        async handleClickUpdateCompleted() {
+            let dataUpdate = {
+                _token: document.querySelector('meta[name="csrf_token"]').getAttribute('content'),
+                idRequest: document.querySelector('#completed').getAttribute('data-request'),
+                idIngredient: document.querySelector('#completed').getAttribute('data-ingredient'),
+                completed: parseInt(document.querySelector('#completed').value)
+            }
 
+            await axios.post('/admin/production/update-completed', dataUpdate)
+                .then(res => {
+                    if (res.data.code != 200) alert(res.data.msg)
+                    else {
+                        Toastify({
+                            text: "Đã phân bổ thành công cho đề nghị sản xuất này",
+                            duration: 3000,
+                            newWindow: true,
+                            close: true,
+                            gravity: "top", // `top` or `bottom`
+                            position: "right", // `left`, `center` or `right`
+                            stopOnFocus: true, // Prevents dismissing of toast on hover
+                            className: "z-50",
+                            style: {
+                                background: "linear-gradient(to right, #00b09b, #96c93d)",
+                            },
+                            onClick: function () { }, // Callback after click
+                        }).showToast();
+                        setTimeout(() => {
+                            window.location.reload()
+                        },3000)
+                    }
+                })
+                .catch(err => console.log(err))
+        },
         getListTask() {
             window.Echo.private(`task.${this.user}`)
                 .listen('TaskEvent', (e) => {
@@ -287,6 +324,14 @@ const app = new Vue({
         toggleProfileModal(e) {
             this.isModalProfile = e.isOpenModal
         },
+        toggleQuotaModal(e) {
+            this.isModalQuota = e.isOpenModal
+            this.objProduct = null
+        },
+        openQuotaModal(objProduct) {
+            this.isModalQuota = true
+            this.objProduct = objProduct
+        },
         openProfileModal() {
             this.isModalProfile = true
         },
@@ -305,6 +350,10 @@ const app = new Vue({
         },
         closeModalView(e) {
             this.isOpenView = e.isOpen
+        },
+        toggleCustomModal(obj = null) {
+            this.objRequestProduct = obj
+            this.isCustomModal = !this.isCustomModal
         }
     }
 });

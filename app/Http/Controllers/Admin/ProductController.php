@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Fabric;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -16,8 +15,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $fabrics = Fabric::paginate(25);
-        return view('admin.manage.product.product', compact('fabrics'));
+        return view('admin.manage.product.product');
     }
 
     public function create()

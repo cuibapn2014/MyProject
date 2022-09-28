@@ -51,7 +51,7 @@
           placeholder="Nhập số lượng"
           min="1"
           value="1"
-          name="ingredient_amount[]"
+          name="amount[]"
         />
       </label>
     </div>
@@ -61,9 +61,15 @@
   </div>
 </template>
 <script>
+import axios from 'axios';
 export default {
   props: {
     ingredients: Array,
+  },
+  mounted(){
+    axios.get('/api/ingredient')
+    .then(res => this.dataIngredient = res.data)
+    .catch(err => console.error(err))
   },
   data() {
     return {

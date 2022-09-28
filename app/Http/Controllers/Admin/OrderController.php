@@ -5,15 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\DetailOrder;
 use App\Models\Order;
-use App\Models\PropertyProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\OrderExport;
 use App\Models\Customer;
-use App\Models\FabricDetail;
-use App\Models\IngredientDetail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
@@ -26,14 +23,7 @@ class OrderController extends Controller
             'detail',
             'detail.category',
             'detail.ingredient',
-            'detail.fabric_lining',
-            'detail.fabric_detail',
             'detail.quality',
-            'detail.ingredient_details',
-            'detail.ingredient_details.ingredient',
-            'detail.properties',
-            'detail.fabric_main',
-            'detail.fabric_extra',
         ])->orderByDesc('created_at')->paginate(25)]);
     }
 
@@ -141,36 +131,6 @@ class OrderController extends Controller
                     'VaiPhu' => $req->fabric_extra,
                     'GhiChu' => $req->note
                 ]);
-
-                FabricDetail::create([
-                    'id_ChiTiet' => $orderDetail->id,
-                    'VaiChinh' => $req->main,
-                    'VaiPhu' => $req->extra,
-                    'VaiLot' => $req->lining
-                ]);
-
-
-                foreach ($req->input('weight') as $index => $weight) {
-                    if ($weight != null &&  $req->input('size')[$index] != null &&  $req->input('height')[$index] != null) {
-                        PropertyProduct::create([
-                            'CanNang' => $weight,
-                            'ChieuCao' => $req->input('height')[$index],
-                            'SoLuong' => $req->input('quantity')[$index],
-                            'KichCo' => $req->input('size')[$index],
-                            'id_ChiTiet' => $orderDetail->id
-                        ]);
-                    }
-                }
-
-                foreach ($req->input('ingredient') as $key => $item) {
-                    if ($item != null) {
-                        IngredientDetail::create([
-                            'id_ChiTiet' => $orderDetail->id,
-                            'id_PhuLieu' => $item,
-                            'SoLuong' => $req->ingredient_quantity[$key]
-                        ]);
-                    }
-                }
             } else {
                 $validator = Validator::make(
                     $req->all(),
@@ -260,34 +220,6 @@ class OrderController extends Controller
                     'VaiPhu' => $req->fabric_extra,
                     'GhiChu' => $req->note
                 ]);
-
-                FabricDetail::create([
-                    'id_ChiTiet' => $orderDetail->id,
-                    'VaiChinh' => $req->main,
-                    'VaiPhu' => $req->extra,
-                    'VaiLot' => $req->lining
-                ]);
-                foreach ($req->input('weight') as $index => $weight) {
-                    if ($weight != null &&  $req->input('size')[$index] != null &&  $req->input('height')[$index] != null) {
-                        PropertyProduct::create([
-                            'CanNang' => $weight,
-                            'ChieuCao' => $req->input('height')[$index],
-                            'SoLuong' => $req->input('quantity')[$index],
-                            'KichCo' => $req->input('size')[$index],
-                            'id_ChiTiet' => $orderDetail->id
-                        ]);
-                    }
-                }
-
-                foreach ($req->input('ingredient') as $key => $item) {
-                    if ($item != null) {
-                        IngredientDetail::create([
-                            'id_ChiTiet' => $orderDetail->id,
-                            'id_PhuLieu' => $item,
-                            'SoLuong' => $req->ingredient_quantity[$key]
-                        ]);
-                    }
-                }
             }
 
             Customer::updateOrCreate([
@@ -313,14 +245,7 @@ class OrderController extends Controller
         return view('admin.manage.order.editOrder', ['order' => Order::with([
             'detail',
             'detail.category',
-            'detail.fabric_detail',
-            'detail.fabric_main',
-            'detail.fabric_extra',
-            'detail.fabric_lining',
-            'detail.ingredient_details',
-            'detail.ingredient_details.ingredient',
             'detail.quality',
-            'detail.properties',
         ])->findOrFail($id)]);
     }
 
@@ -332,7 +257,6 @@ class OrderController extends Controller
             $oldImg = Order::findOrFail($id)->detail->image;
             $address = $req->address . ', ' . $req->ward . ' - ' . $req->district . ' - ' . $req->province;
 
-            PropertyProduct::where('id_ChiTiet', Order::findOrFail($id)->detail->id)->delete();
             $detail = DetailOrder::where('id_DonHang', $id)->first();
 
             if ($req->productType === 'available') {
@@ -371,36 +295,6 @@ class OrderController extends Controller
                     'VaiPhu' => $req->fabric_extra,
                     'GhiChu' => $req->note
                 ]);
-
-                FabricDetail::where('id_ChiTiet', $detail->id)->update([
-                    'VaiChinh' => $req->main,
-                    'VaiPhu' => $req->extra,
-                    'VaiLot' => $req->lining
-                ]);
-
-                foreach ($req->input('weight') as $index => $weight) {
-                    // if ($weight != null &&  $req->input('size')[$index] != null &&  $req->input('height')[$index] != null) {
-                    PropertyProduct::create([
-                        'CanNang' => $weight,
-                        'ChieuCao' => $req->input('height')[$index],
-                        'SoLuong' => $req->input('quantity')[$index],
-                        'KichCo' => $req->input('size')[$index],
-                        'id_ChiTiet' => DetailOrder::where('id_DonHang', $id)->first()->id
-                    ]);
-                    // }
-                }
-
-                IngredientDetail::where('id_ChiTiet', $detail->id)->delete();
-
-                foreach ($req->input('ingredient') as $key => $item) {
-                    if ($item != null) {
-                        IngredientDetail::create([
-                            'id_ChiTiet' => $detail->id,
-                            'id_PhuLieu' => $item,
-                            'SoLuong' => $req->ingredient_quantity[$key]
-                        ]);
-                    }
-                }
             } else {
                 $this->validateProductUnavailable($req);
 
@@ -438,36 +332,6 @@ class OrderController extends Controller
                     'VaiPhu' => $req->fabric_extra,
                     'GhiChu' => $req->note
                 ]);
-
-                FabricDetail::where('id_ChiTiet', $detail->id)->update([
-                    'VaiChinh' => $req->main,
-                    'VaiPhu' => $req->extra,
-                    'VaiLot' => $req->lining
-                ]);
-
-                foreach ($req->input('weight') as $index => $weight) {
-                    // if ($weight != null &&  $req->input('size')[$index] != null &&  $req->input('height')[$index] != null) {
-                    PropertyProduct::create([
-                        'CanNang' => $weight,
-                        'ChieuCao' => $req->input('height')[$index],
-                        'SoLuong' => $req->input('quantity')[$index],
-                        'KichCo' => $req->input('size')[$index],
-                        'id_ChiTiet' => DetailOrder::where('id_DonHang', $id)->first()->id
-                    ]);
-                    // }
-                }
-
-                IngredientDetail::where('id_ChiTiet', $detail->id)->delete();
-
-                foreach ($req->input('ingredient') as $key => $item) {
-                    if ($item != null) {
-                        IngredientDetail::create([
-                            'id_ChiTiet' => $detail->id,
-                            'id_PhuLieu' => $item,
-                            'SoLuong' => $req->ingredient_quantity[$key]
-                        ]);
-                    }
-                }
             }
 
             $order = Order::findOrFail($id);
@@ -493,9 +357,6 @@ class OrderController extends Controller
     public function delete($id)
     {
         $order = Order::findOrFail($id);
-        IngredientDetail::where('id_ChiTiet', $order->detail->id)->delete();
-        FabricDetail::where('id_ChiTiet', $order->detail->id)->delete();
-        PropertyProduct::where('id_ChiTiet', $order->detail->id)->delete();
         $detail = DetailOrder::where('id_DonHang', $order->id)->first();
         File::delete(public_path("img/" . $detail->image));
         $detail->delete();

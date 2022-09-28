@@ -9,7 +9,7 @@ class Cost extends Model
 {
     use HasFactory;
 
-    protected $table = 'gia';
+    protected $table = 'costs';
 
     public $timestamps = false;
 }

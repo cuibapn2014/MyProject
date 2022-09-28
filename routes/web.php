@@ -2,9 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CostController;
-use App\Http\Controllers\Admin\FabricController;
 use App\Http\Controllers\Admin\IngredientController;
-use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductionRequestController;
 use App\Http\Controllers\Auth\AuthController;
@@ -12,9 +10,12 @@ use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\TaskController;
 use App\Http\Controllers\Admin\ProviderController;
 use App\Http\Controllers\Admin\CustomerController;
-use App\Http\Controllers\Admin\PlanController;
+use App\Http\Controllers\Admin\PlanIngredientController;
+use App\Http\Controllers\Admin\ProductionController;
+use App\Http\Controllers\Admin\QuotaController;
 use App\Http\Controllers\Admin\RequirementController;
 use App\Http\Controllers\Admin\UserController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -46,10 +47,15 @@ Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('request.login');
 
 // Logout
-Route::get('/logout', function () {
-    if (Auth::check()) Auth::logout();
-    else return redirect()->route('login');
-    return redirect()->route('home');
+Route::get('/logout', function (Request $request) {
+    if (Auth::check()) {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('home');
+    }
+
+    return redirect()->route('login');
 })->middleware('auth')->name('logout');
 
 //Forgot password
@@ -84,16 +90,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
         // $route->get('/export', [ProviderController::class, 'export'])->name('admin.fabric.export');
     });
 
-    $route->group(['prefix' => 'fabric'], function ($route) {
-        $route->get('/', [FabricController::class, 'index'])->name('admin.fabric.index');
-        $route->get('/create', [FabricController::class, 'getStore'])->name('admin.fabric.create');
-        $route->post('/create', [FabricController::class, 'store'])->name('admin.fabric.request.create');
-        $route->get('/update/{id}', [FabricController::class, 'getUpdate'])->name('admin.fabric.update');
-        $route->post('/update/{id}', [FabricController::class, 'update'])->name('admin.fabric.request.update');
-        $route->get('/delete/{id}', [FabricController::class, 'delete'])->name('admin.fabric.delete');
-        $route->get('/export', [FabricController::class, 'export'])->name('admin.fabric.export');
-    });
-
     $route->group(['prefix' => 'ingredient'], function ($route) {
         $route->get('/', [IngredientController::class, 'index'])->name('admin.ingredient.index');
         $route->get('/create', [IngredientController::class, 'getStore'])->name('admin.ingredient.create');
@@ -104,15 +100,16 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
         $route->get('/export', [IngredientController::class, 'export'])->name('admin.ingredient.export');
     });
 
-    $route->group(['prefix' => 'product'], function ($route) {
-        $route->get('/', [ProductController::class, 'index'])->name('admin.product.index');
-        $route->get('/create', [ProductController::class, 'create'])->name('admin.product.create');
-        $route->post('/create', [ProductController::class, 'store'])->name('admin.product.request.create');
-        $route->get('/update/{id}', [ProductController::class, 'edit'])->name('admin.product.update');
-        $route->post('/update/{id}', [ProductController::class, 'update'])->name('admin.product.request.update');
-        $route->get('/delete/{id}', [ProductController::class, 'delete'])->name('admin.product.delete');
-        // $route->get('/export', [ProductController::class, 'export'])->name('admin.product.export');
-    });
+    // Gợi ý phát triển ở Module bán hàng
+    // $route->group(['prefix' => 'product'], function ($route) {
+    //     $route->get('/', [ProductController::class, 'index'])->name('admin.product.index');
+    //     $route->get('/create', [ProductController::class, 'create'])->name('admin.product.create');
+    //     $route->post('/create', [ProductController::class, 'store'])->name('admin.product.request.create');
+    //     $route->get('/update/{id}', [ProductController::class, 'edit'])->name('admin.product.update');
+    //     $route->post('/update/{id}', [ProductController::class, 'update'])->name('admin.product.request.update');
+    //     $route->get('/delete/{id}', [ProductController::class, 'delete'])->name('admin.product.delete');
+    //     // $route->get('/export', [ProductController::class, 'export'])->name('admin.product.export');
+    // });
 
 
     $route->group(['prefix' => 'order'], function ($route) {
@@ -143,18 +140,27 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
         $route->get('/update/{id}', [ProductionRequestController::class, 'edit'])->name('admin.production.update');
         $route->post('/update/{id}', [ProductionRequestController::class, 'update'])->name('admin.production.request.update');
         $route->get('/delete/{id}', [ProductionRequestController::class, 'destroy'])->name('admin.production.delete');
+        $route->post('/update-completed', [ProductionRequestController::class, 'updateCompleted'])->name('admin.productionCompleted.request.update');
         $route->get('/export', [ProductionRequestController::class, 'export'])->name('admin.production.export');
     });
 
     $route->group(['prefix' => 'plan'], function ($route) {
-        $route->get('/', [PlanController::class, 'index'])->name('admin.plan.index');
-        $route->get('/{id}/create', [PlanController::class, 'create'])->name('admin.plan.create');
-        $route->post('/create', [PlanController::class, 'store'])->name('admin.plan.request.create');
-        $route->get('/update/{id}', [PlanController::class, 'edit'])->name('admin.plan.update');
-        $route->post('/update/{id}', [PlanController::class, 'update'])->name('admin.plan.request.update');
-        $route->get('/delete/{id}', [PlanController::class, 'destroy'])->name('admin.plan.delete');
-        $route->get('/create-buy/{id}', [PlanController::class, 'createBuy'])->name('admin.buy.create');
-        $route->get('/export', [PlanController::class, 'export'])->name('admin.plan.export');
+        $route->get('/', [ProductionController::class, 'index'])->name('admin.plan.index');
+        $route->get('/create/{id}', [ProductionController::class, 'create'])->name('admin.plan.create');
+        $route->post('/create', [ProductionController::class, 'store'])->name('admin.plan.request.create');
+        $route->get('/update/{id}', [ProductionController::class, 'edit'])->name('admin.plan.update');
+        $route->post('/update/{id}', [ProductionController::class, 'update'])->name('admin.plan.request.update');
+        $route->get('/delete/{id}', [ProductionController::class, 'destroy'])->name('admin.plan.delete');
+        $route->get('/create-buy/{id}', [ProductionController::class, 'createBuy'])->name('admin.buy.create');
+        $route->get('/export', [ProductionController::class, 'export'])->name('admin.plan.export');
+    });
+
+    $route->group(['prefix' => 'plan-ingredient'], function ($route) {
+        $route->get('/create/{id_product}', [PlanIngredientController::class, 'create'])->name('admin.planIngredient.create');
+    });
+
+    $route->group(['prefix' => 'quota'], function ($route) {
+        $route->post('/create/{id_production}', [QuotaController::class, 'store'])->name('admin.quota.create.request');
     });
 
     $route->get('/assign/{id}', [TaskController::class, 'removeUser'])->name('admin.task.assign.remove');
@@ -179,6 +185,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
 });
 
 //Resource
-Route::get('/revenue/get',[AdminController::class ,'getRevenue'])->name('revenue');
-Route::get('/debt/get',[AdminController::class ,'getDebt'])->name('debt');
-Route::get('/product-type/count',[AdminController::class ,'countTypeOrder'])->name('count.product-type');
+Route::get('/revenue/get', [AdminController::class, 'getRevenue'])->name('revenue');
+Route::get('/debt/get', [AdminController::class, 'getDebt'])->name('debt');
+Route::get('/product-type/count', [AdminController::class, 'countTypeOrder'])->name('count.product-type');

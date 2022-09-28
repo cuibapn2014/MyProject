@@ -28,7 +28,7 @@ class ProductionRequestValidator extends FormRequest
             'detail_order_id' => 'required',
             'code' => 'required|unique:production_requests,code',
             'image.0' => 'nullable|image|max:3000',
-            'name' => 'required',
+            'id_product' => 'required',
             'amount' => 'required|min:1'
         ];
     }

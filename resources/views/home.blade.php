@@ -409,10 +409,10 @@
     <section class="container grid grid-cols-2 items-center lg:px-24">
         <div>
             <h1 class="text-3xl font-bold text-gray-800">Ứng dụng website quản lý xưởng may</h1>
-            <p class="text-base my-2 text-gray-800">Giải pháp quản lý sản xuất dành  cho doanh nghiệp của bạn</p>
-            <button
-            onclick="location.href='/admin'" 
-            class="p-3 text-sm bg-indigo-500 text-white rounded-sm hover:bg-indigo-600 active:bg-indigo-600 duration-150 transition ease-in">Tham gia ngay</button>
+            <p class="text-base my-2 text-gray-800">Giải pháp quản lý sản xuất dành cho doanh nghiệp của bạn</p>
+            <button onclick="location.href='/admin'"
+                class="p-3 text-sm bg-indigo-500 text-white rounded-sm hover:bg-indigo-600 active:bg-indigo-600 duration-150 transition ease-in">Tham
+                gia ngay</button>
         </div>
         <div class="text-center">
             <img class="h-full" src="{{ asset('/img/home.png') }}" alt="">
@@ -420,7 +420,8 @@
         </div>
     </section>
     <footer class="text-center text-xs absolute bottom-0 left-0 bg-slate-800 w-full text-white p-2">
-        {{ date('Y') }} © Copyright by LyunHouse, Developed by A&T
+        {{\Carbon\Carbon::parse(now())->format('Y')}} ©
+        All right Reserved, Developed by Manh Tuan
     </footer>
 </body>
 

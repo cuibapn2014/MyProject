@@ -13,9 +13,10 @@ $current = 11;
     @endif
     <form action="{{ route('admin.production.request.create') }}" method="post" enctype="multipart/form-data">
         @csrf
-        <label class="block text-sm mt-4 mb-2">
-            <span class="text-gray-700 dark:text-gray-400">Chọn đơn hàng <span class="text-red-500">*</span></span>
-            <select class=" block
+        <div class="flex flex-row items-center sm:flex-col">
+            <label class="block text-sm">
+                <span class="text-gray-700 dark:text-gray-400">Chọn đơn hàng <span class="text-red-500">*</span></span>
+                <select class=" block
             w-full
             mt-1
             text-sm
@@ -26,26 +27,48 @@ $current = 11;
             focus:shadow-outline-purple
             dark:focus:shadow-outline-gray
             mb-1" name="detail_order_id" id="provider" aria-placeholder="Chọn đơn hàng">
-                <option value="" disabled selected>-- Chọn đơn hàng --</option>
-                @foreach($orders as $order)
-                <option value="{{ $order->detail->id }}" {{ old('detail_order_id')==$order->detail->id ? 'selected' :
-                    null }}>{{ $order->TenKhachHang . __(' - ') . $order->detail->TenSP }}</option>
-                @endforeach
-            </select>
-            @error('detail_order_id')
-            <span class="text-red-500 pt-2">{{ $message }}</span>
-            @enderror
-        </label>
-        <label class="block text-sm mb-2">
-            <span class="text-gray-700 dark:text-gray-400">Mã sản phẩm <span class="text-red-500">*</span></span>
-            <input
-                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                placeholder="Nhập mã sản phẩm" name="code"
-                value="{{ old('code') ?? __('PRC') . rand(100000, 999999) }}" />
-            @error('code')
-            <span class="text-red-500 pt-2">{{ $message }}</span>
-            @enderror
-        </label>
+                    <option value="" disabled selected>-- Chọn đơn hàng --</option>
+                    @foreach($orders as $order)
+                    <option value="{{ $order->detail->id }}" {{ old('detail_order_id')==$order->detail->id ? 'selected'
+                        :
+                        null }}>{{ $order->TenKhachHang . __(' - ') . $order->detail->TenSP }}</option>
+                    @endforeach
+                </select>
+                @error('detail_order_id')
+                <span class="text-red-500 pt-2">{{ $message }}</span>
+                @enderror
+            </label>
+            <label class="block text-sm mb-2 ml-4">
+                <span class="text-gray-700 dark:text-gray-400">Mã đề nghị<span class="text-red-500">*</span></span>
+                <input
+                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                    placeholder="Nhập mã đề nghị" name="code"
+                    value="{{ old('code') ?? __('DN') . rand(100000, 999999) }}" />
+                @error('code')
+                <span class="text-red-500 pt-2">{{ $message }}</span>
+                @enderror
+            </label>
+            <label class="block text-sm mb-2 ml-4">
+                <span class="text-gray-700 dark:text-gray-400">Mức độ ưu tiên<span class="text-red-500">*</span></span>
+                <select class="
+                block
+                w-full
+                mt-1
+                text-sm
+                dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+                form-select
+                focus:border-purple-400
+                focus:outline-none
+                focus:shadow-outline-purple
+                dark:focus:shadow-outline-gray
+                mb-1
+              " name="priority" id="priority" aria-placeholder="Chọn mức độ ưu tiên">
+                    <option value="0" {{ old('priority') == 0 ? 'selected' : '' }}>Thấp</option>
+                    <option value="1" {{ old('priority') == 1 ? 'selected' : '' }}>Bình thường</option>
+                    <option value="2" {{ old('priority') == 2 ? 'selected' : '' }}>Cao</option>
+                </select>
+            </label>
+        </div>
         <div class="upload__image block text-sm mb-3">
             <label class="text-gray-700 dark:text-gray-400">Hình ảnh</label>
             <input-file></input-file>
@@ -53,12 +76,27 @@ $current = 11;
             <span class="text-red-500 pt-2">{{ $message }}</span>
             @enderror
         </div>
-        <label class="block text-sm">
-            <span class="text-gray-700 dark:text-gray-400">Tên sản phẩm <span class="text-red-500">*</span></span>
-            <input
-                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                placeholder="Nhập tên sản phẩm" name="name" value="{{ old('name') }}" />
-            @error('name')
+        <label class="block text-sm my-2 mb-2">
+            <span class="text-gray-700 dark:text-gray-400">Chọn sản phẩm<span class="text-red-500">*</span></span>
+            <select class="
+                block
+                w-full
+                mt-1
+                text-sm
+                dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+                form-select
+                focus:border-purple-400
+                focus:outline-none
+                focus:shadow-outline-purple
+                dark:focus:shadow-outline-gray
+                mb-1
+              " name="id_product" id="id_product" aria-placeholder="Chọn sản phẩm">
+                <option value="">-- Chọn sản phẩm --</option>
+                @foreach($product as $product)
+                <option value="{{ $product->id }}">{{ $product->Ten }}</option>
+                @endforeach
+            </select>
+            @error('id_ingredient')
             <span class="text-red-500 pt-2">{{ $message }}</span>
             @enderror
         </label>

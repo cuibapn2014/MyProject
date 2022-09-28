@@ -1,12 +1,12 @@
 @extends('layouts.layout_admin')
-@section('title', 'Phụ liệu')
+@section('title', 'Nguyên phụ liệu')
 @section('main')
 @php
 $current = 3;
 @endphp
 <div class="container px-6 mx-auto grid">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-        Kho phụ liệu
+        Kho Nguyên phụ liệu
     </h2>
     @if(session('success'))
     <p class="p-2 rounded-md my-2 bg-green-100 text-green-400 text-sm">{{ session('success') }}</p>
@@ -95,6 +95,16 @@ $current = 3;
                                         clip-rule="evenodd"></path>
                                 </svg>
                             </button>
+                            <button v-tooltip="'Định mức'" title="Định mức"
+                                @click="openQuotaModal({{ json_encode($ingredient) }})"
+                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                aria-label="Quota">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path
+                                        d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z" />
+                                </svg>
+                            </button>
                         </td>
                     </tr>
                     @endforeach
@@ -106,6 +116,11 @@ $current = 3;
         </div>
     </div>
 </div>
+<transition enter-class="opacity-0" enter-to-class="opacity-100" leave-to-class="opacity-0">
+    <quota-modal v-if="isModalQuota" class="z-50 transition ease-in-out duration-150"
+        :product="objProduct" @toggle-profile="toggleQuotaModal">
+    </quota-modal>
+</transition>
 <transition enter-class="ease-out opacity-0" enter-to-class="opacity-100" leave-class="ease-in opacity-100"
     leave-to-class="opacity-0">
     <div v-show="this.isModalOpen" class="
@@ -158,11 +173,11 @@ $current = 3;
                 <div class="mt-4 mb-6">
                     <!-- Modal title -->
                     <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
-                        Xóa phụ liệu
+                        Xóa Nguyên phụ liệu
                     </p>
                     <!-- Modal description -->
                     <p class="text-sm text-gray-700 dark:text-gray-400">
-                        Bạn có chắc chắn muốn xóa phụ liệu này ?
+                        Bạn có chắc chắn muốn xóa Nguyên phụ liệu này ?
                     </p>
                 </div>
                 <footer class="

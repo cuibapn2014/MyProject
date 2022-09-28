@@ -1,12 +1,12 @@
 @extends('layouts.layout_admin')
-@section('title', 'Thêm mới |Vải')
+@section('title', 'Thêm mới | Nguyên phụ liệu')
 @section('main')
 @php
 $current = 3;
 @endphp
 <div class="container px-6 mx-auto grid">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-        Phụ liệu - Thêm mới
+        Nguyên phụ liệu - Thêm mới
     </h2>
     @if(session('success'))
     <p class="p-2 rounded-md my-2 bg-green-100 text-green-400 text-sm">{{ session('success') }}</p>
@@ -18,7 +18,7 @@ $current = 3;
         @csrf
         <div class="px-4 py-3 mb-8 bg-[#ffffff] rounded-lg shadow-md dark:bg-gray-800">
             <label class="block text-sm">
-                <span class="text-gray-700 dark:text-gray-400">Tên phụ liệu</span>
+                <span class="text-gray-700 dark:text-gray-400">Tên Nguyên phụ liệu</span>
                 <input
                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                     placeholder="" name="name" />
@@ -32,7 +32,42 @@ $current = 3;
             </div>
             <a v-if="this.display <= 1" class="btn__add--input p-2 bg-indigo-600 rounded-lg text-white my-2"
                 @click="handleClick">Thêm ảnh</a>
-
+                <label class="block text-sm mt-4 mb-2">
+                    <span class="text-gray-700 dark:text-gray-400">Loại</span>
+                    <select class=" block
+                    w-full
+                    mt-1
+                    text-sm
+                    dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+                    form-select
+                    focus:border-purple-400
+                    focus:outline-none
+                    focus:shadow-outline-purple
+                    dark:focus:shadow-outline-gray" name="id_ingredient_type" id="id_ingredient_type" aria-placeholder="Chọn đơn loại">
+                    <option value="">-- Chọn loại --</option>
+                    @foreach($ingredientTypes as $type)
+                    <option value="{{ $type->id }}" {{ old('id_ingredient_type') == $type->id ? 'selected' : null }}>{{ $type->name }}</option>
+                    @endforeach
+                </select>
+                </label>
+                <label class="block text-sm mt-4 mb-2">
+                    <span class="text-gray-700 dark:text-gray-400">Đơn vị tính</span>
+                    <select class=" block
+                    w-full
+                    mt-1
+                    text-sm
+                    dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+                    form-select
+                    focus:border-purple-400
+                    focus:outline-none
+                    focus:shadow-outline-purple
+                    dark:focus:shadow-outline-gray" name="id_unit" id="id_unit" aria-placeholder="Chọn đơn vị tính">
+                    <option value="">-- Chọn đơn vị tính --</option>
+                    @foreach($units as $unit)
+                    <option value="{{ $unit->id }}" {{ old('id_unit') == $unit->id ? 'selected' : null }}>{{ $unit->name }}</option>
+                    @endforeach
+                </select>
+                </label>
             <label class="block text-sm mt-3">
                 <span class="text-gray-700 dark:text-gray-400">Giá</span>
                 <input
@@ -64,7 +99,7 @@ $current = 3;
                     rows="3" placeholder="" name="note"></textarea>
             </label>
             <div class="flex justify-end">
-                <button class="mt-4 text-white px-4 py-2 rounded-md border-0 bg-indigo-600 mx-2">Thêm phụ liệu</button>
+                <button class="mt-4 text-white px-4 py-2 rounded-md border-0 bg-indigo-600 mx-2">Thêm Nguyên phụ liệu</button>
                 <a class="mt-4 text-white px-4 py-2 rounded-md border-0 bg-indigo-600 cursor-pointer"
                     @click="openModal">Quay về</a>
             </div>

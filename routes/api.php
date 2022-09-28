@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\FabricController;
 use App\Http\Controllers\Admin\IngredientController;
 use App\Http\Controllers\Admin\QualityController;
 use Illuminate\Http\Request;
@@ -24,5 +23,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/quality', [QualityController::class, 'index'])->middleware('api');
 Route::get('/category', [CategoryController::class, 'index'])->middleware('api');
-Route::get('/fabric', [FabricController::class, 'getAll'])->middleware('api');
 Route::get('/ingredient', [IngredientController::class, 'getAll'])->middleware('api');
+// Route::post('/quota/create/{id_product}', [QuotaController::class, 'store']);

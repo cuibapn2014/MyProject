@@ -57,11 +57,11 @@
                         $errors->first() }}</p>
                     @endif
                     <div class="py-4">
-                        <input name="fullname" type="text" id="fullname" placeholder="Tên của bạn"
+                        <input name="fullname" type="text" id="fullname" placeholder="Tên của bạn" value="{{ old('fullname') }}"
                             class=" block w-full p-3 text-lg  text-black rounded-lg">
                     </div>
                     <div class="py-2">
-                        <input name="email" type="email" id="email" placeholder="Email"
+                        <input name="email" type="email" id="email" placeholder="Email" value="{{ old('email') }}"
                             class=" block w-full p-3 text-lg  text-black rounded-lg">
                     </div>
                     <div class="py-2">

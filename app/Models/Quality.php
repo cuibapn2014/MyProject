@@ -9,7 +9,7 @@ class Quality extends Model
 {
     use HasFactory;
 
-    protected $table= 'chat_luong';
+    protected $table= 'qualities';
 
     public $timestamps = false;
 }

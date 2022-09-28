@@ -43,10 +43,9 @@ $current = 11;
                         class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 sticky top-0">
                         <th class="px-4 py-3 font-bold">#</th>
                         <th class="px-4 py-3">Hình ảnh</th>
-                        <th class="px-4 py-3">Mã sản phẩm</th>
+                        <th class="px-4 py-3">Đề nghị</th>
                         <th class="px-4 py-3">Sản phẩm</th>
-                        <th class="px-4 py-3">Kích thước</th>
-                        <th class="px-4 py-3">Màu sắc</th>
+                        <th class="px-4 py-3">Thuộc tính</th>
                         <th class="px-4 py-3">Yêu cầu</th>
                         <th class="px-4 py-3">Hoàn thành</th>
                         <th class="px-4 py-3">Trạng thái</th>
@@ -72,19 +71,29 @@ $current = 11;
                             {{ $production->code }}
                         </td>
                         <td class="px-4 py-3 text-sm ">
-                            {{ $production->name }}
+                            {{ $production->product->Ten }}
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{ $production->size }}
-                        </td>
-                        <td class="px-4 py-3 text-sm">
-                            {{ $production->color }}
+                            {{ $production->size }}{{$production->color ? ' - ' . $production->color : ''}}
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{ number_format($production->amount) }} cái
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{ number_format($production->completed) }} cái
+                            <button title="Phân bổ" v-tooltip="'Phân bổ'"
+                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                @click="toggleCustomModal({{ $production->load('product.unit_cal') }})"
+                                aria-label="Edit">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path
+                                        d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                    <path fill-rule="evenodd"
+                                        d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </button>
                         </td>
                         <td class="px-4 py-3 text-sm">
                             @switch($production->status)
@@ -155,11 +164,31 @@ $current = 11;
                                         d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
                             </button>
+                            <button v-tooltip="'Tạo kế hoạch vật tư'" title="Tạo kế hoạch vật tư"
+                                onclick="location.href='/admin/plan-ingredient/create/{{ $production->id }}'"
+                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                aria-label="Delete">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                                </svg>
+                            </button>
+                            <button v-tooltip="'Tạo lệnh sản xuất'" title="Tạo lệnh sản xuất" onclick="location.href='/admin/plan/create/{{ $production->id }}'"
+                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                aria-label="create">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </button>
                             @else
                             <button v-tooltip="'Cập nhật trạng thái'"
-                            class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                    fill="currentColor">
                                     <path
                                         d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z" />
                                 </svg>
@@ -190,7 +219,7 @@ $current = 11;
 
 <transition enter-class="ease-out opacity-0" enter-to-class="opacity-100" leave-class="ease-in opacity-100"
     leave-to-class="opacity-0">
-    <div v-show="this.isModalOpen" class="
+    <div v-show="this.isCustomModal" class="
         fixed
         inset-0
         z-30
@@ -200,6 +229,143 @@ $current = 11;
         bg-black bg-opacity-50
         sm:items-center sm:justify-center
       " id="backdrop-overlay" @click="handleClickBackDrop">
+        <transition enter-class="ease-out opacity-0 transform translate-y-1/2" enter-to-class="opacity-100"
+            leave-class="ease-in opacity-100" leave-to-class="opacity-0 transform translate-y-1/2">
+            <!-- Modal -->
+            <div v-show="this.isCustomModal" class="
+          w-full
+          px-6
+          py-4
+          overflow-hidden
+          bg-[#ffffff]
+          rounded-t-lg
+          duration-150
+          dark:bg-gray-800
+          sm:rounded-lg sm:m-4 sm:max-w-xl
+        " role="dialog" id="modal">
+                <!-- Remove header if you don't want a close icon. Use modal body to place modal tile. -->
+                <header class="flex justify-end">
+                    <button class="
+              inline-flex
+              items-center
+              justify-center
+              w-6
+              h-6
+              text-gray-400
+              transition-colors
+              duration-150
+              rounded
+              dark:hover:text-gray-200
+              hover: hover:text-gray-700
+            " aria-label="close" @click="toggleCustomModal">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" role="img" aria-hidden="true">
+                            <path
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd" fill-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </header>
+                <!-- Modal body -->
+                <div class="mt-4 mb-6">
+                    <!-- Modal title -->
+                    <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
+                        Phân bổ sản phẩm
+                    </p>
+                    <!-- Modal description -->
+                    <p class="text-sm text-gray-700 dark:text-gray-400">
+                        Hiện sản phẩm <strong>[[ this.objRequestProduct && this.objRequestProduct?.product?.Ten
+                            ]]</strong> đang còn [[ this.objRequestProduct &&
+                        this.objRequestProduct?.product?.amount.toLocaleString().replace(',', '.') + ' ' +
+                        this.objRequestProduct?.product?.unit_cal?.name ]] trong kho
+                    </p>
+                    <label class="block text-sm my-2">
+                        <span class="text-gray-700 dark:text-gray-400">Số lượng (Tối đa [[ this.objRequestProduct &&
+                            (this.objRequestProduct?.product?.amount +
+                            this.objRequestProduct?.completed).toLocaleString().replace(',', '.') + ' ' +
+                            this.objRequestProduct?.product?.unit_cal?.name ]])</span>
+                        <input
+                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                            type="number" min="0" id="completed" :data-ingredient="this.objRequestProduct?.product?.id"
+                            :data-request="this.objRequestProduct?.id" :value="this.objRequestProduct?.completed"
+                            :max="this.objRequestProduct?.product?.amount + this.objRequestProduct?.completed"
+                            autofocus>
+                    </label>
+
+                </div>
+                <footer class="
+            flex flex-col
+            items-center
+            justify-end
+            px-6
+            py-3
+            -mx-6
+            -mb-4
+            space-y-4
+            sm:space-y-0 sm:space-x-6 sm:flex-row
+            bg-gray-50
+            dark:bg-gray-800
+          ">
+                    <button @click="toggleCustomModal" class="
+              w-full
+              px-5
+              py-3
+              text-sm
+              font-medium
+              leading-5
+              text-gray-700
+              transition-colors
+              duration-150
+              border border-gray-300
+              rounded-lg
+              dark:text-gray-400
+              sm:px-4 sm:py-2 sm:w-auto
+              active:bg-transparent
+              hover:border-gray-500
+              focus:border-gray-500
+              active:text-gray-500
+              focus:outline-none focus:shadow-outline-gray
+            ">
+                        Hủy bỏ
+                    </button>
+                    <button class="
+              w-full
+              px-5
+              py-3
+              text-sm
+              font-medium
+              leading-5
+              text-white
+              transition-colors
+              duration-150
+              bg-purple-600
+              border border-transparent
+              rounded-lg
+              sm:w-auto sm:px-4 sm:py-2
+              active:bg-purple-600
+              hover:bg-purple-700
+              focus:outline-none focus:shadow-outline-purple
+            " @click="handleClickUpdateCompleted">
+                        Phân bổ
+                    </button>
+                </footer>
+            </div>
+        </transition>
+    </div>
+
+</transition>
+
+<transition enter-class="ease-out opacity-0" enter-to-class="opacity-100" leave-class="ease-in opacity-100"
+    leave-to-class="opacity-0">
+    <div v-show="this.isModalOpen" class="
+        fixed
+        inset-0
+        z-30
+        flex
+        items-end
+        transition duration-150
+        bg-black bg-opacity-50
+        sm:items-center sm:justify-center
+      " id="backdrop-overlay" @click="toggleCustomModal">
         <transition enter-class="ease-out opacity-0 transform translate-y-1/2" enter-to-class="opacity-100"
             leave-class="ease-in opacity-100" leave-to-class="opacity-0 transform translate-y-1/2">
             <!-- Modal -->

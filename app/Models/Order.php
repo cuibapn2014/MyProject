@@ -12,7 +12,7 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $table = 'don_hang';
+    protected $table = 'orders';
 
     protected $fillable = ['TenKhachHang', 'SoDienThoai', 'DiaChi', 'NgayTraDon', 'id_NhanVien', 'TongTien'];
 

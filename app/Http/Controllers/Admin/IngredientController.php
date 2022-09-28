@@ -6,7 +6,9 @@ use App\Exports\IngredientExport;
 use App\Http\Controllers\Controller;
 use App\Models\Image;
 use App\Models\Ingredient;
+use App\Models\IngredientType;
 use App\Models\Provider;
+use App\Models\UnitCalculate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
@@ -29,7 +31,9 @@ class IngredientController extends Controller
     public function getStore()
     {
         $providers = Provider::where('status','Đang hợp tác')->get();
-        return view('admin.manage.ingredient.createIngredient', compact('providers'));
+        $units = UnitCalculate::all();
+        $ingredientTypes = IngredientType::all();
+        return view('admin.manage.ingredient.createIngredient', compact('providers', 'units', 'ingredientTypes'));
     }
 
     public function store(Request $req)
@@ -42,10 +46,10 @@ class IngredientController extends Controller
                 'price' => 'integer'
             ],
             [
-                'name.required' => 'Tên phụ liệu không được để trống',
+                'name.required' => 'Tên Nguyên phụ liệu không được để trống',
                 // 'price.required' => 'Giá không được để trống',
                 'price.integer' => 'Giá phải là số nguyên',
-                // 'image.*.required' => 'Bạn chưa thêm hình ảnh cho phụ liệu này',
+                // 'image.*.required' => 'Bạn chưa thêm hình ảnh cho Nguyên phụ liệu này',
             ]
         );
 
@@ -91,7 +95,7 @@ class IngredientController extends Controller
                 'price' => 'integer'
             ],
             [
-                'name.required' => 'Tên phụ liệu không được để trống',
+                'name.required' => 'Tên Nguyên phụ liệu không được để trống',
                 // 'price.required' => 'Giá không được để trống',
                 'price.integer' => 'Giá phải là số nguyên',
             ]

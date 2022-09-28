@@ -1,12 +1,12 @@
 @extends('layouts.layout_admin')
-@section('title', 'Kế hoạch sản xuất')
+@section('title', 'Lệnh sản xuất')
 @section('main')
 @php
 $current = 12;
 @endphp
 <div class="container px-6 mx-auto grid">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-        Kế hoạch sản xuất
+        Lệnh sản xuất
     </h2>
     @if(session('success'))
     <p class="p-2 rounded-md my-2 bg-green-100 text-green-400 text-sm">{{ session('success') }}</p>
@@ -31,8 +31,10 @@ $current = 12;
                         class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 sticky top-0">
                         <th class="px-4 py-3 font-bold">#</th>
                         <th class="px-4 py-3">Mã sản xuất</th>
-                        <th class="px-4 py-3">Mã sản phẩm</th>
+                        <th class="px-4 py-3">Mã lệnh</th>
                         <th class="px-4 py-3">Sản phẩm</th>
+                        <th class="px-4 py-3">Loại</th>
+                        <th class="px-4 py-3">Công đoạn</th>
                         <th class="px-4 py-3">Yêu cầu</th>
                         <th class="px-4 py-3">Hoàn thành</th>
                         <th class="px-4 py-3">Ưu tiên</th>
@@ -57,14 +59,19 @@ $current = 12;
                             {{ $plan->code }}
                         </td>
                         <td class="px-4 py-3 text-sm ">
-                            {{ $plan->stage == 0 ? 'Cắt' : ($plan->stage == 1 ? 'May bán thành phẩm' : 'Hoàn thiện')}} -
-                            {{ $plan->name_product }}
+                            {{ $plan->product->Ten }}
+                        </td>
+                        <td class="px-4 py-3 text-sm ">
+                            {{ $plan->product->ingredient_type->name }}
+                        </td>
+                        <td class="px-4 py-3 text-sm ">
+                            {{ $plan->product->stage_product->name }}
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{ number_format($plan->amount) }} cái
+                            {{ number_format($plan->require_total, 0, ',', '.') . ' ' . $plan->product->unit_cal->name }} 
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{ number_format($plan->completed) }} cái
+                            {{ number_format($plan->completed) . ' ' . $plan->product->unit_cal->name }}
                         </td>
                         <td class="px-4 py-3 text-sm flex items-center">
                             @if($plan->priority == 0)
@@ -226,7 +233,7 @@ $current = 12;
                     </p>
                     <!-- Modal description -->
                     <p class="text-sm text-gray-700 dark:text-gray-400">
-                        Bạn có chắc chắn muốn xóa đề nghị sản xuất này ?
+                        Bạn có chắc chắn muốn xóa lệnh sản xuất này ?
                     </p>
                 </div>
                 <footer class="
@@ -259,7 +266,7 @@ $current = 12;
               active:bg-purple-600
               hover:bg-purple-700
               focus:outline-none focus:shadow-outline-purple
-            " @click="handleDelete('/admin/plan/delete/')">
+            " @click="handleDelete('')">
                         Chắc chắn
                     </button>
                     <button @click="closeModal" class="

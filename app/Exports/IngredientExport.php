@@ -27,7 +27,7 @@ class IngredientExport implements FromQuery, WithHeadings, WithMapping, ShouldAu
     {
         return [
             '#',
-            'Tên phụ liệu',
+            'Tên Nguyên phụ liệu',
             'Giá tiền',
             'Địa chỉ',
             'Số điện thoại',

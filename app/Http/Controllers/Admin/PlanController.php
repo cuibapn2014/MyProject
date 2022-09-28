@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PlanRequest;
 use App\Http\Requests\PlanRequestUpdate;
 use App\Models\Ingredient;
+use App\Models\PlanIngredient;
 use App\Models\PlanProduction;
 use App\Models\PlanProductionDetail;
 use App\Models\ProductionRequest;
@@ -122,7 +123,7 @@ class PlanController extends Controller
                 throw $ex;
             }
         }
-        return redirect()->route('admin.plan.index')->with('success', 'Cập nhật kế hoạch sản xuất thành công');
+        return redirect()->route('admin.plan.index')->with('success', 'Cập nhật Lệnh sản xuất thành công');
     }
 
     public function destroy($id)
@@ -136,11 +137,7 @@ class PlanController extends Controller
 
     public function createBuy($idRequest)
     {
-        $planProduct = PlanProductionDetail::where('id_production_request', $idRequest)
-            ->selectRaw('sum(total) as sum_total, id_ingredient, id_production_request')
-            ->where('total', '>', 0)
-            ->groupBy('id_ingredient', 'id_production_request')
-            ->get();
+        $planIngredient = PlanIngredient::where('id_production_request', $idRequest)->get();
 
         $check = ProductionRequest::findOrFail($idRequest);
         if ($check->amount == $check->completed) {
@@ -148,19 +145,26 @@ class PlanController extends Controller
         }
 
         RequestProduction::where('id_production_request', $idRequest)->delete();
-        foreach ($planProduct as $plan) {
-            $ingredient = Ingredient::find($plan->id_ingredient);
-            if ($plan->sum_total > $ingredient->amount) {
-                $requestProduction = new RequestProduction();
-                $countBuy = RequestProduction::where('id_ingredient', $plan->id_ingredient)
-                    ->where('status', '1')
-                    ->sum('amount');
-                $requestProduction->id_ingredient = $plan->id_ingredient;
-                $requestProduction->amount = !$countBuy ? $plan->sum_total - $ingredient->amount : $plan->sum_total;
-                $requestProduction->id_production_request = $plan->id_production_request;
-                $requestProduction->save();
+        foreach ($planIngredient as $plan) {
+            if ($plan->ingredient->ingredient_type->id == 1) {
+                $requestProduction = RequestProduction::where('id_production_request', $plan->id_production_request)
+                    ->where('id_ingredient', $plan->id_ingredient);
+
+                if (!$requestProduction->exists()) {
+                    RequestProduction::create([
+                        'id_ingredient' => $plan->id_ingredient,
+                        'id_production_request' => $plan->id_production_request,
+                        'amount' => $plan->total,
+                        'censor' => auth()->user()->id
+                    ]);
+                } else {
+                    $requestProduction = $requestProduction->first();
+                    $requestProduction->amount += $plan->total;
+                    $requestProduction->save();
+                }
             }
         }
-        return back()->with('success', 'Đã tạo yêu cầu mua hàng');
+
+        return redirect()->route('admin.requirement.index')->with('success', 'Đã tạo yêu cầu mua hàng');
     }
 }

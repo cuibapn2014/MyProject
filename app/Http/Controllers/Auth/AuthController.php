@@ -29,18 +29,16 @@ class AuthController extends Controller
         $this->validate(
             $req,
             [
-                'email' => 'required|email',
-                'password' => 'required|min:8'
+                'email' => 'required',
+                'password' => 'required'
             ],
             [
-                'email.required' => 'Email không được để trống',
-                'email.email' => 'Email của bạn cung cấp không hợp lệ',
-                'password.required' => 'Mật khẩu không được để trống',
-                'password.min' => 'Mật khẩu ít nhất phải từ 8 ký tự'
+                'required' => 'Tài khoản hoặc mật khẩu không được để trống'
             ]
         );
 
         $credentials = $req->only('email', 'password');
+        $credentials['status'] = 1;
         $remember = $req->remember == 'on' ? true : false;
         if (Auth::attempt($credentials, $remember)) {
             $redirect = Auth::user()->role > 0 ?
@@ -49,7 +47,7 @@ class AuthController extends Controller
             return $redirect;
         }
 
-        return back()->with('failed', 'Email hoặc mật khẩu không chính xác! Vui lòng thử lại');
+        return back()->withInput()->with('failed', 'Email hoặc mật khẩu không chính xác');
     }
 
     public function getRegister()

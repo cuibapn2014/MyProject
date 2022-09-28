@@ -99,7 +99,7 @@
           </p></span
         >
 
-        <span class="font-bold text-base">Phụ liệu</span>
+        <span class="font-bold text-base">Nguyên phụ liệu</span>
         <span
           v-for="(ingredient, index) in this.order.detail.ingredient_details"
           :key="ingredient.id"

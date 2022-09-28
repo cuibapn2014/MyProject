@@ -14,7 +14,7 @@ class ProductionRequest extends Model
     protected $fillable = [
         'detail_order_id',
         'code',
-        'name',
+        'id_product',
         'size',
         'color',
         'amount',
@@ -37,5 +37,10 @@ class ProductionRequest extends Model
     public function plan_production()
     {
         return $this->hasMany(\App\Models\PlanProduction::class, 'id_production_request', 'id');
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(\App\Models\Ingredient::class, 'id_product', 'id');
     }
 }

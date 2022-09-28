@@ -9,7 +9,7 @@
     <base href="{{asset('')}}" />
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <title>HÓA ĐƠN LYUNHOUSE</title>
+    <title>HÓA ĐƠN</title>
 
     <!-- Bootstrap cdn 3.3.7 -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -61,7 +61,7 @@
                                 <div class="col-sm-6 d-flex flex-row justify-content-end">
 
                                     <div class="logo-wrapper">
-                                        <img src="/img/lyunhouse.jpg" class="img-responsive pull-right logo"
+                                        <img src="" class="img-responsive pull-right logo"
                                             width="80px" />
                                     </div>
                                 </div>
@@ -94,22 +94,17 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @php
-                                                $amount = 0;
-                                                @endphp
-                                                @foreach($order->detail->properties as $properties)
-                                                @php $amount += $properties->SoLuong @endphp
+                        
                                                 <tr>
-                                                    <td>{{ $properties->SoLuong }}</td>
+                                                    <td>0</td>
                                                     <td><img src="/img/{{ $order->detail->image }}"
                                                             class="object-contain" alt="product" width="60px"></td>
-                                                    <td>{{ $order->detail->TenSP }}</td>
-                                                    <td>{{ $properties->ChieuCao }}</td>
-                                                    <td>{{ $properties->CanNang }}</td>
-                                                    <td>{{ $order->detail->quality->Ten }}</td>
-                                                    <td>{{ $order->detail->NguonCungCap }}</td>
+                                                    <td>0</td>
+                                                    <td>0</td>
+                                                    <td>0</td>
+                                                    <td>0</td>
+                                                    <td>0</td>
                                                 </tr>
-                                                @endforeach
                                                 <tr style="height: 40px;"></tr>
                                             </tbody>
                                             <thead>
@@ -129,7 +124,7 @@
                                                     <th></th>
                                                     <th></th>
                                                     <th></th>
-                                                    <th>{{ $amount }} sản phẩm</th>
+                                                    <th>0 sản phẩm</th>
                                                 </tr>
                                                 <tr>
                                                     <th>Tổng tiền gia công </th>
@@ -150,26 +145,16 @@
                                                     <th></th>
                                                     <th></th>
                                                     <th></th>
-                                                    <th class="text-success">+ {{ number_format(
-                                                        ($order->detail->fabric_main ? $order->detail->fabric_main->Gia
-                                                        * $order->detail->fabric_detail->VaiChinh : 0)
-                                                        + ($order->detail->fabric_extra ?
-                                                        $order->detail->fabric_extra->Gia *
-                                                        $order->detail->fabric_detail->VaiPhu : 0)
-                                                        + ($order->detail->fabric_lining ?
-                                                        $order->detail->fabric_lining->Gia *
-                                                        $order->detail->fabric_detail->VaiLot : 0)) }}đ</th>
+                                                    <th class="text-success">đ</th>
                                                 </tr>
                                                 <tr>
-                                                    <th>Tiền phụ liệu </th>
+                                                    <th>Tiền Nguyên phụ liệu </th>
                                                     <th></th>
                                                     <th></th>
                                                     <th></th>
                                                     <th></th>
                                                     <th></th>
-                                                    <th class="text-success">+ {{
-                                                        number_format($order->detail->ingredient_details->sum('ingredient.Gia'))
-                                                        }}đ</th>
+                                                    <th class="text-success">+ đ</th>
                                                 </tr>
                                             </thead>
                                             <thead>
@@ -185,8 +170,8 @@
                                             </thead>
                                         </table>
                                         <div class="invoice-top-right">
-                                            <h2 class="our-company-name">Lyun House</h2>
-                                            <h6 class="our-address">Phường 13, Quận Gò Vấp, Thành phố Hồ
+                                            <h2 class="our-company-name">{{ config('app.name') }}</h2>
+                                            <h6 class="our-address">Thành phố Hồ
                                                 Chí Minh</h6>
                                             <h5>
                                                 <?php
@@ -214,13 +199,13 @@
                                     <hr class="divider">
                                 </div>
                                 <div class="fs-3 col-4">
-                                    <h6 class="text-left">lyunhouse.com</h6>
+                                    <h6 class="text-left"></h6>
                                 </div>
                                 <div class="fs-3 col-4">
-                                    <h6 class="text-center">lyunhouse@gmail.com</h6>
+                                    <h6 class="text-center">nmtworks.7250@gmail.com</h6>
                                 </div>
                                 <div class="fs-3 col-4">
-                                    <h6 class="text-right">+84 866 686 877</h6>
+                                    <h6 class="text-right">+84 388 794 195</h6>
                                 </div>
                             </div>
                             <div class="bottom-bar"></div>

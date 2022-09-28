@@ -29,11 +29,11 @@ $current = 13;
                 <thead>
                     <tr
                         class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 sticky top-0">
-                        <th class="px-4 py-3 font-bold">#</th>
-                        <th class="px-4 py-3">Mã sản xuất</th>
+                        <th class="px-3 py-3 font-bold">#</th>
+                        <th class="px-1 py-3">Đề nghị sản xuất</th>
                         <th class="px-4 py-3">Nguyên vật liệu</th>
-                        <th class="px-4 py-3">Loại</th>
-                        <th class="px-4 py-3">Nhà cung cấp</th>
+                        <th class="px-1 py-3">Loại</th>
+                        <th class="px-4 py-3 text-center">Nhà cung cấp</th>
                         <th class="px-4 py-3">Số lượng</th>
                         <th class="px-4 py-3">Trạng thái</th>
                         <th class="px-4 py-3">Ngày tạo</th>
@@ -46,43 +46,69 @@ $current = 13;
                     @endphp
                     @foreach($requirements as $requirement)
                     <tr class="text-gray-700 dark:text-gray-400">
-                        <td class="px-4 py-3 flex">
+                        <td class="px-3 py-3 flex">
                             {{ $index }}
                         </td>
-                        <td class="px-4 py-3 text-sm">
+                        <td class="px-1 py-3 text-sm">
                             {{ $requirement->production_request->code }}
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{ $requirement->ingredient->Ten }}
                         </td>
-                        <td class="px-4 py-3 text-sm">
+                        <td class="px-1 py-3 text-sm">
                             {{ $requirement->ingredient->ingredient_type->name }}
                         </td>
-                        <td class="px-4 py-3 text-sm ">
+                        <td class="px-4 py-3 text-sm text-center">
                             {{ $requirement->ingredient->provider->name }}
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{ $requirement->amount . ' ' . $requirement->ingredient->unit_cal->name }}
+                            {{ $requirement->amount . ' (' . $requirement->ingredient->unit_cal->name.')' }}
                         </td>
                         <td class="px-4 py-3 text-xs">
-                            <span class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white {{ $requirement->status == 1 ? 'bg-orange-100 text-orange-700 dark:bg-orange-600' : 'bg-green-100 text-green-700 dark:bg-green-600' }}">
-                            {{ $requirement->status == 1 ? 'Chờ xử lý' : ($requirement->status == 2 ? 'Đã xử lý' : 'Không giải quyết') }}
+                            
+                                @switch($requirement->status)
+                                @case(1)
+                                <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-orange-100 dark:bg-orange-600 text-orange-700">
+                                Chờ xử lý
+                                @break
+                                @case(2)
+                                <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-purple-100 dark:bg-purple-600 text-purple-700">
+                                Đã xử lý
+                                @break
+                                @case(3)
+                                <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-green-100 dark:bg-green-600 text-green-700">
+                                Đã nhập kho
+                                @break
+                                @case(4)
+                                <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-red-100 dark:bg-red-600 text-red-700">
+                                Đã hủy bỏ
+                                @break
+                                @default
+                                <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-gray-600">
+                                Không xác định
+                                @break
+                                @endswitch
                             </span>
-                        </td>                       
-                        <td class="px-4 py-3 text-sm">
-                            {{ \Carbon\Carbon::parse($requirement->created_at)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y') }}
                         </td>
-                        <td class="px-4 py-3 text-sm flex items-center">              
-                            <button v-tooltip="'Xử lý ngay'" title="Xử lý ngay"
+                        <td class="px-4 py-3 text-sm">
+                            {{
+                            \Carbon\Carbon::parse($requirement->created_at)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y')
+                            }}
+                        </td>
+                        <td class="px-4 py-3 text-sm flex items-center">
+                            <button v-tooltip="'Cập nhật'" title="Cập nhật"
                                 @click.prevent="handleClickViewOrder({{ $requirement }})"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Delete">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
                                     fill="currentColor">
-                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                    <path fill-rule="evenodd"
-                                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                                        clip-rule="evenodd" />
+                                    <path
+                                        d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                                 </svg>
                             </button>
 

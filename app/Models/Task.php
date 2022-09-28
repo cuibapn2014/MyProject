@@ -11,7 +11,7 @@ class Task extends Model
 {
     use HasFactory;
 
-    protected $table = 'cong_viec';
+    protected $table = 'tasks';
 
     public $timestampt = true;
 

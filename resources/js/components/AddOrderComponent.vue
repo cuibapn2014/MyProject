@@ -906,14 +906,14 @@
         </option>
       </select>
     </label> -->
-    <h3 class="font-bold dark:text-gray-200 text-base">Chọn phụ liệu</h3>
+    <h3 class="font-bold dark:text-gray-200 text-base">Chọn Nguyên phụ liệu</h3>
     <div
       class="flex items-center"
       v-for="(item, index) in this.listIngredient"
       :key="index"
     >
       <label class="block my-2 text-sm w-2/4 sm:w-full">
-        <span class="flex text-gray-700 dark:text-gray-400"> Phụ liệu </span>
+        <span class="flex text-gray-700 dark:text-gray-400"> Nguyên phụ liệu </span>
         <select
           class="
             block
@@ -931,7 +931,7 @@
           name="ingredient[]"
           v-model="item.ingredient"
         >
-          <option selected value="">Chọn phụ liệu</option>
+          <option selected value="">Chọn Nguyên phụ liệu</option>
           <option
             v-for="ingredient in dataIngredient"
             :key="ingredient.id"
@@ -997,17 +997,17 @@
       class="p-2 bg-indigo-600 text-white my-2 rounded-lg"
       @click.prevent="handleClickAddIngredient"
     >
-      Thêm phụ liệu
+      Thêm Nguyên phụ liệu
     </button>
     <button
       class="p-2 bg-indigo-600 text-white my-2 rounded-lg"
       @click.prevent="handleClickRemoveIngredient"
     >
-      Xóa phụ liệu
+      Xóa Nguyên phụ liệu
     </button>
     <label class="block text-sm my-1">
       <span class="flex text-gray-700 dark:text-gray-400 font-bold"
-        >Tổng tiền phụ liệu
+        >Tổng tiền Nguyên phụ liệu
       </span>
       <input
         class="

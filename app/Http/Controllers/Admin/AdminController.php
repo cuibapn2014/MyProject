@@ -21,8 +21,8 @@ class AdminController extends Controller
         $revenue = DetailOrder::selectRaw('sum(TienCoc + ThanhToanBS) as total')->first();
         $countOrder = Order::selectRaw('count(id) as total')->first();
         $countClient = Customer::all();
-        $debt = Order::selectRaw('sum(don_hang.TongTien - chi_tiet_don_hang.TienCoc - chi_tiet_don_hang.ThanhToanBS) as debt')
-        ->join('chi_tiet_don_hang', 'don_hang.id', '=', 'chi_tiet_don_hang.id_DonHang')
+        $debt = Order::selectRaw('sum(orders.TongTien - detail_orders.TienCoc - detail_orders.ThanhToanBS) as debt')
+        ->join('detail_orders', 'orders.id', '=', 'detail_orders.id_DonHang')
         ->get();
         return view('admin.home',['revenue' => $revenue,'countOrder' => $countOrder,'countClient' => $countClient,'debt' => $debt]);
     }
@@ -31,13 +31,12 @@ class AdminController extends Controller
     {
         $order = Order::findOrFail($id);
         $costs = Cost::where('id_ChatLuong', $order->detail->id_ChatLuong)->where('id_DanhMuc', $order->detail->id_DanhMuc)->get();
-        $quantity = $order->detail->properties->sum('SoLuong');
         $min = 20;
         $price = 0;
-        foreach ($costs as $cost) {
-            if ($cost->LimitStart <= $quantity && $cost->LimitFinish >= $quantity) $price = $cost->Gia;
-            else if($quantity < $min && $cost->LimitStart = $min) $price = $cost->Gia; break;
-        }
+        // foreach ($costs as $cost) {
+        //     if ($cost->LimitStart <= $quantity && $cost->LimitFinish >= $quantity) $price = $cost->Gia;
+        //     else if($quantity < $min && $cost->LimitStart = $min) $price = $cost->Gia; break;
+        // }
         // $pdf = PDF::loadView('admin.invoice',['order' => $order,'cost' => $price])->setOptions(['defaultFont' => 'time-new-roman']);
         // return $pdf->stream('invoice.pdf', array('Attachment'=> 1));         
         return view('admin.invoice', ['order' => $order,'cost' => $price]);
