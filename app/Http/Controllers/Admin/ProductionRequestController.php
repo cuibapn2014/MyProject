@@ -113,12 +113,12 @@ class ProductionRequestController extends Controller
     {
         $requestProduction = ProductionRequest::findOrFail($request->idRequest);
         $maxAmount = Ingredient::findOrFail($request->idIngredient);
-
+   
         $validator = Validator::make($request->all(), [
             'completed' => [
                 'min:0',
                 function ($attribute, $value, $fail) use ($maxAmount, $requestProduction) {
-                    if ($value > $maxAmount->amount || $value < 0 || $value > $requestProduction->completed) {
+                    if ($value - $requestProduction->completed > $maxAmount->amount || $value < 0 || $value > $requestProduction->amount) {
                         $fail('Số lượng phân bổ không hợp lệ');
                     }
                 },

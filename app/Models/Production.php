@@ -17,7 +17,6 @@ class Production extends Model
         'id_plan_ingredient',
         'id_production_request',
         'require_total',
-        'status',
         'priority',
         'note',
         'creator',
@@ -47,5 +46,10 @@ class Production extends Model
     public function user_review()
     {
         return $this->belongsTo(\App\Models\User::class, 'reviewer', 'id');
+    }
+
+    public function produced()
+    {
+        return $this->hasMany(\App\Models\Produced::class, 'id_production', 'id');
     }
 }

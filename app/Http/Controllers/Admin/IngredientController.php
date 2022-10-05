@@ -20,7 +20,12 @@ class IngredientController extends Controller
     //
     public function index()
     {
-        return view('admin.manage.ingredient.ingredient', ['ingredient' => Ingredient::all()]);
+        return view('admin.manage.ingredient.ingredient', ['ingredient' => Ingredient::where('id_ingredient_type', 1)->paginate(25)]);
+    }
+
+    public function getAllProduct()
+    {
+        return view('admin.manage.ingredient.product', ['ingredient' => Ingredient::where('id_ingredient_type', '>', 1)->paginate(25)]);
     }
 
     public function getAll()

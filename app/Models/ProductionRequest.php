@@ -43,4 +43,13 @@ class ProductionRequest extends Model
     {
         return $this->belongsTo(\App\Models\Ingredient::class, 'id_product', 'id');
     }
+
+    public function updateStatus($idProductionRequest)
+    {
+        $productionRequest = self::findOrFail($idProductionRequest);
+        if($productionRequest->amount == $productionRequest->completed){
+            $productionRequest->status = 3;
+            $productionRequest->save();
+        }
+    }
 }

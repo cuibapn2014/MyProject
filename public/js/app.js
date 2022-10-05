@@ -10360,6 +10360,7 @@ var app = new Vue({
   data: function data() {
     return {
       idDelete: 0,
+      idProduction: null,
       countTask: 0,
       display: 0,
       isLoad: true,
@@ -10588,7 +10589,8 @@ var app = new Vue({
       this.closeNotificationsMenu();
     },
     isWarehouseActive: function isWarehouseActive() {
-      var arr = [2, 3, 5];
+      var arr = [2, 3, 5, 10, 14];
+      console.log(arr.includes(this.isActive));
       return arr.includes(this.isActive);
     },
     isSaleActive: function isSaleActive() {
@@ -10678,6 +10680,10 @@ var app = new Vue({
       var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
       this.objRequestProduct = obj;
       this.isCustomModal = !this.isCustomModal;
+    },
+    toggleUpdateAmountModal: function toggleUpdateAmountModal() {
+      var idProduction = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+      this.idProduction = idProduction;
     }
   }
 });

@@ -42,7 +42,6 @@ class Ingredient extends Model
         return $this->hasMany(\App\Models\Quota::class, 'id_product', 'id');
     }
 
-
     public function stage_product()
     {
         return $this->belongsTo(\App\Models\StageProduct::class, 'stage', 'id');

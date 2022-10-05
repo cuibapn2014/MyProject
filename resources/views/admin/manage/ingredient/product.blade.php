@@ -1,12 +1,12 @@
 @extends('layouts.layout_admin')
-@section('title', 'Nguyên phụ liệu')
+@section('title', 'Thành phẩm')
 @section('main')
 @php
-$current = 3;
+$current = 5;
 @endphp
 <div class="container px-6 mx-auto grid">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-        Kho nguyên phụ liệu
+        Kho thành phẩm
     </h2>
     @if(session('success'))
     <p class="p-2 rounded-md my-2 bg-green-100 text-green-400 text-sm">{{ session('success') }}</p>
@@ -40,10 +40,9 @@ $current = 3;
                         class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                         <th class="px-4 py-3">Hình ảnh</th>
                         <th class="px-4 py-3">Tên</th>
-                        <th class="px-4 py-3">Cung cấp bởi</th>
-                        <th class="px-4 py-3">Giá</th>
-                        <th class="px-4 py-3">Địa chỉ</th>
-                        <th class="px-4 py-3">Liên hệ</th>
+                        <th class="px-4 py-3">Loại</th>
+                        <th class="px-4 py-3">Giá sản xuất</th>
+                        <th class="px-4 py-3">Giá thành phẩm</th>
                         <th class="px-4 py-3">Số lượng tồn</th>
                         <th class="px-4 py-3">Tồn thực tế</th>
                         <th class="px-4 py-3">Ghi Chú</th>
@@ -63,16 +62,13 @@ $current = 3;
                             {{$ingredient->Ten}}
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{$ingredient->provider->name ?? null}}
+                            {{$ingredient->ingredient_type->name}}
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{number_format($ingredient->Gia)}}VND
+                            {{number_format($ingredient->Gia) . ' VND'}}
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{$ingredient->provider->address ?? null}}
-                        </td>
-                        <td class="px-4 py-3 text-sm">
-                            {{$ingredient->provider->phone_number ?? null}}
+                            {{number_format($ingredient->GiaThanh) . ' VND'}}
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{number_format($ingredient->amount) . ' ' . $ingredient->unit_cal->name}}

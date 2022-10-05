@@ -1,12 +1,12 @@
 @extends('layouts.layout_admin')
-@section('title', 'Đề nghị sản xuất')
+@section('title', 'Nhập kho')
 @section('main')
 @php
-$current = 11;
+$current = 10;
 @endphp
 <div class="container px-6 mx-auto grid">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-        Đề nghị sản xuất
+        Nhập kho
     </h2>
     @if(session('success'))
     <p class="p-2 rounded-md my-2 bg-green-100 text-green-400 text-sm">{{ session('success') }}</p>
@@ -15,16 +15,14 @@ $current = 11;
     <p class="p-2 rounded-md my-2 bg-red-100 text-red-400 text-sm">{{ $message }}</p>
     @enderror
     <div class="flex justify-end py-2">
-        <button onclick="location.href='{{ route('admin.production.create') }}'"
+        <button onclick=""
             class="flex items-center px-2 py-2 mx-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border-0 rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
             Thêm mới
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z" />
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+              </svg>
         </button>
-        <button onclick="location.href='{{ route('admin.production.export') }}'"
+        <button onclick=""
             class="flex items-center px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border-0 rounded-lg active:bg-green-700 hover:bg-green-700 focus:outline-none focus:shadow-outline-purple">
             Xuất Excel
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -37,117 +35,105 @@ $current = 11;
     <div class="w-full overflow-x-auto rounded-lg shadow-xs mb-4" v-dragscroll style="max-height: 600px;">
         <div class="w-full">
             <table class="w-full whitespace-no-wrap">
-                @if($productions->count() > 0)
+                @if($imports->count() > 0)
                 <thead>
                     <tr
                         class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 sticky top-0">
-                        <th class="px-4 py-3 font-bold">#</th>
-                        <th class="px-4 py-3">Hình ảnh</th>
-                        <th class="px-4 py-3">Đề nghị</th>
-                        <th class="px-4 py-3">Sản phẩm</th>
-                        <th class="px-4 py-3">Thuộc tính</th>
-                        <th class="px-4 py-3">Yêu cầu</th>
-                        <th class="px-4 py-3">Hoàn thành</th>
-                        <th class="px-4 py-3">Trạng thái</th>
-                        <th class="px-4 py-3">Người tạo</th>
-                        <th class="px-4 py-3">Ngày tạo</th>
-                        <th class="px-4 py-3">Hành động</th>
+                        <th class="px-3 py-3 font-bold">#</th>
+                        <th class="px-2 py-3">Mã nhập kho</th>
+                        <th class="px-3 py-3">Loại</th>
+                        <th class="px-3 py-3">Sản phẩm</th>
+                        <th class="px-3 py-3">Số lượng</th>
+                        <th class="px-3 py-3">Đơn giá</th>
+                        <th class="px-3 py-3">Tổng tiền</th>
+                        <th class="px-3 py-3">Ghi chú</th>
+                        <th class="px-3 py-3">Ngày nhập</th>
+                        <th class="px-3 py-3">Trạng thái</th>
+                        <th class="px-3 py-3">Người yêu cầu</th>
+                        <th class="px-3 py-3">Người xét duyệt</th>
+                        <th class="px-3 py-3">Hành động</th>
                     </tr>
                 </thead>
                 <tbody class="bg-[#ffffff] divide-y dark:divide-gray-700 dark:bg-gray-800">
                     @php
-                    $index = $productions->firstItem();
+                    $index = $imports->firstItem();
                     @endphp
-                    @foreach($productions as $production)
+                    @foreach($imports as $import)
                     <tr class="text-gray-700 dark:text-gray-400">
-                        <td class="px-4 py-3 flex">
+                        <td class="px-3 py-3 flex">
                             {{ $index }}
                         </td>
-                        <td class="px-4 py-3 text-sm">
+                        <!-- <td class="px-4 py-3 text-sm">
                             <img class="img__mthumbnail h-14 w-14 rounded-lg object-cover object-center"
-                                src="{{ asset('/img_product/') . '/' . $production->image }}">
+                                src="{{ asset('/img_product/') . '/' . $import->image }}">
+                        </td> -->
+                        <td class="px-2 py-3 text-sm">
+                            {{ $import->code }}
                         </td>
-                        <td class="px-4 py-3 text-sm">
-                            {{ $production->code }}
+                        <td class="px-3 py-3 text-sm ">
+                            {{ $import->type == 1 ? 'Nhập kho nguyên phụ liệu' : 'Nhập kho thành phẩm sản xuất' }}
                         </td>
-                        <td class="px-4 py-3 text-sm ">
-                            {{ $production->product->Ten }}
+                        <td class="px-3 py-3 text-sm">
+                            {{ $import->ingredient->Ten }}
                         </td>
-                        <td class="px-4 py-3 text-sm">
-                            {{ $production->size }}{{$production->color ? ' - ' . $production->color : ''}}
+                        <td class="px-3 py-3 text-sm">
+                            {{ number_format($import->amount) . ' ' . $import->ingredient->unit_cal->name}}
                         </td>
-                        <td class="px-4 py-3 text-sm">
-                            {{ number_format($production->amount) }} cái
+                        <td class="px-3 py-3 text-sm">
+                            {{ number_format($import->ingredient->Gia) }}
                         </td>
-                        <td class="px-4 py-3 text-sm">
-                            {{ number_format($production->completed) }} cái
-                            @if($production->status < 2)
-                            <button title="Phân bổ" v-tooltip="'Phân bổ'"
-                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                                @click="toggleCustomModal({{ $production->load('product.unit_cal') }})"
-                                aria-label="Edit">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path
-                                        d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                                    <path fill-rule="evenodd"
-                                        d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                            @endif
+                        <td class="px-3 py-3 text-sm">
+                            {{ number_format($import->ingredient->Gia * $import->amount) }}
                         </td>
-                        <td class="px-4 py-3 text-sm">
-                            @switch($production->status)
+                        <td class="px-3 py-3 text-sm max-w-xs overflow-hidden text-ellipsis" v-tooltip="'{{ $import->note }}'">
+                            {{ $import->note }}
+                        </td>
+                        <td class="px-3 py-3 text-sm">
+                            {{
+                                \Carbon\Carbon::parse($import->import_date)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y')
+                            }}                    
+                        </td>
+                        <td class="px-3 py-3 text-sm">
+                            @switch($import->status)
                             @case(1)
                             <span
-                                class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
-                                Chờ xử lý
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-orange-100 text-orange-700 dark:bg-orange-600">
+                                Chờ duyệt
                             </span>
                             @break
                             @case(2)
                             <span
-                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-orange-100 text-orange-700 dark:bg-orange-600">
-                                Đang sản xuất
-                            </span>
-                            @break
-                            @case(3)
-                            <span
                                 class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-green-100 text-green-700 dark:bg-green-600">
-                                Hoàn thành
-                            </span>
-                            @break
-                            @case(4)
-                            <span
-                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-red-100 text-red-700 dark:bg-red-600">
-                                Ngưng sản xuất
+                                Đã duyệt
                             </span>
                             @break
                             @endswitch
                         </td>
-                        <td class="px-4 py-3 text-sm">
-                            <img v-tooltip.top-start="'{{ $production->user->name }}'"
-                                src="{{asset('/img/user').'/'.$production->user->image }}"
+                        <td class="px-3 py-3 text-sm">
+                            <img v-tooltip.top-start="'{{ $import->creator->name . ' - ' . $import->creator->role->name }}'"
+                                src="{{asset('/img/user').'/'.$import->creator->image }}"
                                 class="h-12 w-12 object-cover object-center rounded-full" />
                         </td>
-                        <td class="px-4 py-3 text-sm">
-                            {{
-                            \Carbon\Carbon::parse($production->updated_at)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y')
-                            }}
+                        <td class="px-3 py-3 text-sm">
+                            @if($import->reviewer)
+                            <img v-tooltip.top-start="'{{ $import->reviewer->name . ' - ' . $import->reviewer->role->name }}'"
+                                src="{{asset('/img/user').'/'.$import->reviewer->image }}"
+                                class="h-12 w-12 object-cover object-center rounded-full" />
+                                @endif
                         </td>
-                        <td class="px-4 py-3 text-sm flex items-center">
-                            @if($production->status == 1)
+                        <td class="px-3 py-3 text-sm flex items-center">
+                            @if($import->status == 1)
                             <button title="Chỉnh sửa" v-tooltip="'Chỉnh sửa'"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Edit"
-                                onclick="location.href='{{ route('admin.production.update',['id' => $production->id]) }}'">
+                                onclick="">
                                 <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                                     <path
                                         d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
                                     </path>
                                 </svg>
                             </button>
-                            <button v-tooltip="'Xóa'" title="Xóa" @click="openModal({{$production->id}})"
+                            <button v-tooltip="'Xóa'" title="Xóa" @click="openModal({{$import->id}})"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Delete">
                                 <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
@@ -156,45 +142,7 @@ $current = 11;
                                         clip-rule="evenodd"></path>
                                 </svg>
                             </button>
-                            <button v-tooltip="'Tạo yêu cầu mua hàng'" title="Tạo yêu cầu mua hàng"
-                                onclick="location.href='{{ route('admin.buy.create',['id' => $production->id]) }}'"
-                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                                aria-label="Delete">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                            </button>
-                            <button v-tooltip="'Tạo kế hoạch vật tư'" title="Tạo kế hoạch vật tư"
-                                onclick="location.href='/admin/plan-ingredient/create/{{ $production->id }}'"
-                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                                aria-label="Delete">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                                </svg>
-                            </button>
-                            <button v-tooltip="'Tạo lệnh sản xuất'" title="Tạo lệnh sản xuất" onclick="location.href='/admin/plan/create/{{ $production->id }}'"
-                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                                aria-label="create">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                            @else
-                            <button v-tooltip="'Cập nhật trạng thái'"
-                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path
-                                        d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z" />
-                                </svg>
-                            </button>
+                            
                             @endif
                         </td>
                     </tr>
@@ -207,7 +155,7 @@ $current = 11;
                 <div class="text-sm text-center dark:text-gray-200">Không tìm thấy dữ liệu nào</div>
                 @endif
             </table>
-            {{ $productions->links() }}
+            {{ $imports->links() }}
         </div>
     </div>
 </div>
@@ -446,7 +394,7 @@ $current = 11;
               active:bg-purple-600
               hover:bg-purple-700
               focus:outline-none focus:shadow-outline-purple
-            " @click="handleDelete('/admin/production/delete/' + idDelete)">
+            " @click="handleDelete('/admin/import/delete/' + idDelete)">
                         Chắc chắn
                     </button>
                     <button @click="closeModal" class="

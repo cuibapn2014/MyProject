@@ -160,9 +160,17 @@
                             <li
                                 class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
                                 <a class="w-full hover:text-gray-800 dark:hover:text-gray-200"
-                                    :class="{ 'text-gray-800' : this.isActive == 2, 'dark:text-gray-100' : this.isActive == 2 }"
-                                    href="#">
-                                    Nhập/Xuất kho hàng
+                                    :class="{ 'text-gray-800' : this.isActive == 10, 'dark:text-gray-100' : this.isActive == 10 }"
+                                    href="{{ route('admin.warehouse.import.index') }}">
+                                    Nhập kho
+                                </a>
+                            </li>
+                            <li
+                                class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                                <a class="w-full hover:text-gray-800 dark:hover:text-gray-200"
+                                    :class="{ 'text-gray-800' : this.isActive == 14, 'dark:text-gray-100' : this.isActive == 14 }"
+                                    href="{{ route('admin.warehouse.export.index') }}">
+                                    Xuất kho
                                 </a>
                             </li>
                             <li
@@ -171,6 +179,14 @@
                                     :class="{ 'text-gray-800' : this.isActive == 3, 'dark:text-gray-100' : this.isActive == 3 }"
                                     href="{{ route('admin.ingredient.index') }}">
                                     Nguyên phụ liệu
+                                </a>
+                            </li>
+                            <li
+                            class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                                <a class="w-full hover:text-gray-800 dark:hover:text-gray-200"
+                                    :class="{ 'text-gray-800' : this.isActive == 5, 'dark:text-gray-100' : this.isActive == 5 }"
+                                    href="{{ route('admin.product.index') }}">
+                                    Thành phẩm
                                 </a>
                             </li>
                             <!-- <li

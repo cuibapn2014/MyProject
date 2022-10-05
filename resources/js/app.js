@@ -99,6 +99,7 @@ const app = new Vue({
     data() {
         return {
             idDelete: 0,
+            idProduction:null,
             countTask: 0,
             display: 0,
             isLoad: true,
@@ -251,7 +252,7 @@ const app = new Vue({
         },
 
         isWarehouseActive() {
-            const arr = [2, 3, 5];
+            const arr = [2, 3, 5, 10, 14];
             return arr.includes(this.isActive)
         },
 
@@ -354,6 +355,9 @@ const app = new Vue({
         toggleCustomModal(obj = null) {
             this.objRequestProduct = obj
             this.isCustomModal = !this.isCustomModal
+        },
+        toggleUpdateAmountModal(idProduction = null){
+            this.idProduction = idProduction
         }
     }
 });

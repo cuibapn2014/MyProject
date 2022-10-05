@@ -11,10 +11,14 @@ use App\Http\Controllers\Admin\TaskController;
 use App\Http\Controllers\Admin\ProviderController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\PlanIngredientController;
+use App\Http\Controllers\Admin\ProducedController;
 use App\Http\Controllers\Admin\ProductionController;
 use App\Http\Controllers\Admin\QuotaController;
 use App\Http\Controllers\Admin\RequirementController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\WarehouseController;
+use App\Http\Controllers\Admin\WarehouseExportController;
+use App\Http\Controllers\Admin\WarehouseImportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -100,6 +104,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
         $route->get('/export', [IngredientController::class, 'export'])->name('admin.ingredient.export');
     });
 
+    $route->get('/products', [IngredientController::class, 'getAllProduct'])->name('admin.product.index');
     // Gợi ý phát triển ở Module bán hàng
     // $route->group(['prefix' => 'product'], function ($route) {
     //     $route->get('/', [ProductController::class, 'index'])->name('admin.product.index');
@@ -149,12 +154,24 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
         $route->get('/create/{id}', [ProductionController::class, 'create'])->name('admin.plan.create');
         $route->post('/create', [ProductionController::class, 'store'])->name('admin.plan.request.create');
         $route->get('/update/{id}', [ProductionController::class, 'edit'])->name('admin.plan.update');
-        $route->post('/update/{id}', [ProductionController::class, 'update'])->name('admin.plan.request.update');
+        $route->post('/update-completed', [ProducedController::class, 'store'])->name('admin.plan.request.update');
         $route->get('/delete/{id}', [ProductionController::class, 'destroy'])->name('admin.plan.delete');
         $route->get('/create-buy/{id}', [ProductionController::class, 'createBuy'])->name('admin.buy.create');
         $route->get('/export', [ProductionController::class, 'export'])->name('admin.plan.export');
     });
 
+    $route->group(['prefix' => 'warehouse'], function ($route) {
+        $route->get('/imports', [WarehouseImportController::class, 'index'])->name('admin.warehouse.import.index');
+        $route->get('/exports', [WarehouseExportController::class, 'index'])->name('admin.warehouse.export.index');
+        $route->get('/create', [WarehouseController::class, 'create'])->name('admin.warehouse.create');
+        $route->post('/create', [WarehouseController::class, 'store'])->name('admin.warehouse.request.create');
+        // $route->get('/update/{id}', [ProductionRequestController::class, 'edit'])->name('admin.production.update');
+        // $route->post('/update/{id}', [ProductionRequestController::class, 'update'])->name('admin.production.request.update');
+        // $route->get('/delete/{id}', [ProductionRequestController::class, 'destroy'])->name('admin.production.delete');
+        // $route->post('/update-completed', [ProductionRequestController::class, 'updateCompleted'])->name('admin.productionCompleted.request.update');
+        // $route->get('/export', [ProductionRequestController::class, 'export'])->name('admin.production.export');
+    });
+    
     $route->group(['prefix' => 'plan-ingredient'], function ($route) {
         $route->get('/create/{id_product}', [PlanIngredientController::class, 'create'])->name('admin.planIngredient.create');
     });
