@@ -470,6 +470,6 @@ class OrderController extends Controller
 
     public function export()
     {
-        return Excel::download(new OrderExport, 'don_hang.xlsx');
+        return Excel::download(new OrderExport, 'orders.xlsx');
     }
 }

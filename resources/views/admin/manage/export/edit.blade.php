@@ -1,140 +1,25 @@
 @extends('layouts.layout_admin')
-@section('title', 'Chỉnh sửa |Đề nghị sản xuất')
+@section('title', 'Chỉnh sửa | Xuất kho')
 @section('main')
 @php
-$current = 11;
+$current = 14;
 @endphp
 <div class="container px-6 mx-auto grid">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-        Đề nghị sản xuất - Chỉnh sửa
+        Xuất kho - Chỉnh sửa
     </h2>
     @if(session('success'))
     <p class="p-2 rounded-md my-2 bg-green-100 text-green-400 text-sm">{{ session('success') }}</p>
     @endif
-    <form action="{{ route('admin.production.request.update', ['id' => $production->id]) }}" method="post" enctype="multipart/form-data">
+    @if($errors->any())
+    <p class="p-2 max-w-fit rounded-md my-2 bg-red-100 text-red-400 text-sm">{{ $errors->first() }}</p>
+    @endif
+    <form action="{{ route('admin.warehouse.export.update', ['id' => $export->id]) }}" method="post"
+        enctype="multipart/form-data">
         @csrf
-        <div class="flex flex-row items-center sm:flex-col">
-            <label class="block text-sm">
-                <span class="text-gray-700 dark:text-gray-400">Chọn đơn hàng <span class="text-red-500">*</span></span>
-                <select class=" block
-            w-full
-            mt-1
-            text-sm
-            dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
-            form-select
-            focus:border-purple-400
-            focus:outline-none
-            focus:shadow-outline-purple
-            dark:focus:shadow-outline-gray
-            mb-1" name="detail_order_id" id="provider" aria-placeholder="Chọn đơn hàng">
-                    <option value="" disabled selected>-- Chọn đơn hàng --</option>
-                    @foreach($orders as $order)
-                    <option value="{{ $order->detail->id }}" {{ $production->detail_order_id ==$order->detail->id ? 'selected'
-                        :
-                        null }}>{{ $order->TenKhachHang . __(' - ') . $order->detail->TenSP }}</option>
-                    @endforeach
-                </select>
-                @error('detail_order_id')
-                <span class="text-red-500 pt-2">{{ $message }}</span>
-                @enderror
-            </label>
-            <label class="block text-sm mb-2 ml-4">
-                <span class="text-gray-700 dark:text-gray-400">Mã đề nghị<span class="text-red-500">*</span></span>
-                <input
-                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    placeholder="Nhập mã đề nghị" name="code"
-                    value="{{ $production->code }}" />
-                @error('code')
-                <span class="text-red-500 pt-2">{{ $message }}</span>
-                @enderror
-            </label>
-            <label class="block text-sm mb-2 ml-4">
-                <span class="text-gray-700 dark:text-gray-400">Mức độ ưu tiên<span class="text-red-500">*</span></span>
-                <select class="
-                block
-                w-full
-                mt-1
-                text-sm
-                dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
-                form-select
-                focus:border-purple-400
-                focus:outline-none
-                focus:shadow-outline-purple
-                dark:focus:shadow-outline-gray
-                mb-1
-              " name="priority" id="priority" aria-placeholder="Chọn mức độ ưu tiên">
-                    <option value="0" {{ $production->priority == 0 ? 'selected' : '' }}>Thấp</option>
-                    <option value="1" {{ $production->priority == 1 ? 'selected' : '' }}>Bình thường</option>
-                    <option value="2" {{ $production->priority == 2 ? 'selected' : '' }}>Cao</option>
-                </select>
-            </label>
-        </div>
-        <div class="upload__image block text-sm mb-3">
-            <label class="text-gray-700 dark:text-gray-400">Hình ảnh</label>
-            <img src="{{ asset('/img_product/') . '/' . $production->image }}" class="img__mthumbnail h-14 rounded-lg">
-            <input-file></input-file>
-            @error('image.0')
-            <span class="text-red-500 pt-2">{{ $message }}</span>
-            @enderror
-        </div>
-        <label class="block text-sm my-2 mb-2">
-            <span class="text-gray-700 dark:text-gray-400">Chọn sản phẩm<span class="text-red-500">*</span></span>
-            <select class="
-                block
-                w-full
-                mt-1
-                text-sm
-                dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
-                form-select
-                focus:border-purple-400
-                focus:outline-none
-                focus:shadow-outline-purple
-                dark:focus:shadow-outline-gray
-                mb-1
-              " name="id_product" id="id_product" aria-placeholder="Chọn sản phẩm">
-                <option value="">-- Chọn sản phẩm --</option>
-                @foreach($product as $product)
-                <option {{ $production->id_product == $product->id ? 'selected' : ''}} value="{{ $product->id }}">{{ $product->Ten }}</option>
-                @endforeach
-            </select>
-            @error('id_ingredient')
-            <span class="text-red-500 pt-2">{{ $message }}</span>
-            @enderror
-        </label>
-        <div class="flex">
-            <label class="block text-sm my-2">
-                <span class="text-gray-700 dark:text-gray-400">Kích thước</span>
-                <input
-                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    placeholder="Nhập kích thước" name="size" value="{{ $production->size }}" />
-            </label>
-            <label class="block text-sm my-2 mx-2">
-                <span class="text-gray-700 dark:text-gray-400">Màu sắc</span>
-                <input
-                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    placeholder="Nhập màu sắc" name="color" value="{{ $production->color }}" />
-            </label>
-            <label class="block text-sm my-2">
-                <span class="text-gray-700 dark:text-gray-400">Số lượng <span class="text-red-500">*</span></span>
-                <input
-                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    type="number" placeholder="Nhập số lượng" min="1" value="{{ $production->amount ?? 1 }}" name="amount" />
-                @error('amount')
-                <span class="text-red-500 pt-2">{{ $message }}</span>
-                @enderror
-            </label>
-        </div>
-        <label class="block mt-4 text-sm">
-            <span class="text-gray-700 dark:text-gray-400">Ghi chú</span>
-            <textarea
-                class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                rows="3" placeholder="Nhập ghi chú" name="note">{{ $production->note }}</textarea>
-        </label>
-        <div class="flex justify-start">
-            <button class="mt-4 text-white px-4 py-2 rounded-md border-0 bg-indigo-600 mx-2">Lưu</button>
-            <button type="button" class="mt-4 text-white px-4 py-2 rounded-md border-0 bg-indigo-600 cursor-pointer"
-                @click="openModal">Quay về</button>
-        </div>
+        <warehouse-export :product_update="{{ json_encode($export) }}" :orders="{{ json_encode($orders) }}"
+            :products="{{ json_encode($products) }}" :productions="{{ json_encode($productions->load('product')) }}">
+        </warehouse-export>
     </form>
 </div>
 <transition enter-class="ease-out opacity-0" enter-to-class="opacity-100" leave-class="ease-in opacity-100"

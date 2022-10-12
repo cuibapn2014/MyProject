@@ -15,7 +15,14 @@ class Ingredient extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['Ten', 'GhiChu', 'HinhAnh'];
+    protected $fillable = [
+        'Ten', 
+        'GhiChu', 
+        'HinhAnh',
+        'amount',
+        'used_amount',
+        'waste_amount'
+    ];
 
     public function images()
     {

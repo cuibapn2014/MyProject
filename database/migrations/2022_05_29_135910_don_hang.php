@@ -14,7 +14,7 @@ class DonHang extends Migration
     public function up()
     {
         //
-        Schema::create('don_hang', function(Blueprint $table){
+        Schema::create('orders', function(Blueprint $table){
             $table->id();
             $table->string('TenKhachHang')->nullable();
             $table->string('SoDienThoai')->nullable()->max(12)->min(10);
@@ -32,6 +32,6 @@ class DonHang extends Migration
     public function down()
     {
         //
-        Schema::dropIfExists('don_hang');
+        Schema::dropIfExists('orders');
     }
 }

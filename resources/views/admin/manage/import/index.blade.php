@@ -15,12 +15,14 @@ $current = 10;
     <p class="p-2 rounded-md my-2 bg-red-100 text-red-400 text-sm">{{ $message }}</p>
     @enderror
     <div class="flex justify-end py-2">
-        <button onclick=""
+        <button onclick="location.href='{{ route('admin.warehouse.import.create') }}'"
             class="flex items-center px-2 py-2 mx-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border-0 rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
             Thêm mới
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-              </svg>
+                <path fill-rule="evenodd"
+                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                    clip-rule="evenodd" />
+            </svg>
         </button>
         <button onclick=""
             class="flex items-center px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border-0 rounded-lg active:bg-green-700 hover:bg-green-700 focus:outline-none focus:shadow-outline-purple">
@@ -30,7 +32,7 @@ $current = 10;
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
-        </button>
+        </button>     
     </div>
     <div class="w-full overflow-x-auto rounded-lg shadow-xs mb-4" v-dragscroll style="max-height: 600px;">
         <div class="w-full">
@@ -71,7 +73,17 @@ $current = 10;
                             {{ $import->code }}
                         </td>
                         <td class="px-3 py-3 text-sm ">
-                            {{ $import->type == 1 ? 'Nhập kho nguyên phụ liệu' : 'Nhập kho thành phẩm sản xuất' }}
+                            @switch($import->type)
+                            @case(1)
+                            Nhập kho nguyên phụ liệu
+                            @break
+                            @case(2)
+                            Nhập kho thành phẩm
+                            @break
+                            @case(3)
+                            Nhập kho phế phẩm
+                            @break
+                            @endswitch
                         </td>
                         <td class="px-3 py-3 text-sm">
                             {{ $import->ingredient->Ten }}
@@ -85,13 +97,14 @@ $current = 10;
                         <td class="px-3 py-3 text-sm">
                             {{ number_format($import->ingredient->Gia * $import->amount) }}
                         </td>
-                        <td class="px-3 py-3 text-sm max-w-xs overflow-hidden text-ellipsis" v-tooltip="'{{ $import->note }}'">
+                        <td class="px-3 py-3 text-sm max-w-xs overflow-hidden text-ellipsis"
+                            v-tooltip="'{{ $import->note }}'">
                             {{ $import->note }}
                         </td>
                         <td class="px-3 py-3 text-sm">
                             {{
-                                \Carbon\Carbon::parse($import->import_date)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y')
-                            }}                    
+                            \Carbon\Carbon::parse($import->import_date)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y')
+                            }}
                         </td>
                         <td class="px-3 py-3 text-sm">
                             @switch($import->status)
@@ -107,6 +120,12 @@ $current = 10;
                                 Đã duyệt
                             </span>
                             @break
+                            @default
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-red-100 text-red-700 dark:bg-red-600">
+                                Không duyệt
+                            </span>
+                            @break
                             @endswitch
                         </td>
                         <td class="px-3 py-3 text-sm">
@@ -119,14 +138,14 @@ $current = 10;
                             <img v-tooltip.top-start="'{{ $import->reviewer->name . ' - ' . $import->reviewer->role->name }}'"
                                 src="{{asset('/img/user').'/'.$import->reviewer->image }}"
                                 class="h-12 w-12 object-cover object-center rounded-full" />
-                                @endif
+                            @endif
                         </td>
                         <td class="px-3 py-3 text-sm flex items-center">
                             @if($import->status == 1)
                             <button title="Chỉnh sửa" v-tooltip="'Chỉnh sửa'"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Edit"
-                                onclick="">
+                                onclick="location.href='/admin/warehouse/imports/update/{{ $import->id }}'">
                                 <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                                     <path
                                         d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
@@ -142,7 +161,17 @@ $current = 10;
                                         clip-rule="evenodd"></path>
                                 </svg>
                             </button>
-                            
+                            <div class="inline-block relative group">                           
+                                <ul class="absolute hidden text-gray-700 pt-1 right-0 top-[25] group-hover:block z-50" style="margin-top: 25px;">
+                                    <li class=""><a class="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
+                                        href="{{ route('admin.warehouse.import.updateStatus', ['id' => $import->id, 'status' => 2]) }}">Duyệt nhập kho</a></li>
+                                    <li class=""><a class="rounded-b bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
+                                        href="{{ route('admin.warehouse.import.updateStatus', ['id' => $import->id, 'status' => 1]) }}">Không duyệt</a></li>
+                                </ul>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  </svg>
+                            </div>
                             @endif
                         </td>
                     </tr>
@@ -315,8 +344,7 @@ $current = 10;
         transition duration-150
         bg-black bg-opacity-50
         sm:items-center sm:justify-center
-      " id="backdrop-overlay"
-        @click="closeModal">
+      " id="backdrop-overlay" @click="closeModal">
         <transition enter-class="ease-out opacity-0 transform translate-y-1/2" enter-to-class="opacity-100"
             leave-class="ease-in opacity-100" leave-to-class="opacity-0 transform translate-y-1/2">
             <!-- Modal -->

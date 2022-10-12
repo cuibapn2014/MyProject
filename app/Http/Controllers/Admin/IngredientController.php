@@ -35,7 +35,7 @@ class IngredientController extends Controller
 
     public function getStore()
     {
-        $providers = Provider::where('status','Đang hợp tác')->get();
+        $providers = Provider::where('status', 'Đang hợp tác')->get();
         $units = UnitCalculate::all();
         $ingredientTypes = IngredientType::all();
         return view('admin.manage.ingredient.createIngredient', compact('providers', 'units', 'ingredientTypes'));
@@ -58,26 +58,31 @@ class IngredientController extends Controller
             ]
         );
 
-        if($validator->fails()){
-            return back()->withErrors($validator)->withInput();   
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
         }
 
         $ingredient = new Ingredient();
         $ingredient->Ten = $req->name;
+        $ingredient->id_ingredient_type = $req->id_ingredient_type;
+        $ingredient->id_unit = $req->id_unit;
         $ingredient->id_provider = $req->provider;
         $ingredient->GhiChu = $req->note;
+        $ingredient->Gia = $req->price;
 
         $ingredient->save();
-        foreach ($req->file('image') as $image) {
-            $photo = new Image();
-            if ($image != null) {
-                $extension = $image->getClientOriginalExtension();
-                $file_name = current(explode('.', $image->getClientOriginalName())) . '_' . time() . '.' . $extension;
-                $image->move('img', $file_name);
-                $photo->urlImage = $file_name;
-                $photo->type = 'pl';
-                $photo->id_provide = $ingredient->id;
-                $photo->save();
+        if ($req->file('image')) {
+            foreach ($req->file('image') as $image) {
+                $photo = new Image();
+                if ($image != null) {
+                    $extension = $image->getClientOriginalExtension();
+                    $file_name = current(explode('.', $image->getClientOriginalName())) . '_' . time() . '.' . $extension;
+                    $image->move('img', $file_name);
+                    $photo->urlImage = $file_name;
+                    $photo->type = 'pl';
+                    $photo->id_provide = $ingredient->id;
+                    $photo->save();
+                }
             }
         }
 
@@ -144,7 +149,8 @@ class IngredientController extends Controller
         return back()->with('success', 'Đã xóa');
     }
 
-    public function export(){
+    public function export()
+    {
         return Excel::download(new IngredientExport, 'phu_lieu.xlsx');
     }
 }

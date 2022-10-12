@@ -10245,6 +10245,1037 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/WarehouseExportComponent.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/WarehouseExportComponent.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    product_update: Object,
+    products: Array,
+    productions: Array,
+    orders: Array,
+    quick_code: String
+  },
+  computed: {
+    getPrice: function getPrice() {
+      var _this = this;
+
+      var product = this.products.find(function (item) {
+        return item.id === _this.productData.id_ingredient;
+      });
+      this.price = product != null ? product.GiaThanh : 0;
+      return this.price * parseInt(this.productData.amount);
+    }
+  },
+  mounted: function mounted() {
+    if (this.product_update != null) {
+      this.productData = this.product_update;
+    }
+  },
+  data: function data() {
+    return {
+      isModalOpen: false,
+      price: 0,
+      productData: {
+        code: this.quick_code,
+        type: 1,
+        id_ingredient: 0,
+        paid: 0,
+        amount: 1,
+        id_order: 0,
+        id_production: 0,
+        export_date: null,
+        note: null
+      }
+    };
+  },
+  methods: {
+    toggleModal: function toggleModal() {
+      this.isModalOpen = !this.isModalOpen;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/WarehouseImportComponent.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/WarehouseImportComponent.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    product_update: Object,
+    products: Array,
+    quick_code: String
+  },
+  mounted: function mounted() {
+    if (this.product_update != null) {
+      this.productData = this.product_update;
+    }
+  },
+  computed: {
+    totalPay: function totalPay() {
+      var _this = this;
+
+      var product = this.products.find(function (item) {
+        return item.id === _this.productData.id_ingredient;
+      });
+      this.price = product != null ? product.Gia : 0;
+      return this.price * parseInt(this.productData.amount);
+    }
+  },
+  data: function data() {
+    return {
+      isModalOpen: false,
+      price: 0,
+      productData: {
+        code: this.quick_code,
+        type: 1,
+        id_ingredient: 0,
+        amount: 1,
+        id_order: 0,
+        paid: 0,
+        is_pay: 0,
+        import_date: null,
+        note: null
+      }
+    };
+  },
+  methods: {
+    toggleModal: function toggleModal() {
+      this.isModalOpen = !this.isModalOpen;
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
@@ -10315,6 +11346,8 @@ Vue.component('task', (__webpack_require__(/*! ./components/TaskComponent.vue */
 Vue.component('modal-detail', (__webpack_require__(/*! ./components/ModalDetail.vue */ "./resources/js/components/ModalDetail.vue")["default"]));
 Vue.component('plan-detail', (__webpack_require__(/*! ./components/PlanDetail.vue */ "./resources/js/components/PlanDetail.vue")["default"]));
 Vue.component('plan-detail-edit', (__webpack_require__(/*! ./components/PlanDetailEdit.vue */ "./resources/js/components/PlanDetailEdit.vue")["default"]));
+Vue.component('warehouse-export', (__webpack_require__(/*! ./components/WarehouseExportComponent.vue */ "./resources/js/components/WarehouseExportComponent.vue")["default"]));
+Vue.component('warehouse-import', (__webpack_require__(/*! ./components/WarehouseImportComponent.vue */ "./resources/js/components/WarehouseImportComponent.vue")["default"]));
 window.axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
 window.axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 /**
@@ -10590,7 +11623,6 @@ var app = new Vue({
     },
     isWarehouseActive: function isWarehouseActive() {
       var arr = [2, 3, 5, 10, 14];
-      console.log(arr.includes(this.isActive));
       return arr.includes(this.isActive);
     },
     isSaleActive: function isSaleActive() {
@@ -51631,6 +52663,84 @@ component.options.__file = "resources/js/components/TaskComponent.vue"
 
 /***/ }),
 
+/***/ "./resources/js/components/WarehouseExportComponent.vue":
+/*!**************************************************************!*\
+  !*** ./resources/js/components/WarehouseExportComponent.vue ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _WarehouseExportComponent_vue_vue_type_template_id_701ebed1___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./WarehouseExportComponent.vue?vue&type=template&id=701ebed1& */ "./resources/js/components/WarehouseExportComponent.vue?vue&type=template&id=701ebed1&");
+/* harmony import */ var _WarehouseExportComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./WarehouseExportComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/WarehouseExportComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _WarehouseExportComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _WarehouseExportComponent_vue_vue_type_template_id_701ebed1___WEBPACK_IMPORTED_MODULE_0__.render,
+  _WarehouseExportComponent_vue_vue_type_template_id_701ebed1___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/WarehouseExportComponent.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/WarehouseImportComponent.vue":
+/*!**************************************************************!*\
+  !*** ./resources/js/components/WarehouseImportComponent.vue ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _WarehouseImportComponent_vue_vue_type_template_id_34838e80___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./WarehouseImportComponent.vue?vue&type=template&id=34838e80& */ "./resources/js/components/WarehouseImportComponent.vue?vue&type=template&id=34838e80&");
+/* harmony import */ var _WarehouseImportComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./WarehouseImportComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/WarehouseImportComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _WarehouseImportComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _WarehouseImportComponent_vue_vue_type_template_id_34838e80___WEBPACK_IMPORTED_MODULE_0__.render,
+  _WarehouseImportComponent_vue_vue_type_template_id_34838e80___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/WarehouseImportComponent.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/AddOrderComponent.vue?vue&type=script&lang=js&":
 /*!********************************************************************************!*\
   !*** ./resources/js/components/AddOrderComponent.vue?vue&type=script&lang=js& ***!
@@ -51804,6 +52914,38 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TaskComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TaskComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/TaskComponent.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TaskComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/WarehouseExportComponent.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/components/WarehouseExportComponent.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_WarehouseExportComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./WarehouseExportComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/WarehouseExportComponent.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_WarehouseExportComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/WarehouseImportComponent.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/components/WarehouseImportComponent.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_WarehouseImportComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./WarehouseImportComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/WarehouseImportComponent.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_WarehouseImportComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
@@ -51990,6 +53132,40 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TaskComponent_vue_vue_type_template_id_50814c9d_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TaskComponent_vue_vue_type_template_id_50814c9d_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TaskComponent.vue?vue&type=template&id=50814c9d&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/TaskComponent.vue?vue&type=template&id=50814c9d&scoped=true&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/WarehouseExportComponent.vue?vue&type=template&id=701ebed1&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/WarehouseExportComponent.vue?vue&type=template&id=701ebed1& ***!
+  \*********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_WarehouseExportComponent_vue_vue_type_template_id_701ebed1___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_WarehouseExportComponent_vue_vue_type_template_id_701ebed1___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_WarehouseExportComponent_vue_vue_type_template_id_701ebed1___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./WarehouseExportComponent.vue?vue&type=template&id=701ebed1& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/WarehouseExportComponent.vue?vue&type=template&id=701ebed1&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/WarehouseImportComponent.vue?vue&type=template&id=34838e80&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/WarehouseImportComponent.vue?vue&type=template&id=34838e80& ***!
+  \*********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_WarehouseImportComponent_vue_vue_type_template_id_34838e80___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_WarehouseImportComponent_vue_vue_type_template_id_34838e80___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_WarehouseImportComponent_vue_vue_type_template_id_34838e80___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./WarehouseImportComponent.vue?vue&type=template&id=34838e80& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/WarehouseImportComponent.vue?vue&type=template&id=34838e80&");
 
 
 /***/ }),
@@ -57192,6 +58368,1431 @@ var render = function () {
   )
 }
 var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/WarehouseExportComponent.vue?vue&type=template&id=701ebed1&":
+/*!************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/WarehouseExportComponent.vue?vue&type=template&id=701ebed1& ***!
+  \************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      staticClass:
+        "px-4 py-3 mb-8 bg-[#ffffff] rounded-lg shadow-md dark:bg-gray-800",
+    },
+    [
+      _c(
+        "div",
+        { staticClass: "flex flex-row items-center sm:flex-col flex-wrap" },
+        [
+          _c("label", { staticClass: "block text-sm mb-2 mr-4" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.productData.code,
+                  expression: "productData.code",
+                },
+              ],
+              staticClass:
+                "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          uppercase\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
+              attrs: { placeholder: "xkxxxxxx", name: "code" },
+              domProps: { value: _vm.productData.code },
+              on: {
+                input: function ($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.productData, "code", $event.target.value)
+                },
+              },
+            }),
+          ]),
+          _vm._v(" "),
+          _c("label", { staticClass: "block text-sm" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.productData.type,
+                    expression: "productData.type",
+                  },
+                ],
+                staticClass:
+                  "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n          form-select\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:focus:shadow-outline-gray\n          mb-1\n        ",
+                attrs: {
+                  name: "type",
+                  id: "type",
+                  "aria-placeholder": "Chọn loại xuất kho",
+                },
+                on: {
+                  change: function ($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function (o) {
+                        return o.selected
+                      })
+                      .map(function (o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.productData,
+                      "type",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  },
+                },
+              },
+              [
+                _c(
+                  "option",
+                  { attrs: { value: "", disabled: "", selected: "" } },
+                  [_vm._v("-- Loại xuất kho --")]
+                ),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "1" } }, [_vm._v("Sản xuất")]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "2" } }, [_vm._v("Bán hàng")]),
+              ]
+            ),
+          ]),
+          _vm._v(" "),
+          _c("label", { staticClass: "block text-sm my-2 mx-2" }, [
+            _vm._m(2),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.productData.id_ingredient,
+                    expression: "productData.id_ingredient",
+                  },
+                ],
+                staticClass:
+                  "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n          form-select\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:focus:shadow-outline-gray\n          mb-1\n        ",
+                attrs: {
+                  name: "id_ingredient",
+                  id: "id_ingredient",
+                  "aria-placeholder": "Chọn sản phẩm",
+                },
+                on: {
+                  change: function ($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function (o) {
+                        return o.selected
+                      })
+                      .map(function (o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.productData,
+                      "id_ingredient",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  },
+                },
+              },
+              [
+                _c("option", { attrs: { value: "" } }, [
+                  _vm._v("-- Chọn sản phẩm --"),
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.products, function (product) {
+                  return _c(
+                    "option",
+                    { key: product.id, domProps: { value: product.id } },
+                    [
+                      _vm._v(
+                        "\n          " + _vm._s(product.Ten) + "\n        "
+                      ),
+                    ]
+                  )
+                }),
+              ],
+              2
+            ),
+          ]),
+          _vm._v(" "),
+          _c("label", { staticClass: "block text-sm mb-2 ml-4" }, [
+            _vm._m(3),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.productData.amount,
+                  expression: "productData.amount",
+                },
+              ],
+              staticClass:
+                "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
+              attrs: {
+                placeholder: "Nhập số lượng",
+                name: "amount",
+                type: "number",
+                value: "1",
+              },
+              domProps: { value: _vm.productData.amount },
+              on: {
+                input: function ($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.productData, "amount", $event.target.value)
+                },
+              },
+            }),
+          ]),
+        ]
+      ),
+      _vm._v(" "),
+      _vm.productData.type == 2
+        ? _c(
+            "div",
+            { staticClass: "flex flex-row items-center sm:flex-col flex-wrap" },
+            [
+              _c("label", { staticClass: "block text-sm" }, [
+                _vm._m(4),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.productData.id_order,
+                        expression: "productData.id_order",
+                      },
+                    ],
+                    staticClass:
+                      "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n          form-select\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:focus:shadow-outline-gray\n          mb-1\n        ",
+                    attrs: {
+                      name: "id_order",
+                      id: "id_order",
+                      "aria-placeholder": "Chọn đơn hàng",
+                    },
+                    on: {
+                      change: function ($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function (o) {
+                            return o.selected
+                          })
+                          .map(function (o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.productData,
+                          "id_order",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      },
+                    },
+                  },
+                  [
+                    _c(
+                      "option",
+                      { attrs: { value: "", disabled: "", selected: "" } },
+                      [_vm._v("-- Đơn hàng --")]
+                    ),
+                    _vm._v(" "),
+                    _vm._l(_vm.orders, function (order) {
+                      return order.id_product == _vm.productData.id_ingredient
+                        ? _c(
+                            "option",
+                            {
+                              key: order.detail_order.order.id,
+                              domProps: { value: order.detail_order.order.id },
+                            },
+                            [
+                              _vm._v(
+                                "\n          " +
+                                  _vm._s(
+                                    order.detail_order.order.TenKhachHang +
+                                      " - " +
+                                      order.detail_order.order.SoDienThoai
+                                  ) +
+                                  "\n        "
+                              ),
+                            ]
+                          )
+                        : _vm._e()
+                    }),
+                  ],
+                  2
+                ),
+              ]),
+              _vm._v(" "),
+              _c("label", { staticClass: "block text-sm mb-2 ml-4" }, [
+                _c(
+                  "span",
+                  { staticClass: "text-gray-700 dark:text-gray-400" },
+                  [_vm._v("Đơn giá")]
+                ),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass:
+                    "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
+                  attrs: {
+                    placeholder: "Đơn giá",
+                    step: "100",
+                    min: "0",
+                    type: "number",
+                  },
+                  domProps: { value: this.price },
+                }),
+              ]),
+              _vm._v(" "),
+              _c(
+                "label",
+                { staticClass: "block text-sm mb-2 max-w-xs lg:ml-4" },
+                [
+                  _c(
+                    "span",
+                    { staticClass: "text-gray-700 dark:text-gray-400" },
+                    [_vm._v("Tổng thanh toán")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    staticClass:
+                      "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
+                    attrs: { readonly: "", type: "text" },
+                    domProps: { value: _vm.getPrice.toLocaleString() + " đ" },
+                  }),
+                ]
+              ),
+              _vm._v(" "),
+              _c("label", { staticClass: "block text-sm mb-2 max-w-xs ml-2" }, [
+                _c(
+                  "span",
+                  { staticClass: "text-gray-700 dark:text-gray-400" },
+                  [_vm._v("Đã thanh toán")]
+                ),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.productData.paid,
+                      expression: "productData.paid",
+                    },
+                  ],
+                  staticClass:
+                    "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
+                  attrs: {
+                    placeholder: "Nhập số tiền đã thanh toán",
+                    name: "paid",
+                    type: "number",
+                    min: "0",
+                    max: _vm.getPrice,
+                  },
+                  domProps: { value: _vm.productData.paid },
+                  on: {
+                    input: function ($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.productData, "paid", $event.target.value)
+                    },
+                  },
+                }),
+              ]),
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.productData.type == 1
+        ? _c("label", { staticClass: "block text-sm" }, [
+            _vm._m(5),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.productData.id_production,
+                    expression: "productData.id_production",
+                  },
+                ],
+                staticClass:
+                  "\n        block\n        w-full\n        mt-1\n        text-sm\n        dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n        form-select\n        focus:border-purple-400 focus:outline-none focus:shadow-outline-purple\n        dark:focus:shadow-outline-gray\n        mb-1\n      ",
+                attrs: {
+                  name: "id_production",
+                  id: "id_production",
+                  "aria-placeholder": "Chọn lệnh sản xuất",
+                },
+                on: {
+                  change: function ($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function (o) {
+                        return o.selected
+                      })
+                      .map(function (o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.productData,
+                      "id_production",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  },
+                },
+              },
+              [
+                _c(
+                  "option",
+                  { attrs: { value: "", disabled: "", selected: "" } },
+                  [_vm._v("-- Lệnh sản xuất --")]
+                ),
+                _vm._v(" "),
+                _vm._l(_vm.productions, function (production) {
+                  return _c(
+                    "option",
+                    { key: production.id, domProps: { value: production.id } },
+                    [
+                      _vm._v(
+                        "\n        " +
+                          _vm._s(
+                            production.code + " - " + production.product.Ten
+                          ) +
+                          "\n      "
+                      ),
+                    ]
+                  )
+                }),
+              ],
+              2
+            ),
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("label", { staticClass: "block text-sm my-2" }, [
+        _vm._m(6),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.productData.export_date,
+              expression: "productData.export_date",
+            },
+          ],
+          staticClass:
+            "\n        block\n        w-full\n        mt-1\n        text-sm\n        dark:border-gray-600\n        max-w-xs\n        dark:bg-gray-700\n        focus:border-purple-400 focus:outline-none focus:shadow-outline-purple\n        dark:text-gray-300 dark:focus:shadow-outline-gray\n        form-input\n      ",
+          attrs: {
+            placeholder: "Ngày nhập kho",
+            name: "export_date",
+            type: "date",
+          },
+          domProps: { value: _vm.productData.export_date },
+          on: {
+            input: function ($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.productData, "export_date", $event.target.value)
+            },
+          },
+        }),
+      ]),
+      _vm._v(" "),
+      _c("label", { staticClass: "block mt-4 text-sm" }, [
+        _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
+          _vm._v("Ghi chú"),
+        ]),
+        _vm._v(" "),
+        _c("textarea", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.productData.note,
+              expression: "productData.note",
+            },
+          ],
+          staticClass:
+            "\n        block\n        w-full\n        mt-1\n        text-sm\n        dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n        form-textarea\n        focus:border-purple-400 focus:outline-none focus:shadow-outline-purple\n        dark:focus:shadow-outline-gray\n      ",
+          attrs: { rows: "3", placeholder: "Nhập ghi chú", name: "note" },
+          domProps: { value: _vm.productData.note },
+          on: {
+            input: function ($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.productData, "note", $event.target.value)
+            },
+          },
+        }),
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "flex justify-end" }, [
+        _c(
+          "button",
+          {
+            staticClass:
+              "mt-4 text-white px-4 py-2 rounded-md border-0 bg-indigo-600 mx-2",
+          },
+          [
+            _vm._v(
+              "\n      " +
+                _vm._s(this.product_update == null ? "Xuất kho" : "Cập nhật") +
+                "\n    "
+            ),
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            staticClass:
+              "\n        mt-4\n        text-white\n        px-4\n        py-2\n        rounded-md\n        border-0\n        bg-indigo-600\n        cursor-pointer\n      ",
+            on: {
+              click: function ($event) {
+                $event.preventDefault()
+                return _vm.toggleModal.apply(null, arguments)
+              },
+            },
+          },
+          [_vm._v("Quay về")]
+        ),
+      ]),
+      _vm._v(" "),
+      _c(
+        "transition",
+        {
+          attrs: {
+            "enter-class": "ease-out opacity-0",
+            "enter-to-class": "opacity-100",
+            "leave-class": "ease-in opacity-100",
+            "leave-to-class": "opacity-0",
+          },
+        },
+        [
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: this.isModalOpen,
+                  expression: "this.isModalOpen",
+                },
+              ],
+              staticClass:
+                "\n        fixed\n        inset-0\n        z-30\n        flex\n        items-end\n        transition\n        duration-150\n        bg-black bg-opacity-50\n        sm:items-center sm:justify-center\n      ",
+              attrs: { id: "backdrop-overlay" },
+              on: {
+                click: function ($event) {
+                  $event.preventDefault()
+                  return _vm.toggleModal.apply(null, arguments)
+                },
+              },
+            },
+            [
+              _c(
+                "transition",
+                {
+                  attrs: {
+                    "enter-class":
+                      "ease-out opacity-0 transform translate-y-1/2",
+                    "enter-to-class": "opacity-100",
+                    "leave-class": "ease-in opacity-100",
+                    "leave-to-class": "opacity-0 transform translate-y-1/2",
+                  },
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: this.isModalOpen,
+                          expression: "this.isModalOpen",
+                        },
+                      ],
+                      staticClass:
+                        "\n            w-full\n            px-6\n            py-4\n            overflow-hidden\n            bg-[#ffffff]\n            rounded-t-lg\n            duration-150\n            dark:bg-gray-800\n            sm:rounded-lg sm:m-4 sm:max-w-xl\n          ",
+                      attrs: { role: "dialog", id: "modal" },
+                      on: {
+                        click: function ($event) {
+                          $event.stopPropagation()
+                        },
+                      },
+                    },
+                    [
+                      _c("header", { staticClass: "flex justify-end" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "\n                inline-flex\n                items-center\n                justify-center\n                w-6\n                h-6\n                text-gray-400\n                transition-colors\n                duration-150\n                rounded\n                dark:hover:text-gray-200\n                hover: hover:text-gray-700\n              ",
+                            attrs: { "aria-label": "close" },
+                            on: {
+                              click: function ($event) {
+                                $event.preventDefault()
+                                return _vm.toggleModal.apply(null, arguments)
+                              },
+                            },
+                          },
+                          [
+                            _c(
+                              "svg",
+                              {
+                                staticClass: "w-4 h-4",
+                                attrs: {
+                                  fill: "currentColor",
+                                  viewBox: "0 0 20 20",
+                                  role: "img",
+                                  "aria-hidden": "true",
+                                },
+                              },
+                              [
+                                _c("path", {
+                                  attrs: {
+                                    d: "M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z",
+                                    "clip-rule": "evenodd",
+                                    "fill-rule": "evenodd",
+                                  },
+                                }),
+                              ]
+                            ),
+                          ]
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mt-4 mb-6" }, [
+                        _c(
+                          "p",
+                          {
+                            staticClass:
+                              "\n                mb-2\n                text-lg\n                font-semibold\n                text-gray-700\n                dark:text-gray-300\n              ",
+                          },
+                          [_vm._v("\n              Quay về\n            ")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "p",
+                          {
+                            staticClass:
+                              "text-sm text-gray-700 dark:text-gray-400",
+                          },
+                          [
+                            _vm._v(
+                              "\n              Bạn có chắc chắn muốn quay về ?\n            "
+                            ),
+                          ]
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "footer",
+                        {
+                          staticClass:
+                            "\n              flex flex-col\n              items-center\n              justify-end\n              px-6\n              py-3\n              -mx-6\n              -mb-4\n              space-y-4\n              sm:space-y-0 sm:space-x-6 sm:flex-row\n              bg-gray-50\n              dark:bg-gray-800\n            ",
+                        },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "\n                w-full\n                px-5\n                py-3\n                text-sm\n                font-medium\n                leading-5\n                text-white\n                transition-colors\n                duration-150\n                bg-purple-600\n                border border-transparent\n                rounded-lg\n                sm:w-auto sm:px-4 sm:py-2\n                active:bg-purple-600\n                hover:bg-purple-700\n                focus:outline-none focus:shadow-outline-purple\n              ",
+                              attrs: {
+                                type: "button",
+                                onclick:
+                                  "location.href='/admin/warehouse/exports'",
+                              },
+                            },
+                            [_vm._v("\n              Chắc chắn\n            ")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "\n                w-full\n                px-5\n                py-3\n                text-sm\n                font-medium\n                leading-5\n                text-gray-700\n                transition-colors\n                duration-150\n                border border-gray-300\n                rounded-lg\n                dark:text-gray-400\n                sm:px-4 sm:py-2 sm:w-auto\n                active:bg-transparent\n                hover:border-gray-500\n                focus:border-gray-500\n                active:text-gray-500\n                focus:outline-none focus:shadow-outline-gray\n              ",
+                              on: {
+                                click: function ($event) {
+                                  $event.preventDefault()
+                                  return _vm.toggleModal.apply(null, arguments)
+                                },
+                              },
+                            },
+                            [_vm._v("\n              Hủy bỏ\n            ")]
+                          ),
+                        ]
+                      ),
+                    ]
+                  ),
+                ]
+              ),
+            ],
+            1
+          ),
+        ]
+      ),
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
+      _vm._v("Mã xuất kho"),
+      _c("span", { staticClass: "text-red-500" }, [_vm._v("*")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
+      _vm._v("Loại xuất kho "),
+      _c("span", { staticClass: "text-red-500" }, [_vm._v("*")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
+      _vm._v("Sản phẩm"),
+      _c("span", { staticClass: "text-red-500" }, [_vm._v("*")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
+      _vm._v("Số lượng"),
+      _c("span", { staticClass: "text-red-500" }, [_vm._v("*")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
+      _vm._v("Đơn hàng "),
+      _c("span", { staticClass: "text-red-500" }, [_vm._v("*")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
+      _vm._v("Lệnh sản xuất "),
+      _c("span", { staticClass: "text-red-500" }, [_vm._v("*")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
+      _vm._v("Ngày xuất kho"),
+      _c("span", { staticClass: "text-red-500" }, [_vm._v("*")]),
+    ])
+  },
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/WarehouseImportComponent.vue?vue&type=template&id=34838e80&":
+/*!************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/WarehouseImportComponent.vue?vue&type=template&id=34838e80& ***!
+  \************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c(
+        "div",
+        { staticClass: "flex flex-row items-center sm:flex-col flex-wrap" },
+        [
+          _c("label", { staticClass: "block text-sm mb-2 mr-4" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.productData.code,
+                  expression: "productData.code",
+                },
+              ],
+              staticClass:
+                "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          uppercase\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
+              attrs: { placeholder: "NKxxxxxx", name: "code" },
+              domProps: { value: _vm.productData.code },
+              on: {
+                input: function ($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.productData, "code", $event.target.value)
+                },
+              },
+            }),
+          ]),
+          _vm._v(" "),
+          _c("label", { staticClass: "block text-sm" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.productData.type,
+                    expression: "productData.type",
+                  },
+                ],
+                staticClass:
+                  "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n          form-select\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:focus:shadow-outline-gray\n          mb-1\n        ",
+                attrs: {
+                  name: "type",
+                  id: "type",
+                  "aria-placeholder": "Chọn đơn hàng",
+                },
+                on: {
+                  change: function ($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function (o) {
+                        return o.selected
+                      })
+                      .map(function (o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.productData,
+                      "type",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  },
+                },
+              },
+              [
+                _c(
+                  "option",
+                  { attrs: { value: "", disabled: "", selected: "" } },
+                  [_vm._v("-- Loại nhập kho --")]
+                ),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "1", selected: "" } }, [
+                  _vm._v("Nguyên phụ liệu"),
+                ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "2" } }, [
+                  _vm._v("Thành phẩm sản xuất"),
+                ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "3" } }, [_vm._v("Phế phẩm")]),
+              ]
+            ),
+          ]),
+          _vm._v(" "),
+          _c("label", { staticClass: "block text-sm my-2 mx-2" }, [
+            _vm._m(2),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.productData.id_ingredient,
+                    expression: "productData.id_ingredient",
+                  },
+                ],
+                staticClass:
+                  "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n          form-select\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:focus:shadow-outline-gray\n          mb-1\n        ",
+                attrs: {
+                  name: "id_ingredient",
+                  id: "id_ingredient",
+                  "aria-placeholder": "Chọn nguyên phụ liệu",
+                },
+                on: {
+                  change: function ($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function (o) {
+                        return o.selected
+                      })
+                      .map(function (o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.productData,
+                      "id_ingredient",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  },
+                },
+              },
+              [
+                _c("option", { attrs: { value: "" } }, [
+                  _vm._v("-- Chọn nguyên phụ liệu --"),
+                ]),
+                _vm._v(" "),
+                _vm._l(this.products, function (product) {
+                  return _c(
+                    "option",
+                    { key: product.id, domProps: { value: product.id } },
+                    [
+                      _vm._v(
+                        "\n          " + _vm._s(product.Ten) + "\n        "
+                      ),
+                    ]
+                  )
+                }),
+              ],
+              2
+            ),
+          ]),
+          _vm._v(" "),
+          _c("label", { staticClass: "block text-sm mb-2 ml-4" }, [
+            _vm._m(3),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.productData.amount,
+                  expression: "productData.amount",
+                },
+              ],
+              staticClass:
+                "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
+              attrs: {
+                placeholder: "Nhập số lượng",
+                name: "amount",
+                type: "number",
+              },
+              domProps: { value: _vm.productData.amount },
+              on: {
+                input: function ($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.productData, "amount", $event.target.value)
+                },
+              },
+            }),
+          ]),
+          _vm._v(" "),
+          _vm.productData.type == 1
+            ? _c("label", { staticClass: "block text-sm mb-2 ml-4" }, [
+                _c(
+                  "span",
+                  { staticClass: "text-gray-700 dark:text-gray-400" },
+                  [_vm._v("Đơn giá")]
+                ),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass:
+                    "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
+                  attrs: { readonly: "", placeholder: "Đơn giá", type: "text" },
+                  domProps: { value: this.price.toLocaleString() + " đ" },
+                }),
+              ])
+            : _vm._e(),
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "flex flex-row items-center sm:flex-col flex-wrap" },
+        [
+          _vm.productData.type == 1
+            ? _c("label", { staticClass: "block text-sm mb-2 max-w-xs" }, [
+                _c(
+                  "span",
+                  { staticClass: "text-gray-700 dark:text-gray-400" },
+                  [_vm._v("Tổng thanh toán")]
+                ),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass:
+                    "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
+                  attrs: { readonly: "", type: "text" },
+                  domProps: { value: _vm.totalPay.toLocaleString() + " đ" },
+                }),
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.productData.type == 1
+            ? _c("label", { staticClass: "block text-sm mb-2 max-w-xs ml-2" }, [
+                _c(
+                  "span",
+                  { staticClass: "text-gray-700 dark:text-gray-400" },
+                  [_vm._v("Đã thanh toán")]
+                ),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.productData.paid,
+                      expression: "productData.paid",
+                    },
+                  ],
+                  staticClass:
+                    "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
+                  attrs: {
+                    placeholder: "Nhập số tiền đã thanh toán",
+                    name: "paid",
+                    type: "number",
+                    max: _vm.totalPay,
+                  },
+                  domProps: { value: _vm.productData.paid },
+                  on: {
+                    input: function ($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.productData, "paid", $event.target.value)
+                    },
+                  },
+                }),
+              ])
+            : _vm._e(),
+        ]
+      ),
+      _vm._v(" "),
+      _c("label", { staticClass: "block text-sm mb-2" }, [
+        _vm._m(4),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.productData.import_date,
+              expression: "productData.import_date",
+            },
+          ],
+          staticClass:
+            "\n        block\n        w-full\n        mt-1\n        text-sm\n        dark:border-gray-600\n        max-w-xs\n        dark:bg-gray-700\n        focus:border-purple-400 focus:outline-none focus:shadow-outline-purple\n        dark:text-gray-300 dark:focus:shadow-outline-gray\n        form-input\n      ",
+          attrs: {
+            placeholder: "Ngày nhập kho",
+            name: "import_date",
+            type: "date",
+          },
+          domProps: { value: _vm.productData.import_date },
+          on: {
+            input: function ($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.productData, "import_date", $event.target.value)
+            },
+          },
+        }),
+      ]),
+      _vm._v(" "),
+      _c("label", { staticClass: "block mt-4 text-sm" }, [
+        _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
+          _vm._v("Ghi chú"),
+        ]),
+        _vm._v(" "),
+        _c("textarea", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.productData.note,
+              expression: "productData.note",
+            },
+          ],
+          staticClass:
+            "\n        block\n        w-full\n        mt-1\n        text-sm\n        dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n        form-textarea\n        focus:border-purple-400 focus:outline-none focus:shadow-outline-purple\n        dark:focus:shadow-outline-gray\n      ",
+          attrs: { rows: "3", placeholder: "Nhập ghi chú", name: "note" },
+          domProps: { value: _vm.productData.note },
+          on: {
+            input: function ($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.productData, "note", $event.target.value)
+            },
+          },
+        }),
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "py-2 flex items-center" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.productData.is_pay,
+              expression: "productData.is_pay",
+            },
+          ],
+          staticClass:
+            "w-4 h-4 accent-indigo-600 rounded-md checked:bg-indigo-400",
+          attrs: { type: "checkbox", name: "is_pay", id: "is_pay" },
+          domProps: {
+            checked: Array.isArray(_vm.productData.is_pay)
+              ? _vm._i(_vm.productData.is_pay, null) > -1
+              : _vm.productData.is_pay,
+          },
+          on: {
+            change: function ($event) {
+              var $$a = _vm.productData.is_pay,
+                $$el = $event.target,
+                $$c = $$el.checked ? true : false
+              if (Array.isArray($$a)) {
+                var $$v = null,
+                  $$i = _vm._i($$a, $$v)
+                if ($$el.checked) {
+                  $$i < 0 &&
+                    _vm.$set(_vm.productData, "is_pay", $$a.concat([$$v]))
+                } else {
+                  $$i > -1 &&
+                    _vm.$set(
+                      _vm.productData,
+                      "is_pay",
+                      $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                    )
+                }
+              } else {
+                _vm.$set(_vm.productData, "is_pay", $$c)
+              }
+            },
+          },
+        }),
+        _vm._v(" "),
+        _c(
+          "label",
+          {
+            staticClass: "mx-1 text-[#ffffff] lg:text-black dark:text-gray-200",
+            attrs: { for: "is_pay" },
+          },
+          [_vm._v("Đã thanh toán (Bỏ qua nếu không phải nhập nguyên phụ liệu)")]
+        ),
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "flex justify-start" }, [
+        _c(
+          "button",
+          {
+            staticClass:
+              "mt-4 text-white px-4 py-2 rounded-md border-0 bg-indigo-600 mx-2",
+          },
+          [_vm._v("\n      Lưu\n    ")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass:
+              "\n        mt-4\n        text-white\n        px-4\n        py-2\n        rounded-md\n        border-0\n        bg-indigo-600\n        cursor-pointer\n      ",
+            attrs: { type: "button" },
+            on: {
+              click: function ($event) {
+                $event.preventDefault()
+                return _vm.toggleModal.apply(null, arguments)
+              },
+            },
+          },
+          [_vm._v("\n      Quay về\n    ")]
+        ),
+      ]),
+      _vm._v(" "),
+      _c(
+        "transition",
+        {
+          attrs: {
+            "enter-class": "ease-out opacity-0",
+            "enter-to-class": "opacity-100",
+            "leave-class": "ease-in opacity-100",
+            "leave-to-class": "opacity-0",
+          },
+        },
+        [
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: this.isModalOpen,
+                  expression: "this.isModalOpen",
+                },
+              ],
+              staticClass:
+                "\n        fixed\n        inset-0\n        z-30\n        flex\n        items-end\n        transition\n        duration-150\n        bg-black bg-opacity-50\n        sm:items-center sm:justify-center\n      ",
+              attrs: { id: "backdrop-overlay" },
+              on: {
+                click: function ($event) {
+                  $event.preventDefault()
+                  return _vm.toggleModal.apply(null, arguments)
+                },
+              },
+            },
+            [
+              _c(
+                "transition",
+                {
+                  attrs: {
+                    "enter-class":
+                      "ease-out opacity-0 transform translate-y-1/2",
+                    "enter-to-class": "opacity-100",
+                    "leave-class": "ease-in opacity-100",
+                    "leave-to-class": "opacity-0 transform translate-y-1/2",
+                  },
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: this.isModalOpen,
+                          expression: "this.isModalOpen",
+                        },
+                      ],
+                      staticClass:
+                        "\n            w-full\n            px-6\n            py-4\n            overflow-hidden\n            bg-[#ffffff]\n            rounded-t-lg\n            duration-150\n            dark:bg-gray-800\n            sm:rounded-lg sm:m-4 sm:max-w-xl\n          ",
+                      attrs: { role: "dialog", id: "modal" },
+                      on: {
+                        click: function ($event) {
+                          $event.stopPropagation()
+                        },
+                      },
+                    },
+                    [
+                      _c("header", { staticClass: "flex justify-end" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "\n                inline-flex\n                items-center\n                justify-center\n                w-6\n                h-6\n                text-gray-400\n                transition-colors\n                duration-150\n                rounded\n                dark:hover:text-gray-200\n                hover: hover:text-gray-700\n              ",
+                            attrs: { "aria-label": "close" },
+                            on: {
+                              click: function ($event) {
+                                $event.preventDefault()
+                                return _vm.toggleModal.apply(null, arguments)
+                              },
+                            },
+                          },
+                          [
+                            _c(
+                              "svg",
+                              {
+                                staticClass: "w-4 h-4",
+                                attrs: {
+                                  fill: "currentColor",
+                                  viewBox: "0 0 20 20",
+                                  role: "img",
+                                  "aria-hidden": "true",
+                                },
+                              },
+                              [
+                                _c("path", {
+                                  attrs: {
+                                    d: "M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z",
+                                    "clip-rule": "evenodd",
+                                    "fill-rule": "evenodd",
+                                  },
+                                }),
+                              ]
+                            ),
+                          ]
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mt-4 mb-6" }, [
+                        _c(
+                          "p",
+                          {
+                            staticClass:
+                              "\n                mb-2\n                text-lg\n                font-semibold\n                text-gray-700\n                dark:text-gray-300\n              ",
+                          },
+                          [_vm._v("\n              Quay về\n            ")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "p",
+                          {
+                            staticClass:
+                              "text-sm text-gray-700 dark:text-gray-400",
+                          },
+                          [
+                            _vm._v(
+                              "\n              Bạn có chắc chắn muốn quay về ?\n            "
+                            ),
+                          ]
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "footer",
+                        {
+                          staticClass:
+                            "\n              flex flex-col\n              items-center\n              justify-end\n              px-6\n              py-3\n              -mx-6\n              -mb-4\n              space-y-4\n              sm:space-y-0 sm:space-x-6 sm:flex-row\n              bg-gray-50\n              dark:bg-gray-800\n            ",
+                        },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "\n                w-full\n                px-5\n                py-3\n                text-sm\n                font-medium\n                leading-5\n                text-white\n                transition-colors\n                duration-150\n                bg-purple-600\n                border border-transparent\n                rounded-lg\n                sm:w-auto sm:px-4 sm:py-2\n                active:bg-purple-600\n                hover:bg-purple-700\n                focus:outline-none focus:shadow-outline-purple\n              ",
+                              attrs: {
+                                type: "button",
+                                onclick:
+                                  "location.href='/admin/warehouse/imports'",
+                              },
+                            },
+                            [_vm._v("\n              Chắc chắn\n            ")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "\n                w-full\n                px-5\n                py-3\n                text-sm\n                font-medium\n                leading-5\n                text-gray-700\n                transition-colors\n                duration-150\n                border border-gray-300\n                rounded-lg\n                dark:text-gray-400\n                sm:px-4 sm:py-2 sm:w-auto\n                active:bg-transparent\n                hover:border-gray-500\n                focus:border-gray-500\n                active:text-gray-500\n                focus:outline-none focus:shadow-outline-gray\n              ",
+                              on: {
+                                click: function ($event) {
+                                  $event.preventDefault()
+                                  return _vm.toggleModal.apply(null, arguments)
+                                },
+                              },
+                            },
+                            [_vm._v("\n              Hủy bỏ\n            ")]
+                          ),
+                        ]
+                      ),
+                    ]
+                  ),
+                ]
+              ),
+            ],
+            1
+          ),
+        ]
+      ),
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
+      _vm._v("Mã nhập kho"),
+      _c("span", { staticClass: "text-red-500" }, [_vm._v("*")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
+      _vm._v("Loại nhập kho "),
+      _c("span", { staticClass: "text-red-500" }, [_vm._v("*")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
+      _vm._v("Nguyên phụ liệu"),
+      _c("span", { staticClass: "text-red-500" }, [_vm._v("*")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
+      _vm._v("Số lượng"),
+      _c("span", { staticClass: "text-red-500" }, [_vm._v("*")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
+      _vm._v("Ngày nhập kho"),
+      _c("span", { staticClass: "text-red-500" }, [_vm._v("*")]),
+    ])
+  },
+]
 render._withStripped = true
 
 

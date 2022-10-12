@@ -161,17 +161,31 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
     });
 
     $route->group(['prefix' => 'warehouse'], function ($route) {
-        $route->get('/imports', [WarehouseImportController::class, 'index'])->name('admin.warehouse.import.index');
-        $route->get('/exports', [WarehouseExportController::class, 'index'])->name('admin.warehouse.export.index');
-        $route->get('/create', [WarehouseController::class, 'create'])->name('admin.warehouse.create');
-        $route->post('/create', [WarehouseController::class, 'store'])->name('admin.warehouse.request.create');
+        $route->group(['prefix' => 'imports'], function ($route) {
+            $route->get('/', [WarehouseImportController::class, 'index'])->name('admin.warehouse.import.index');
+            $route->get('/create', [WarehouseImportController::class, 'create'])->name('admin.warehouse.import.create');
+            $route->post('/create', [WarehouseImportController::class, 'store'])->name('admin.warehouse.import.store');
+            $route->get('/update/{id}', [WarehouseImportController::class, 'edit'])->name('admin.warehouse.import.edit');
+            $route->post('/update/{id}', [WarehouseImportController::class, 'update'])->name('admin.warehouse.import.update');
+            $route->get('/update-status/{id}/{status}', [WarehouseImportController::class, 'updateStatus'])->name('admin.warehouse.import.updateStatus');
+        });
+
+        $route->group(['prefix' => 'exports'], function ($route) {
+            $route->get('/', [WarehouseExportController::class, 'index'])->name('admin.warehouse.export.index');
+            $route->get('/create', [WarehouseExportController::class, 'create'])->name('admin.warehouse.export.create');
+            $route->post('/create', [WarehouseExportController::class, 'store'])->name('admin.warehouse.export.store');
+            $route->get('/update/{id}', [WarehouseExportController::class, 'edit'])->name('admin.warehouse.export.edit');
+            $route->post('/update/{id}', [WarehouseExportController::class, 'update'])->name('admin.warehouse.export.update');
+            $route->get('/update-status/{id}/{status}', [WarehouseExportController::class, 'updateStatus'])->name('admin.warehouse.export.updateStatus');
+        });
+
         // $route->get('/update/{id}', [ProductionRequestController::class, 'edit'])->name('admin.production.update');
         // $route->post('/update/{id}', [ProductionRequestController::class, 'update'])->name('admin.production.request.update');
         // $route->get('/delete/{id}', [ProductionRequestController::class, 'destroy'])->name('admin.production.delete');
         // $route->post('/update-completed', [ProductionRequestController::class, 'updateCompleted'])->name('admin.productionCompleted.request.update');
         // $route->get('/export', [ProductionRequestController::class, 'export'])->name('admin.production.export');
     });
-    
+
     $route->group(['prefix' => 'plan-ingredient'], function ($route) {
         $route->get('/create/{id_product}', [PlanIngredientController::class, 'create'])->name('admin.planIngredient.create');
     });

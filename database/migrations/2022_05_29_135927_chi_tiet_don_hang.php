@@ -14,7 +14,7 @@ class ChiTietDonHang extends Migration
     public function up()
     {
         //
-        Schema::create('chi_tiet_don_hang', function(Blueprint $table){
+        Schema::create('detail_orders', function(Blueprint $table){
             $table->id();
             $table->string('TenSP')->nullable();
             $table->integer('id_DanhMuc');
@@ -38,6 +38,6 @@ class ChiTietDonHang extends Migration
     public function down()
     {
         //
-        Schema::dropIfExists('chi_tiet_don_hang');
+        Schema::dropIfExists('detail_orders');
     }
 }

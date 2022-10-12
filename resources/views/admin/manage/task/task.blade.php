@@ -3,7 +3,7 @@
 @section('main')
 @php
 $current = 4;
-$role = auth()->user()->role;
+$role = auth()->user()->id_role;
 @endphp
 
 <div class="container px-6 mx-auto grid">

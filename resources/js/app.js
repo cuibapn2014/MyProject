@@ -45,6 +45,8 @@ Vue.component('task', require('./components/TaskComponent.vue').default);
 Vue.component('modal-detail', require('./components/ModalDetail.vue').default);
 Vue.component('plan-detail', require('./components/PlanDetail.vue').default);
 Vue.component('plan-detail-edit', require('./components/PlanDetailEdit.vue').default);
+Vue.component('warehouse-export', require('./components/WarehouseExportComponent.vue').default);
+Vue.component('warehouse-import', require('./components/WarehouseImportComponent.vue').default);
 
 
 

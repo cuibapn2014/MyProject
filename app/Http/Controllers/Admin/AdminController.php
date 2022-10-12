@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Cost;
 use App\Models\Customer;
 use App\Models\DetailOrder;
+use App\Models\WarehouseExport;
 use Illuminate\Support\Facades\File;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -18,11 +19,11 @@ class AdminController extends Controller
     //
     public function index()
     {
-        $revenue = DetailOrder::selectRaw('sum(TienCoc + ThanhToanBS) as total')->first();
+        $revenue = WarehouseExport::selectRaw('sum(paid) as total')->first();
         $countOrder = Order::selectRaw('count(id) as total')->first();
         $countClient = Customer::all();
-        $debt = Order::selectRaw('sum(orders.TongTien - detail_orders.TienCoc - detail_orders.ThanhToanBS) as debt')
-        ->join('detail_orders', 'orders.id', '=', 'detail_orders.id_DonHang')
+        $debt = WarehouseExport::selectRaw('(sum(ingredients.GiaThanh * warehouse_exports.amount - warehouse_exports.paid)) as debt')
+        ->join('ingredients', 'warehouse_exports.id_ingredient', 'ingredients.id')
         ->get();
         return view('admin.home',['revenue' => $revenue,'countOrder' => $countOrder,'countClient' => $countClient,'debt' => $debt]);
     }
@@ -84,9 +85,9 @@ class AdminController extends Controller
     }
 
     public function getRevenue(){
-        return Order::selectRaw('month(don_hang.created_at) as month, sum(chi_tiet_don_hang.TienCoc + chi_tiet_don_hang.ThanhToanBS) as total')
-        ->join('chi_tiet_don_hang', 'don_hang.id', '=', 'chi_tiet_don_hang.id_DonHang')
-        ->whereYear('don_hang.created_at', date('Y'))
+        return Order::selectRaw('month(orders.created_at) as month, sum(warehouse_exports.paid) as total')
+        ->join('warehouse_exports', 'orders.id', 'id_order')
+        ->whereYear('orders.created_at', date('Y'))
         ->groupBy('month')
         ->orderBy('month','asc')
         ->get();
@@ -99,9 +100,10 @@ class AdminController extends Controller
     }
 
     public function getDebt(){
-        return Order::selectRaw('month(don_hang.created_at) as month, sum(don_hang.TongTien) as total, sum(don_hang.TongTien - chi_tiet_don_hang.TienCoc - chi_tiet_don_hang.ThanhToanBS) as debt')
-        ->join('chi_tiet_don_hang', 'don_hang.id', '=', 'chi_tiet_don_hang.id_DonHang')
-        ->whereYear('don_hang.created_at', date('Y'))
+        return Order::selectRaw('month(orders.created_at) as month, sum(warehouse_exports.paid) as total, (sum(ingredients.GiaThanh * warehouse_exports.amount - warehouse_exports.paid)) as debt')
+        ->join('warehouse_exports', 'orders.id', 'id_order')
+        ->join('ingredients', 'warehouse_exports.id_ingredient', 'ingredients.id')
+        ->whereYear('orders.created_at', date('Y'))
         ->groupBy('month')
         ->orderBy('month','asc')
         ->get();

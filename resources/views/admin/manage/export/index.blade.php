@@ -15,7 +15,7 @@ $current = 14;
     <p class="p-2 rounded-md my-2 bg-red-100 text-red-400 text-sm">{{ $message }}</p>
     @enderror
     <div class="flex justify-end py-2">
-        <button onclick=""
+        <button onclick="location.href='{{ route('admin.warehouse.export.create') }}'"
             class="flex items-center px-2 py-2 mx-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border-0 rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
             Thêm mới
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -40,12 +40,12 @@ $current = 14;
                     <tr
                         class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 sticky top-0">
                         <th class="px-3 py-3 font-bold">#</th>
-                        <th class="px-2 py-3">Mã nhập kho</th>
+                        <th class="px-2 py-3">Mã xuất kho</th>
                         <th class="px-3 py-3">Loại</th>
                         <th class="px-3 py-3">Sản phẩm</th>
                         <th class="px-3 py-3">Số lượng</th>
                         <th class="px-3 py-3">Ghi chú</th>
-                        <th class="px-3 py-3">Ngày nhập</th>
+                        <th class="px-3 py-3">Ngày xuất</th>
                         <th class="px-3 py-3">Trạng thái</th>
                         <th class="px-3 py-3">Người yêu cầu</th>
                         <th class="px-3 py-3">Người xét duyệt</th>
@@ -99,6 +99,12 @@ $current = 14;
                                 Đã duyệt
                             </span>
                             @break
+                            @default
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-red-100 text-red-700 dark:bg-red-600">
+                                Không duyệt
+                            </span>
+                            @break
                             @endswitch
                         </td>
                         <td class="px-3 py-3 text-sm">
@@ -118,7 +124,7 @@ $current = 14;
                             <button title="Chỉnh sửa" v-tooltip="'Chỉnh sửa'"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Edit"
-                                onclick="">
+                                onclick="location.href='{{ route('admin.warehouse.export.update', ['id' => $export->id]) }}'">
                                 <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                                     <path
                                         d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
@@ -134,7 +140,17 @@ $current = 14;
                                         clip-rule="evenodd"></path>
                                 </svg>
                             </button>
-                            
+                            <div class="inline-block relative group">                           
+                                <ul class="absolute hidden text-gray-700 pt-1 right-0 top-[25] group-hover:block z-50" style="margin-top: 25px;">
+                                    <li class=""><a class="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
+                                            href="{{ route('admin.warehouse.export.updateStatus', ['id' => $export->id, 'status' => 2]) }}">Duyệt xuất kho</a></li>
+                                    <li class=""><a class="rounded-b bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
+                                        href="{{ route('admin.warehouse.export.updateStatus', ['id' => $export->id, 'status' => 1]) }}">Không duyệt</a></li>
+                                </ul>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  </svg>
+                            </div>
                             @endif
                         </td>
                     </tr>

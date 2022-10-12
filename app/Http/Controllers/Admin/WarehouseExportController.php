@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\WarehouseExportRequest;
+use App\Models\Ingredient;
+use App\Models\Production;
+use App\Models\ProductionRequest;
 use App\Models\WarehouseExport;
 use Illuminate\Http\Request;
 
@@ -20,15 +24,29 @@ class WarehouseExportController extends Controller
         return view('admin.manage.export.index', compact('exports'));
     }
 
+    public function create()
+    {
+        $products = Ingredient::all(); 
+        $orders = ProductionRequest::with(['detail_order','detail_order.order'])->get();
+        $productions = Production::all();
+        $count = WarehouseExport::count() + 1;
+        $code = 'XK'.str_pad($count, 6, '0', STR_PAD_LEFT);
+        return view('admin.manage.export.create', compact('products', 'orders', 'productions', 'code'));
+    }
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(WarehouseExportRequest $request)
     {
         //
+        $dataCreate = $request->all();
+        $dataCreate['id_creator'] = auth()->user()->id;
+        WarehouseExport::create($dataCreate);
+        return redirect()->route('admin.warehouse.export.index')->with('success', 'Thêm thành công');
     }
 
     /**
@@ -42,6 +60,15 @@ class WarehouseExportController extends Controller
         //
     }
 
+    public function edit($id)
+    {
+        $products = Ingredient::all(); 
+        $orders = Order::all();
+        $productions = Production::all();
+        $export = WarehouseExport::findOrFail($id);
+        return view('admin.manage.export.edit', compact('export' ,'products', 'orders', 'productions'));
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -52,6 +79,9 @@ class WarehouseExportController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $data = $request->all();
+        WarehouseExport::findOrFail($id)->update($data);
+        return redirect()->route('admin.warehouse.export.index')->with('success', 'Cập nhật thành công');
     }
 
     /**
@@ -63,5 +93,23 @@ class WarehouseExportController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function updateStatus($id, $status)
+    {
+        $export = WarehouseExport::findOrFail($id);
+        
+        $ingredient = Ingredient::findOrFail($export->id_ingredient);
+        if($ingredient->amount < $export->amount) return back()->withErrors(['available' => 'Số lượng tồn kho không đủ với yêu cầu xuất kho']);
+        $export->update([
+            'status' => $status,
+            'id_reviewer' => auth()->user()->id
+        ]);
+        $ingredient->update([
+            'used_amount' => ($ingredient->used_amount - $export->amount) >= 0 ? ($ingredient - $export->amount) : 0,
+            'amount' => $ingredient->amount - $export->amount
+        ]);
+
+        return back()->with('success', 'Cập nhật trạng thái thành công');
     }
 }

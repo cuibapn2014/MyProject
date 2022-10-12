@@ -21,6 +21,8 @@ class WarehouseImport extends Model
         'status',
         'import_date',
         'id_creator',
+        'is_pay',
+        'paid',
         'id_reviewer'
     ];
 
