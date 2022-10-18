@@ -33,12 +33,13 @@ class IngredientController extends Controller
         return response()->json(Ingredient::all());
     }
 
-    public function getStore()
+    public function getStore(Request $request)
     {
         $providers = Provider::where('status', 'Đang hợp tác')->get();
         $units = UnitCalculate::all();
         $ingredientTypes = IngredientType::all();
-        return view('admin.manage.ingredient.createIngredient', compact('providers', 'units', 'ingredientTypes'));
+        $title = $request->type == 1 ? "Thành phẩm" : "Nguyên phụ liệu";
+        return view('admin.manage.ingredient.createIngredient', compact('providers', 'units', 'ingredientTypes', 'title'));
     }
 
     public function store(Request $req)
@@ -89,11 +90,13 @@ class IngredientController extends Controller
         return redirect()->route('admin.ingredient.index')->with('success', 'Thêm mới thành công');
     }
 
-    public function getUpdate($id)
+    public function getUpdate(Request $request, $id)
     {
         $providers = Provider::all();
         $ingredient = Ingredient::findOrFail($id);
-        return view('admin.manage.ingredient.editIngredient', compact('providers', 'ingredient'));
+        $ingredientTypes = IngredientType::all();
+        $title = $request->type == 1 ? "Thành phẩm" : "Nguyên phụ liệu";
+        return view('admin.manage.ingredient.editIngredient', compact('providers', 'ingredient', 'title'));
     }
 
     public function update(Request $req, $id)
@@ -110,11 +113,14 @@ class IngredientController extends Controller
                 'price.integer' => 'Giá phải là số nguyên',
             ]
         );
-        if ($req->input('old_image') == null && !$req->hasFile('image'))
-            return back()->with('error', 'Bạn không được để trống mục hình ảnh');
+        // if ($req->input('old_image') == null && !$req->hasFile('image'))
+        //     return back()->with('error', 'Bạn không được để trống mục hình ảnh');
         $ingredient = Ingredient::findOrFail($id);
         $ingredient->Ten = $req->name;
-        $ingredient->Gia = $req->price;
+        if ($ingredient->id_ingredient_type < 3)
+            $ingredient->Gia = $req->price;
+        else if ($ingredient->id_ingredient_type == 3)
+            $ingredient->GiaThanh = $req->price;
         $ingredient->GhiChu = $req->note;
         $ingredient->id_provider = $req->provider;
         $ingredient->save();
@@ -133,7 +139,7 @@ class IngredientController extends Controller
                 }
             }
         }
-        return redirect()->route('admin.ingredient.index')->with('success', 'Cập nhật thành công');
+        return back()->with('success', 'Cập nhật thành công');
     }
 
     public function delete($id)

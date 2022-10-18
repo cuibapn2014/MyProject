@@ -101,17 +101,33 @@ $current = 13;
                             }}
                         </td>
                         <td class="px-4 py-3 text-sm flex items-center">
-                            <button v-tooltip="'Cập nhật'" title="Cập nhật"
-                                @click.prevent="handleClickViewOrder({{ $requirement }})"
+                            @if($requirement->status < 2)
+                            <button v-tooltip="'Đã xử lý'" title="Đã xử lý"
+                            onclick="location.href='{{ route('admin.requirement.updateStatus', ['id' => $requirement->id]) }}?status=2'"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                                aria-label="Delete">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path
-                                        d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                                </svg>
+                                aria-label="Done">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                  </svg>
                             </button>
-
+                            <button v-tooltip="'Không xử lý'" title="Không xử lý"
+                            onclick="location.href='{{ route('admin.requirement.updateStatus', ['id' => $requirement->id]) }}?status=4'"
+                            class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                            aria-label="Cancel">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                              </svg>
+                            </button>
+                            @elseif($requirement->status == 2)
+                            <button v-tooltip="'Đã nhập kho'" title="Đã nhập kho"
+                            onclick="location.href='{{ route('admin.requirement.updateStatus', ['id' => $requirement->id]) }}?status=3'"
+                            class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                            aria-label="Import">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+                              </svg>
+                            </button>
+                            @endif
                         </td>
                     </tr>
                     @php

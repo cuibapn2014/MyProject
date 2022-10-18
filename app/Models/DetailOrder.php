@@ -15,13 +15,12 @@ class DetailOrder extends Model
 
     protected $fillable = [
         'id_DonHang',
-        'TenSP', 'LoaiHang',
-        'id_DanhMuc', 'id_LoaiVai',
-        'id_PhuLieu', 'SoLuong',
-        'KichThuoc', 'id_ChatLuong',
-        'TongTien', 'TienCoc', 'Gia', 'ThanhToanBS', 
-        'NguonCungCap', 'image',
-        'VaiChinh', 'VaiPhu', 'VaiLot',
+        'LoaiHang',
+        'amount',
+        'id_product',
+        'id_ChatLuong',
+        'NguonCungCap',
+        'image',
         'GhiChu'
     ];
 
@@ -45,5 +44,15 @@ class DetailOrder extends Model
     public function quality()
     {
         return $this->belongsTo(Quality::class, 'id_ChatLuong', 'id');
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(\App\Models\Ingredient::class, 'id_product', 'id');
+    }
+
+    public function production_request()
+    {
+        return $this->hasMany(\App\Models\ProductionRequest::class, 'detail_order_id', 'id');
     }
 }

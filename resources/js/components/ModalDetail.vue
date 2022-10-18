@@ -40,109 +40,72 @@
         /></span>
       </div>
       <div class="w-full border-bottom py-2 flex flex-col">
-        <span class="w-100">Tên khách hàng: {{ this.order.TenKhachHang }}</span>
-        <span class="w-100">Số điện thoại: {{ this.order.SoDienThoai }}</span>
-        <span class="w-100">Địa chỉ: {{ this.order.DiaChi }}</span>
+        <span class="w-100"
+          >Tên khách hàng: {{ this.order.customer.name }}</span
+        >
+        <span class="w-100"
+          >Số điện thoại: {{ this.order.customer.phone_number }}</span
+        >
+        <span class="w-100">Địa chỉ: {{ this.order.customer.address }}</span>
       </div>
       <div class="w-full border-bottom py-2 flex flex-col">
         <h3 class="font-bold">Thông tin đơn hàng</h3>
-        <img
-          :src="'img/' + this.order.detail.image"
-          class="
-            product__thumbnail
-            h-36
-            max-w-max
-            object-contain
-            rounded-lg
-            z-50
-            my-1
-          "
-          loading="lazy"
-        />
-        <span>Tên sản phẩm: {{ this.order.detail.TenSP }}</span>
-        <span>Loại hàng: {{ this.order.detail.LoaiHang }}</span>
-        <span
-          >Danh mục:
-          {{
-            this.order.detail.category && this.order.detail.category.Ten
-          }}</span
-        >
-        <span
-          >Chất lượng:
-          {{ this.order.detail.quality && this.order.detail.quality.Ten }}</span
-        >
-        <span
-          >Vải chính:
-          {{
-            this.order.detail.fabric_main && this.order.detail.fabric_main.Ten
-          }}
-          - {{ this.order.detail.fabric_detail.VaiChinh }}m</span
-        >
-        <span
-          ><p v-if="this.order.detail.fabric_extra">
-            Vải phụ:
-            {{
-              this.order.detail.fabric_extra &&
-              this.order.detail.fabric_extra.Ten
-            }}
-            - {{ this.order.detail.fabric_detail.VaiPhu }}m
-          </p></span
-        >
-        <span>
-          <p v-if="this.order.detail.fabric_lining">
-            Vải lót:
-            {{
-              this.order.detail.fabric_lining &&
-              this.order.detail.fabric_lining.Ten
-            }}
-            - {{ this.order.detail.fabric_detail.VaiLot }}m
-          </p></span
-        >
-
-        <span class="font-bold text-base">Nguyên phụ liệu</span>
-        <span
-          v-for="(ingredient, index) in this.order.detail.ingredient_details"
-          :key="ingredient.id"
-        >
-          <div>
-            {{ ++index }}.
-            {{ ingredient.ingredient && ingredient.ingredient.Ten }} - Số lượng:
-            {{ ingredient.ingredient && ingredient.SoLuong }} cái
-          </div>
-        </span>
-        <h3 class="font-bold mt-2">Phân loại thuộc tính</h3>
-        <div
-          v-for="(properties, index) in this.order.detail.properties"
-          :key="properties.id"
-          class="flex items-center justify-between py-2"
-        >
-          <span>SP{{ index + 1 }}</span>
-          <span class="mx-1">Cân nặng: {{ properties.CanNang }}Kg</span>
-          <span class="mx-1">Chiều cao: {{ properties.ChieuCao }}cm</span>
-          <span class="mx-1">Kích cỡ: {{ properties.KichCo }}</span>
-          <span class="mx-1">Số lượng: {{ properties.SoLuong }} cái</span>
+        <div class="grid grid-cols-5 gap-2 my-3 items-center">
+          <span>Hình ảnh</span>
+          <span class="col-span-2">Tên sản phẩm - Số lượng</span>
+          <span class="text-center">Chất lượng</span>
+          <span class="text-center">Tổng tiền</span>
         </div>
-        <span class="py-2 border-top"
-          >Ghi chú: {{ this.order.detail.GhiChu }}</span
+        <div
+          class="grid grid-cols-5 gap-2 my-3 items-center"
+          v-for="detail in this.order.detail"
+          :key="detail.id"
         >
-        <h3 class="font-bold text-base dark:text-gray-200">Thanh toán</h3>
+          <img
+            :src="'img/' + detail.image"
+            class="
+              product__thumbnail
+              h-16
+              max-w-max
+              object-contain
+              rounded-lg
+              z-50
+              my-1
+            "
+            loading="lazy"
+          />
+          <span class="col-span-2"
+            >{{ detail.product.Ten }} x {{ detail.amount }}
+            {{ detail.product.ingredient_type.name }}</span
+          >
+          <span class="text-center">{{
+            detail.quality && detail.quality.Ten
+          }}</span>
+          <span class="text-center">{{
+            Number(detail.amount * detail.product.GiaThanh).toLocaleString()
+          }}</span>
+        </div>
+        <span class="py-2 border-top">Ghi chú: {{ this.order.note }}</span>
+        <h3 class="font-bold text-base dark:text-gray-200">
+          Thông tin thanh toán
+        </h3>
         <ul>
           <li>
             Tổng thành tiền:
             <span class="font-bold text-base text-green-500">{{
-              this.formatPrice(this.order.TongTien)
+              this.formatPrice(getTotalPaid())
             }}</span>
           </li>
           <li>
             Đã thanh toán:
             <span class="font-bold text-base text-green-500">{{
-              this.formatPrice(this.order.detail.TienCoc)
-            }} <small class="text-[#000000] dark:text-gray-200">(Tiền cọc) +</small> {{ this.formatPrice(this.order.detail.ThanhToanBS) }} <small class="text-[#000000] dark:text-gray-200">(Thanh toán bổ sung)</small></span>
+              this.formatPrice(getPaid())
+            }}</span>
           </li>
           <li>
             Còn lại:
             <span class="font-bold text-base text-red-500">{{
-              this.formatPrice(this.order.TongTien - this.order.detail.TienCoc - this.order.detail.ThanhToanBS)
+              this.formatPrice(getTotalPaid() - getPaid())
             }}</span>
           </li>
         </ul>
@@ -172,7 +135,17 @@
           </span></span
         >
         <button
-          class="p-2 bg-indigo-600 text-white rounded-lg mt-2"
+          class="
+            px-3
+            py-2
+            bg-indigo-500
+            hover:bg-indigo-600
+            duration-150
+            ease-in
+            text-white
+            rounded-lg
+            mt-2
+          "
           @click="closeModal"
         >
           Đóng
@@ -223,6 +196,20 @@ export default {
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
         .concat("đ");
+    },
+    getTotalPaid() {
+      let total = 0
+      this.order.detail.map(item => {
+        total = total + (item.amount * item.product.GiaThanh)
+      })
+      return total;
+    },
+    getPaid() {
+      let total = 0
+      this.order.export_details.map(item => {
+        total += item.paid
+      })
+      return total;
     },
   },
 };

@@ -1,12 +1,12 @@
 @extends('layouts.layout_admin')
-@section('title', 'Thêm mới | Nguyên phụ liệu')
+@section('title', 'Thêm mới |'  . $title)
 @section('main')
 @php
-$current = 3;
+$current = $title == "Nguyên phụ liệu" ? 3 : 5;
 @endphp
 <div class="container px-6 mx-auto grid">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-        Nguyên phụ liệu - Thêm mới
+        {{ $title }} - Thêm mới
     </h2>
     @if(session('success'))
     <p class="p-2 rounded-md my-2 bg-green-100 text-green-400 text-sm">{{ session('success') }}</p>

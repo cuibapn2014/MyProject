@@ -11,7 +11,13 @@ class Customer extends Model
 
     protected $table = 'customers';
 
-    protected $fillable = ['name', 'phone_number', 'address', 'note', 'creator'];
+    protected $fillable = [
+        'name', 
+        'phone_number', 
+        'address', 
+        'note', 
+        'creator'
+    ];
 
     public function orders(){
         return $this->hasMany(\App\Models\Order::class, 'SoDienThoai', 'phone_number');

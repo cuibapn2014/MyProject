@@ -108,6 +108,7 @@
           name="amount"
           v-model="productData.amount"
           type="number"
+          min="1"
           value="1"
         />
       </label>
@@ -137,8 +138,8 @@
           aria-placeholder="Chọn đơn hàng"
         >
           <option value="" disabled selected>-- Đơn hàng --</option>
-          <option v-for="order in orders" v-if="order.id_product == productData.id_ingredient" :key="order.detail_order.order.id" :value="order.detail_order.order.id">
-            {{ order.detail_order.order.TenKhachHang + " - " + order.detail_order.order.SoDienThoai }}
+          <option v-for="order in orders" v-if="order.detail.reduce((acc, item) => acc && item.id_product == productData.id_ingredient)" :key="order.id" :value="order.id">
+            {{ order.customer.name + " - " + order.customer.phone_number }}
           </option>
         </select>
       </label>
@@ -161,6 +162,7 @@
           step="100"
           min="0"
           type="number"
+          readonly
           :value="this.price"
         />
       </label>
@@ -187,7 +189,7 @@
         />
       </label>
       <label
-        class="block text-sm mb-2 max-w-xs ml-2"
+        class="block text-sm w-40 mb-2 max-w-xs ml-2"
       >
         <span class="text-gray-700 dark:text-gray-400">Đã thanh toán</span>
         <input

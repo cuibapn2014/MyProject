@@ -18,6 +18,7 @@ class Production extends Model
         'id_production_request',
         'require_total',
         'priority',
+        'status',
         'note',
         'creator',
         'reviewer'

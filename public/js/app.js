@@ -9219,6 +9219,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    url_img: null
+  },
   mounted: function mounted() {
     (0,medium_zoom__WEBPACK_IMPORTED_MODULE_0__["default"])(document.querySelectorAll(".img__thumbnail"), {
       background: "rgba(0,0,0,0.5)"
@@ -9226,7 +9229,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      urlImg: null
+      urlImg: this.url_img
     };
   },
   methods: {
@@ -9258,33 +9261,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var medium_zoom__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! medium-zoom */ "./node_modules/medium-zoom/dist/medium-zoom.esm.js");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -9478,6 +9454,20 @@ __webpack_require__.r(__webpack_exports__);
     formatPrice: function formatPrice(value) {
       var val = (value / 1).toFixed(0).replace(".", ",");
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".").concat("đ");
+    },
+    getTotalPaid: function getTotalPaid() {
+      var total = 0;
+      this.order.detail.map(function (item) {
+        total = total + item.amount * item.product.GiaThanh;
+      });
+      return total;
+    },
+    getPaid: function getPaid() {
+      var total = 0;
+      this.order.export_details.map(function (item) {
+        total += item.paid;
+      });
+      return total;
     }
   }
 });
@@ -10734,6 +10724,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     product_update: Object,
@@ -10795,19 +10787,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -11386,6 +11365,11 @@ var app = new Vue({
     (0,medium_zoom__WEBPACK_IMPORTED_MODULE_9__["default"])(document.querySelectorAll(".img__mthumbnail"), {
       background: "rgba(0,0,0,0.5)"
     });
+
+    if (document.querySelector('#edit-order')) {
+      this.idOrder = document.querySelector('#edit-order').getAttribute('data-id');
+      this.getDataEditOrder();
+    }
   },
   updated: function updated() {
     this.getTheme();
@@ -11397,7 +11381,11 @@ var app = new Vue({
       countTask: 0,
       display: 0,
       isLoad: true,
+      idOrder: 0,
       isActive: 0,
+      idCustom: 0,
+      countProduct: 1,
+      countProductEdit: [],
       isOpenView: false,
       detailOrder: null,
       dark: this.getThemeFromLocalStorage(),
@@ -11573,16 +11561,44 @@ var app = new Vue({
         }, _callee5);
       }))();
     },
-    getListTask: function getListTask() {
+    getDataEditOrder: function getDataEditOrder() {
       var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+        return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                if (!(_this3.idOrder > 0)) {
+                  _context6.next = 3;
+                  break;
+                }
+
+                _context6.next = 3;
+                return axios__WEBPACK_IMPORTED_MODULE_0___default().get("/admin/order/getEdit/".concat(_this3.idOrder)).then(function (res) {
+                  _this3.countProductEdit = res.data.data;
+                })["catch"](function (err) {
+                  return console.error(err);
+                });
+
+              case 3:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
+      }))();
+    },
+    getListTask: function getListTask() {
+      var _this4 = this;
 
       window.Echo["private"]("task.".concat(this.user)).listen('TaskEvent', function (e) {
         console.log(e);
 
-        _this3.dataTask.push(e.assign);
+        _this4.dataTask.push(e.assign);
 
-        console.log(_this3.dataTask);
-        _this3.countTask += 1;
+        console.log(_this4.dataTask);
+        _this4.countTask += 1;
       });
     },
     getThemeFromLocalStorage: function getThemeFromLocalStorage() {
@@ -11716,6 +11732,23 @@ var app = new Vue({
     toggleUpdateAmountModal: function toggleUpdateAmountModal() {
       var idProduction = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
       this.idProduction = idProduction;
+    },
+    handleClickAddProduct: function handleClickAddProduct() {
+      this.countProduct = this.countProduct + 1;
+    },
+    handleMinusProduct: function handleMinusProduct() {
+      if (this.countProduct > 1) this.countProduct = this.countProduct - 1;
+    },
+    handleClickAddProductObj: function handleClickAddProductObj() {
+      this.countProductEdit.push({
+        id: 0
+      });
+    },
+    handleMinusProductObj: function handleMinusProductObj() {
+      if (this.countProductEdit.length > 1) this.countProductEdit.pop();
+    },
+    setCountProductEdit: function setCountProductEdit(data) {
+      this.countProductEdit = data;
     }
   }
 });
@@ -57223,15 +57256,17 @@ var render = function () {
             { staticClass: "w-full border-bottom py-2 flex flex-col" },
             [
               _c("span", { staticClass: "w-100" }, [
-                _vm._v("Tên khách hàng: " + _vm._s(this.order.TenKhachHang)),
+                _vm._v("Tên khách hàng: " + _vm._s(this.order.customer.name)),
               ]),
               _vm._v(" "),
               _c("span", { staticClass: "w-100" }, [
-                _vm._v("Số điện thoại: " + _vm._s(this.order.SoDienThoai)),
+                _vm._v(
+                  "Số điện thoại: " + _vm._s(this.order.customer.phone_number)
+                ),
               ]),
               _vm._v(" "),
               _c("span", { staticClass: "w-100" }, [
-                _vm._v("Địa chỉ: " + _vm._s(this.order.DiaChi)),
+                _vm._v("Địa chỉ: " + _vm._s(this.order.customer.address)),
               ]),
             ]
           ),
@@ -57244,164 +57279,57 @@ var render = function () {
                 _vm._v("Thông tin đơn hàng"),
               ]),
               _vm._v(" "),
-              _c("img", {
-                staticClass:
-                  "\n          product__thumbnail\n          h-36\n          max-w-max\n          object-contain\n          rounded-lg\n          z-50\n          my-1\n        ",
-                attrs: {
-                  src: "img/" + this.order.detail.image,
-                  loading: "lazy",
-                },
-              }),
+              _vm._m(0),
               _vm._v(" "),
-              _c("span", [
-                _vm._v("Tên sản phẩm: " + _vm._s(this.order.detail.TenSP)),
-              ]),
-              _vm._v(" "),
-              _c("span", [
-                _vm._v("Loại hàng: " + _vm._s(this.order.detail.LoaiHang)),
-              ]),
-              _vm._v(" "),
-              _c("span", [
-                _vm._v(
-                  "Danh mục:\n        " +
-                    _vm._s(
-                      this.order.detail.category &&
-                        this.order.detail.category.Ten
-                    )
-                ),
-              ]),
-              _vm._v(" "),
-              _c("span", [
-                _vm._v(
-                  "Chất lượng:\n        " +
-                    _vm._s(
-                      this.order.detail.quality && this.order.detail.quality.Ten
-                    )
-                ),
-              ]),
-              _vm._v(" "),
-              _c("span", [
-                _vm._v(
-                  "Vải chính:\n        " +
-                    _vm._s(
-                      this.order.detail.fabric_main &&
-                        this.order.detail.fabric_main.Ten
-                    ) +
-                    "\n        - " +
-                    _vm._s(this.order.detail.fabric_detail.VaiChinh) +
-                    "m"
-                ),
-              ]),
-              _vm._v(" "),
-              _c("span", [
-                this.order.detail.fabric_extra
-                  ? _c("p", [
+              _vm._l(this.order.detail, function (detail) {
+                return _c(
+                  "div",
+                  {
+                    key: detail.id,
+                    staticClass: "grid grid-cols-5 gap-2 my-3 items-center",
+                  },
+                  [
+                    _c("img", {
+                      staticClass:
+                        "\n            product__thumbnail\n            h-16\n            max-w-max\n            object-contain\n            rounded-lg\n            z-50\n            my-1\n          ",
+                      attrs: { src: "img/" + detail.image, loading: "lazy" },
+                    }),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "col-span-2" }, [
                       _vm._v(
-                        "\n          Vải phụ:\n          " +
-                          _vm._s(
-                            this.order.detail.fabric_extra &&
-                              this.order.detail.fabric_extra.Ten
-                          ) +
-                          "\n          - " +
-                          _vm._s(this.order.detail.fabric_detail.VaiPhu) +
-                          "m\n        "
-                      ),
-                    ])
-                  : _vm._e(),
-              ]),
-              _vm._v(" "),
-              _c("span", [
-                this.order.detail.fabric_lining
-                  ? _c("p", [
-                      _vm._v(
-                        "\n          Vải lót:\n          " +
-                          _vm._s(
-                            this.order.detail.fabric_lining &&
-                              this.order.detail.fabric_lining.Ten
-                          ) +
-                          "\n          - " +
-                          _vm._s(this.order.detail.fabric_detail.VaiLot) +
-                          "m\n        "
-                      ),
-                    ])
-                  : _vm._e(),
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "font-bold text-base" }, [
-                _vm._v("Nguyên phụ liệu"),
-              ]),
-              _vm._v(" "),
-              _vm._l(
-                this.order.detail.ingredient_details,
-                function (ingredient, index) {
-                  return _c("span", { key: ingredient.id }, [
-                    _c("div", [
-                      _vm._v(
-                        "\n          " +
-                          _vm._s(++index) +
-                          ".\n          " +
-                          _vm._s(
-                            ingredient.ingredient && ingredient.ingredient.Ten
-                          ) +
-                          " - Số lượng:\n          " +
-                          _vm._s(ingredient.ingredient && ingredient.SoLuong) +
-                          " cái\n        "
+                        _vm._s(detail.product.Ten) +
+                          " x " +
+                          _vm._s(detail.amount) +
+                          "\n          " +
+                          _vm._s(detail.product.ingredient_type.name)
                       ),
                     ]),
-                  ])
-                }
-              ),
-              _vm._v(" "),
-              _c("h3", { staticClass: "font-bold mt-2" }, [
-                _vm._v("Phân loại thuộc tính"),
-              ]),
-              _vm._v(" "),
-              _vm._l(
-                this.order.detail.properties,
-                function (properties, index) {
-                  return _c(
-                    "div",
-                    {
-                      key: properties.id,
-                      staticClass: "flex items-center justify-between py-2",
-                    },
-                    [
-                      _c("span", [_vm._v("SP" + _vm._s(index + 1))]),
-                      _vm._v(" "),
-                      _c("span", { staticClass: "mx-1" }, [
-                        _vm._v(
-                          "Cân nặng: " + _vm._s(properties.CanNang) + "Kg"
-                        ),
-                      ]),
-                      _vm._v(" "),
-                      _c("span", { staticClass: "mx-1" }, [
-                        _vm._v(
-                          "Chiều cao: " + _vm._s(properties.ChieuCao) + "cm"
-                        ),
-                      ]),
-                      _vm._v(" "),
-                      _c("span", { staticClass: "mx-1" }, [
-                        _vm._v("Kích cỡ: " + _vm._s(properties.KichCo)),
-                      ]),
-                      _vm._v(" "),
-                      _c("span", { staticClass: "mx-1" }, [
-                        _vm._v(
-                          "Số lượng: " + _vm._s(properties.SoLuong) + " cái"
-                        ),
-                      ]),
-                    ]
-                  )
-                }
-              ),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "text-center" }, [
+                      _vm._v(_vm._s(detail.quality && detail.quality.Ten)),
+                    ]),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "text-center" }, [
+                      _vm._v(
+                        _vm._s(
+                          Number(
+                            detail.amount * detail.product.GiaThanh
+                          ).toLocaleString()
+                        )
+                      ),
+                    ]),
+                  ]
+                )
+              }),
               _vm._v(" "),
               _c("span", { staticClass: "py-2 border-top" }, [
-                _vm._v("Ghi chú: " + _vm._s(this.order.detail.GhiChu)),
+                _vm._v("Ghi chú: " + _vm._s(this.order.note)),
               ]),
               _vm._v(" "),
               _c(
                 "h3",
                 { staticClass: "font-bold text-base dark:text-gray-200" },
-                [_vm._v("Thanh toán")]
+                [_vm._v("\n        Thông tin thanh toán\n      ")]
               ),
               _vm._v(" "),
               _c("ul", [
@@ -57410,7 +57338,7 @@ var render = function () {
                   _c(
                     "span",
                     { staticClass: "font-bold text-base text-green-500" },
-                    [_vm._v(_vm._s(this.formatPrice(this.order.TongTien)))]
+                    [_vm._v(_vm._s(this.formatPrice(_vm.getTotalPaid())))]
                   ),
                 ]),
                 _vm._v(" "),
@@ -57419,29 +57347,7 @@ var render = function () {
                   _c(
                     "span",
                     { staticClass: "font-bold text-base text-green-500" },
-                    [
-                      _vm._v(
-                        _vm._s(this.formatPrice(this.order.detail.TienCoc)) +
-                          " "
-                      ),
-                      _c(
-                        "small",
-                        { staticClass: "text-[#000000] dark:text-gray-200" },
-                        [_vm._v("(Tiền cọc) +")]
-                      ),
-                      _vm._v(
-                        " " +
-                          _vm._s(
-                            this.formatPrice(this.order.detail.ThanhToanBS)
-                          ) +
-                          " "
-                      ),
-                      _c(
-                        "small",
-                        { staticClass: "text-[#000000] dark:text-gray-200" },
-                        [_vm._v("(Thanh toán bổ sung)")]
-                      ),
-                    ]
+                    [_vm._v(_vm._s(this.formatPrice(_vm.getPaid())))]
                   ),
                 ]),
                 _vm._v(" "),
@@ -57453,11 +57359,7 @@ var render = function () {
                     [
                       _vm._v(
                         _vm._s(
-                          this.formatPrice(
-                            this.order.TongTien -
-                              this.order.detail.TienCoc -
-                              this.order.detail.ThanhToanBS
-                          )
+                          this.formatPrice(_vm.getTotalPaid() - _vm.getPaid())
                         )
                       ),
                     ]
@@ -57516,7 +57418,8 @@ var render = function () {
             _c(
               "button",
               {
-                staticClass: "p-2 bg-indigo-600 text-white rounded-lg mt-2",
+                staticClass:
+                  "\n          px-3\n          py-2\n          bg-indigo-500\n          hover:bg-indigo-600\n          duration-150\n          ease-in\n          text-white\n          rounded-lg\n          mt-2\n        ",
                 on: { click: _vm.closeModal },
               },
               [_vm._v("\n        Đóng\n      ")]
@@ -57533,7 +57436,28 @@ var render = function () {
     ]
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "grid grid-cols-5 gap-2 my-3 items-center" },
+      [
+        _c("span", [_vm._v("Hình ảnh")]),
+        _vm._v(" "),
+        _c("span", { staticClass: "col-span-2" }, [
+          _vm._v("Tên sản phẩm - Số lượng"),
+        ]),
+        _vm._v(" "),
+        _c("span", { staticClass: "text-center" }, [_vm._v("Chất lượng")]),
+        _vm._v(" "),
+        _c("span", { staticClass: "text-center" }, [_vm._v("Tổng tiền")]),
+      ]
+    )
+  },
+]
 render._withStripped = true
 
 
@@ -58559,6 +58483,7 @@ var render = function () {
                 placeholder: "Nhập số lượng",
                 name: "amount",
                 type: "number",
+                min: "1",
                 value: "1",
               },
               domProps: { value: _vm.productData.amount },
@@ -58629,20 +58554,22 @@ var render = function () {
                     ),
                     _vm._v(" "),
                     _vm._l(_vm.orders, function (order) {
-                      return order.id_product == _vm.productData.id_ingredient
+                      return order.detail.reduce(function (acc, item) {
+                        return (
+                          acc &&
+                          item.id_product == _vm.productData.id_ingredient
+                        )
+                      })
                         ? _c(
                             "option",
-                            {
-                              key: order.detail_order.order.id,
-                              domProps: { value: order.detail_order.order.id },
-                            },
+                            { key: order.id, domProps: { value: order.id } },
                             [
                               _vm._v(
                                 "\n          " +
                                   _vm._s(
-                                    order.detail_order.order.TenKhachHang +
+                                    order.customer.name +
                                       " - " +
-                                      order.detail_order.order.SoDienThoai
+                                      order.customer.phone_number
                                   ) +
                                   "\n        "
                               ),
@@ -58670,6 +58597,7 @@ var render = function () {
                     step: "100",
                     min: "0",
                     type: "number",
+                    readonly: "",
                   },
                   domProps: { value: this.price },
                 }),
@@ -58694,42 +58622,46 @@ var render = function () {
                 ]
               ),
               _vm._v(" "),
-              _c("label", { staticClass: "block text-sm mb-2 max-w-xs ml-2" }, [
-                _c(
-                  "span",
-                  { staticClass: "text-gray-700 dark:text-gray-400" },
-                  [_vm._v("Đã thanh toán")]
-                ),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.productData.paid,
-                      expression: "productData.paid",
+              _c(
+                "label",
+                { staticClass: "block text-sm w-40 mb-2 max-w-xs ml-2" },
+                [
+                  _c(
+                    "span",
+                    { staticClass: "text-gray-700 dark:text-gray-400" },
+                    [_vm._v("Đã thanh toán")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.productData.paid,
+                        expression: "productData.paid",
+                      },
+                    ],
+                    staticClass:
+                      "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
+                    attrs: {
+                      placeholder: "Nhập số tiền đã thanh toán",
+                      name: "paid",
+                      type: "number",
+                      min: "0",
+                      max: _vm.getPrice,
                     },
-                  ],
-                  staticClass:
-                    "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
-                  attrs: {
-                    placeholder: "Nhập số tiền đã thanh toán",
-                    name: "paid",
-                    type: "number",
-                    min: "0",
-                    max: _vm.getPrice,
-                  },
-                  domProps: { value: _vm.productData.paid },
-                  on: {
-                    input: function ($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.productData, "paid", $event.target.value)
+                    domProps: { value: _vm.productData.paid },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.productData, "paid", $event.target.value)
+                      },
                     },
-                  },
-                }),
-              ]),
+                  }),
+                ]
+              ),
             ]
           )
         : _vm._e(),
@@ -59299,15 +59231,19 @@ var render = function () {
                 ]),
                 _vm._v(" "),
                 _vm._l(this.products, function (product) {
-                  return _c(
-                    "option",
-                    { key: product.id, domProps: { value: product.id } },
-                    [
-                      _vm._v(
-                        "\n          " + _vm._s(product.Ten) + "\n        "
-                      ),
-                    ]
-                  )
+                  return parseInt(_vm.productData.type) ===
+                    product.id_ingredient_type ||
+                    parseInt(_vm.productData.type) === 3
+                    ? _c(
+                        "option",
+                        { key: product.id, domProps: { value: product.id } },
+                        [
+                          _vm._v(
+                            "\n          " + _vm._s(product.Ten) + "\n        "
+                          ),
+                        ]
+                      )
+                    : _vm._e()
                 }),
               ],
               2
@@ -59483,60 +59419,6 @@ var render = function () {
             },
           },
         }),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "py-2 flex items-center" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.productData.is_pay,
-              expression: "productData.is_pay",
-            },
-          ],
-          staticClass:
-            "w-4 h-4 accent-indigo-600 rounded-md checked:bg-indigo-400",
-          attrs: { type: "checkbox", name: "is_pay", id: "is_pay" },
-          domProps: {
-            checked: Array.isArray(_vm.productData.is_pay)
-              ? _vm._i(_vm.productData.is_pay, null) > -1
-              : _vm.productData.is_pay,
-          },
-          on: {
-            change: function ($event) {
-              var $$a = _vm.productData.is_pay,
-                $$el = $event.target,
-                $$c = $$el.checked ? true : false
-              if (Array.isArray($$a)) {
-                var $$v = null,
-                  $$i = _vm._i($$a, $$v)
-                if ($$el.checked) {
-                  $$i < 0 &&
-                    _vm.$set(_vm.productData, "is_pay", $$a.concat([$$v]))
-                } else {
-                  $$i > -1 &&
-                    _vm.$set(
-                      _vm.productData,
-                      "is_pay",
-                      $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                    )
-                }
-              } else {
-                _vm.$set(_vm.productData, "is_pay", $$c)
-              }
-            },
-          },
-        }),
-        _vm._v(" "),
-        _c(
-          "label",
-          {
-            staticClass: "mx-1 text-[#ffffff] lg:text-black dark:text-gray-200",
-            attrs: { for: "is_pay" },
-          },
-          [_vm._v("Đã thanh toán (Bỏ qua nếu không phải nhập nguyên phụ liệu)")]
-        ),
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "flex justify-start" }, [

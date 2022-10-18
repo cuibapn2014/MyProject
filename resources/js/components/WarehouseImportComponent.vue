@@ -79,6 +79,7 @@
           <option value="">-- Chọn nguyên phụ liệu --</option>
           <option
             v-for="product in this.products"
+            v-if="parseInt(productData.type) === product.id_ingredient_type || parseInt(productData.type) === 3"
             :key="product.id"
             :value="product.id"
           >
@@ -223,20 +224,6 @@
         v-model="productData.note"
       ></textarea>
     </label>
-    <div class="py-2 flex items-center">
-      <input
-        class="w-4 h-4 accent-indigo-600 rounded-md checked:bg-indigo-400"
-        type="checkbox"
-        name="is_pay"
-        id="is_pay"
-        v-model="productData.is_pay"
-      />
-      <label
-        class="mx-1 text-[#ffffff] lg:text-black dark:text-gray-200"
-        for="is_pay"
-        >Đã thanh toán (Bỏ qua nếu không phải nhập nguyên phụ liệu)</label
-      >
-    </div>
     <div class="flex justify-start">
       <button
         class="mt-4 text-white px-4 py-2 rounded-md border-0 bg-indigo-600 mx-2"

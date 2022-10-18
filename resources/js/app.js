@@ -94,6 +94,10 @@ const app = new Vue({
         mediumZoom(document.querySelectorAll(".img__mthumbnail"), {
             background: "rgba(0,0,0,0.5)",
         });
+        if (document.querySelector('#edit-order')) {
+            this.idOrder = document.querySelector('#edit-order').getAttribute('data-id')
+            this.getDataEditOrder()
+        }
     },
     updated() {
         this.getTheme()
@@ -101,11 +105,15 @@ const app = new Vue({
     data() {
         return {
             idDelete: 0,
-            idProduction:null,
+            idProduction: null,
             countTask: 0,
             display: 0,
             isLoad: true,
+            idOrder: 0,
             isActive: 0,
+            idCustom: 0,
+            countProduct: 1,
+            countProductEdit: [],
             isOpenView: false,
             detailOrder: null,
             dark: this.getThemeFromLocalStorage(),
@@ -192,10 +200,19 @@ const app = new Vue({
                         }).showToast();
                         setTimeout(() => {
                             window.location.reload()
-                        },3000)
+                        }, 3000)
                     }
                 })
                 .catch(err => console.log(err))
+        },
+        async getDataEditOrder() {
+            if (this.idOrder > 0) {
+                await axios.get(`/admin/order/getEdit/${this.idOrder}`)
+                    .then(res => {
+                        this.countProductEdit = res.data.data
+                    })
+                    .catch(err => console.error(err))
+            }
         },
         getListTask() {
             window.Echo.private(`task.${this.user}`)
@@ -358,8 +375,25 @@ const app = new Vue({
             this.objRequestProduct = obj
             this.isCustomModal = !this.isCustomModal
         },
-        toggleUpdateAmountModal(idProduction = null){
+        toggleUpdateAmountModal(idProduction = null) {
             this.idProduction = idProduction
+        },
+        handleClickAddProduct() {
+            this.countProduct = this.countProduct + 1
+        },
+        handleMinusProduct() {
+            if (this.countProduct > 1)
+                this.countProduct = this.countProduct - 1
+        },
+        handleClickAddProductObj() {
+            this.countProductEdit.push({ id: 0 })
+        },
+        handleMinusProductObj() {
+            if (this.countProductEdit.length > 1)
+                this.countProductEdit.pop()
+        },
+        setCountProductEdit(data) {
+            this.countProductEdit = data
         }
     }
 });

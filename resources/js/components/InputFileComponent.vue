@@ -57,6 +57,9 @@
 <script>
 import mediumZoom from "medium-zoom";
 export default {
+  props:{
+    url_img: null
+  },
   mounted() {
     mediumZoom(document.querySelectorAll(".img__thumbnail"), {
       background: "rgba(0,0,0,0.5)",
@@ -64,7 +67,7 @@ export default {
   },
   data() {
     return {
-      urlImg: null,
+      urlImg: this.url_img,
     };
   },
   methods: {

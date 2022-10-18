@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\TaskController;
 use App\Http\Controllers\Admin\ProviderController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\PlanIngredientController;
 use App\Http\Controllers\Admin\ProducedController;
 use App\Http\Controllers\Admin\ProductionController;
@@ -122,6 +123,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
         $route->get('/create', [OrderController::class, 'create'])->name('admin.order.create');
         $route->post('/create', [OrderController::class, 'store'])->name('admin.order.request.create');
         $route->get('/update/{id}', [OrderController::class, 'edit'])->name('admin.order.update');
+        $route->get('/getEdit/{id}', [OrderController::class, 'getDataEdit'])->name('admin.order.dataDetail');
         $route->post('/update/{id}', [OrderController::class, 'update'])->name('admin.order.request.update');
         $route->get('/delete/{id}', [OrderController::class, 'delete'])->name('admin.order.delete');
         $route->get('/export', [OrderController::class, 'export'])->name('admin.order.export');
@@ -154,9 +156,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
         $route->get('/create/{id}', [ProductionController::class, 'create'])->name('admin.plan.create');
         $route->post('/create', [ProductionController::class, 'store'])->name('admin.plan.request.create');
         $route->get('/update/{id}', [ProductionController::class, 'edit'])->name('admin.plan.update');
+        $route->get('/update-status/{id}', [ProductionController::class, 'updateStatus'])->name('admin.plan.updateStatus');
         $route->post('/update-completed', [ProducedController::class, 'store'])->name('admin.plan.request.update');
         $route->get('/delete/{id}', [ProductionController::class, 'destroy'])->name('admin.plan.delete');
-        $route->get('/create-buy/{id}', [ProductionController::class, 'createBuy'])->name('admin.buy.create');
+        $route->get('/create-buy/{id}', [PlanController::class, 'createBuy'])->name('admin.buy.create');
         $route->get('/export', [ProductionController::class, 'export'])->name('admin.plan.export');
     });
 
@@ -209,6 +212,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
     $route->post('/update/{id}', [AdminController::class, 'updateUser'])->name('admin.user.update');
 
     $route->get('/requirement', [RequirementController::class, 'index'])->name('admin.requirement.index');
+    $route->get('/requirement/update-status/{id}', [RequirementController::class, 'updateStatus'])->name('admin.requirement.updateStatus');
+
 
     $route->group(['prefix' => 'employee'], function ($route) {
         $route->get('/', [UserController::class, 'index'])->name('admin.employee.index');

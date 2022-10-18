@@ -75,24 +75,16 @@ class WarehouseImportController extends Controller
         ]);
 
         $ingredient = Ingredient::findOrFail($import->id_ingredient);
-        switch($import->type)
+        $ingredient->update([
+            'amount' => $ingredient->amount + $import->amount,
+            'used_amount' => $ingredient->used_amount + $import->amount
+        ]);
+        
+        if($import->type == 3)
         {
-            case 1: 
-                $ingredient->update([
-                    'amount' => $ingredient->amount + $import->amount
-                ])
-                ;break;
-            case 2: 
-                $ingredient->update([
-                    'amount' => $ingredient->amount + $import->amount,
-                    'used_amount' => $ingredient->used_amount + $import->amount
-                ])
-                ;break;
-            case 3: 
                 $ingredient->update([
                     'waste_amount' => $ingredient->waste_amount + $import->amount
-                ])
-                ;break;
+                ]);
         }
 
         return back()->with('success', 'Cập nhật trạng thái thành công');

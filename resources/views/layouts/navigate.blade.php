@@ -56,7 +56,7 @@
                                 <a class="w-full hover:text-gray-800 dark:hover:text-gray-200"
                                     :class="{ 'text-gray-800' : this.isActive == 1, 'dark:text-gray-100' : this.isActive == 1 }"
                                     href="{{ route('admin.order.index') }}">
-                                    Quản lý đơn hàng
+                                    Đơn hàng
                                 </a>
                             </li>
                             <li
@@ -64,7 +64,7 @@
                                 <a class="w-full hover:text-gray-800 dark:hover:text-gray-200"
                                     :class="{ 'text-gray-800' : this.isActive == 6, 'dark:text-gray-100' : this.isActive == 6 }"
                                     href="{{ route('admin.customer.index') }}">
-                                    Quản lý khách hàng
+                                    Khách hàng
                                 </a>
                             </li>
                         </ul>
@@ -317,7 +317,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
-                        <span class="ml-4">Quản lý đơn hàng</span>
+                        <span class="ml-4">Đơn hàng</span>
                     </a>
                 </li>
                 <li class="relative px-6 py-3">

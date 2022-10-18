@@ -14,14 +14,42 @@ class Order extends Model
 
     protected $table = 'orders';
 
-    protected $fillable = ['TenKhachHang', 'SoDienThoai', 'DiaChi', 'NgayTraDon', 'id_NhanVien', 'TongTien'];
+    protected $fillable = [
+        'id_customer',
+        'NgayTraDon',
+        'id_NhanVien',
+        'vat',
+        'status',
+        'note'
+    ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'id_NhanVien', 'id');
     }
 
-    public function detail(){
-        return $this->hasOne(DetailOrder::class,'id_DonHang','id');
+    public function detail()
+    {
+        return $this->hasMany(DetailOrder::class, 'id_DonHang', 'id');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(\App\Models\Customer::class, 'id_customer', 'id');
+    }
+
+    public function export_details()
+    {
+        return $this->hasMany(\App\Models\WarehouseExport::class,'id_order', 'id');
+    }
+
+    public static function totalPaid($idOrder)
+    {
+        $total = 0;
+        $order = parent::findOrFail($idOrder);
+        foreach($order->detail as $detail){
+            $total += $detail->amount * $detail->product->GiaThanh;
+        }
+        return $total;
     }
 }

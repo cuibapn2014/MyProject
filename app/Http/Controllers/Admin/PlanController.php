@@ -138,6 +138,7 @@ class PlanController extends Controller
     public function createBuy($idRequest)
     {
         $planIngredient = PlanIngredient::where('id_production_request', $idRequest)->get();
+        if(count($planIngredient) <= 0) return back()->withErrors(['available' => 'Vui lòng tạo kế hoạch vật tư trước khi tạo yêu cầu mua hàng']);
 
         $check = ProductionRequest::findOrFail($idRequest);
         if ($check->amount == $check->completed) {
@@ -150,7 +151,7 @@ class PlanController extends Controller
                 $requestProduction = RequestProduction::where('id_production_request', $plan->id_production_request)
                     ->where('id_ingredient', $plan->id_ingredient);
 
-                if (!$requestProduction->exists()) {
+                if (!$requestProduction->exists() && $plan->total > 0) {
                     RequestProduction::create([
                         'id_ingredient' => $plan->id_ingredient,
                         'id_production_request' => $plan->id_production_request,

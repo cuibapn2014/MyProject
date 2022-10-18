@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WarehouseExportRequest;
 use App\Models\Ingredient;
+use App\Models\Order;
 use App\Models\Production;
 use App\Models\ProductionRequest;
 use App\Models\WarehouseExport;
@@ -27,7 +28,7 @@ class WarehouseExportController extends Controller
     public function create()
     {
         $products = Ingredient::all(); 
-        $orders = ProductionRequest::with(['detail_order','detail_order.order'])->get();
+        $orders = Order::with(['detail','detail.production_request', 'customer'])->get();
         $productions = Production::all();
         $count = WarehouseExport::count() + 1;
         $code = 'XK'.str_pad($count, 6, '0', STR_PAD_LEFT);
@@ -63,7 +64,7 @@ class WarehouseExportController extends Controller
     public function edit($id)
     {
         $products = Ingredient::all(); 
-        $orders = Order::all();
+        $orders = ProductionRequest::with(['detail_order','detail_order.order'])->get();
         $productions = Production::all();
         $export = WarehouseExport::findOrFail($id);
         return view('admin.manage.export.edit', compact('export' ,'products', 'orders', 'productions'));
@@ -106,8 +107,8 @@ class WarehouseExportController extends Controller
             'id_reviewer' => auth()->user()->id
         ]);
         $ingredient->update([
-            'used_amount' => ($ingredient->used_amount - $export->amount) >= 0 ? ($ingredient - $export->amount) : 0,
-            'amount' => $ingredient->amount - $export->amount
+            'used_amount' => ($ingredient->used_amount - $export->amount) >= 0 ? ($ingredient->used_amount - $export->amount) : 0,
+            // 'amount' => $ingredient->amount - $export->amount
         ]);
 
         return back()->with('success', 'Cập nhật trạng thái thành công');

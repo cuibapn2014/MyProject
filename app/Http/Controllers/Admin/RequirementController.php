@@ -19,4 +19,16 @@ class RequirementController extends Controller
         $requirements = RequestProduction::orderByDesc('id')->paginate(25);
         return view('admin.manage.requirements.index', compact('requirements'));
     }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $this->validate($request, [
+            'status' => 'required|min:1|max:4'
+        ]);
+        $requestProduction = RequestProduction::findOrFail($id);
+        $requestProduction->update([
+            'status' => $request->status
+        ]);
+        return back()->with('success', 'Cập nhật thành công');
+    }
 }

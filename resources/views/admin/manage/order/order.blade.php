@@ -1,12 +1,12 @@
 @extends('layouts.layout_admin')
-@section('title', 'Quản lý đơn hàng')
+@section('title', 'Đơn hàng')
 @section('main')
 @php
 $current = 1;
 @endphp
 <div class="container px-6 mx-auto grid">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-        Quản lý đơn hàng
+        Đơn hàng
     </h2>
     @if(session('success'))
     <p class="p-2 rounded-md my-2 bg-green-100 text-green-400 text-sm">{{ session('success') }}</p>
@@ -41,7 +41,7 @@ $current = 1;
                         <th class="px-4 py-3 font-bold">#</th>
                         <th class="px-4 py-3">Khách hàng</th>
                         <th class="px-4 py-3">Liên hệ</th>
-                        <th class="px-4 py-3">Thành tiền</th>
+                        <th class="px-4 py-3">Tổng tiền</th>
                         <th class="px-4 py-3">Tiền còn lại</th>
                         <th class="px-4 py-3">Đã thanh toán</th>
                         <th class="px-4 py-3">Tạo bởi</th>
@@ -59,19 +59,15 @@ $current = 1;
                             {{ $index }}                     
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{ $order->TenKhachHang }}
+                            {{ $order->customer->name }}
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{ $order->SoDienThoai }}
+                            {{ $order->customer->phone_number }}
                         </td>
                         <td class="px-4 py-3 text-sm font-bold text-green-500">
-                            {{ number_format($order->TongTien) }} đ
+                            {{ number_format(\App\Models\Order::totalPaid($order->id),0,',','.') }}
                         </td>
-                        @if($order->TongTien - $order->detail->TienCoc - $order->detail->ThanhToanBS > 0)
-                        <td class="px-4 py-3 text-sm text-red-500 font-bold">
-                            {{ number_format($order->TongTien - $order->detail->TienCoc - $order->detail->ThanhToanBS) }} đ
-                        </td>
-                        @else
+                        @if(\App\Models\Order::totalPaid($order->id) - $order->export_details->sum('paid') <= 0)
                         <td class="px-4 py-3 text-sm text-green-500 font-bold">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                 class="h-5 w-5 mx-auto">
@@ -80,9 +76,13 @@ $current = 1;
                                     clip-rule="evenodd"></path>
                             </svg>
                         </td>
+                        @else
+                        <td class="px-4 py-3 text-sm text-red-500 font-bold">
+                            {{ number_format((\App\Models\Order::totalPaid($order->id) - $order->export_details->sum('paid')),0,',','.') }}
+                        </td>
                         @endif
                         <td class="px-4 py-3 text-sm font-bold text-green-500">
-                            {{ number_format($order->detail->ThanhToanBS + $order->detail->TienCoc) }} đ
+                            {{ number_format($order->export_details->sum('paid'),0,',','.') }}
                         </td>
                         <td class="px-4 py-3 text-sm">
                             <img v-tooltip.top-start="'{{ $order->user->name }}'"
@@ -125,7 +125,7 @@ $current = 1;
                                 </svg>
                             </button>
                             <button v-tooltip="'Xem chi tiết'" title="Xem chi tiết"
-                                @click.prevent="handleClickViewOrder({{ $order }})"
+                                @click.prevent="handleClickViewOrder({{ $order->load(['detail','detail.quality','detail.product', 'detail.product.ingredient_type']) }})"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Delete">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"

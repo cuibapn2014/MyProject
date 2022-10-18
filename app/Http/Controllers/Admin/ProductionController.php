@@ -62,9 +62,13 @@ class ProductionController extends Controller
         return response()->json(['code' => 200, 'msg' => 'success']);
     }
 
-    public function updateStatus($id)
+    public function updateStatus(Request $req, $id)
     {
-        return $id;
+        $productRequest = ProductionRequest::findOrFail($id);
+        $productRequest->update([
+            'status' => $req->status
+        ]);
+        return back()->with('success', 'Cập nhật thành công');
     }
 
     public function destroy($id)
