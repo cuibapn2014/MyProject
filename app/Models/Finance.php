@@ -12,7 +12,17 @@ class Finance extends Model
 
     protected $table = 'finances';
 
-    protected $fillable = ['type', 'detail', 'total', 'id_user'];
+    protected $fillable = [
+        'code',
+        'type',
+        'title',
+        'detail', 
+        'total',
+        'id_user',
+        'status',
+        'reviewer_date',
+        'create_date'
+    ];
 
     public function user(){
         return $this->belongsTo(User::class, 'id_user', 'id');

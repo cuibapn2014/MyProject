@@ -1,27 +1,33 @@
 @extends('layouts.layout_admin')
-@section('title', 'Đơn hàng')
+@section('title', 'Tài chính')
 @section('main')
 @php
-$current = 1;
+$current = 8;
 @endphp
 <div class="container px-6 mx-auto grid">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-        Đơn hàng
+        Tài chính
     </h2>
     @if(session('success'))
     <p class="p-2 rounded-md my-2 bg-green-100 text-green-400 text-sm">{{ session('success') }}</p>
     @endif
     <div class="flex justify-end py-2">
-        <button onclick="location.href='{{ route('admin.order.create') }}'"
-            class="flex items-center px-2 py-2 mx-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border-0 rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-            Thêm mới
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z" />
-            </svg>
+        <div class="inline-block relative group mx-2">                           
+            <ul class="absolute hidden text-gray-700 pt-1 right-0 top-[50] group-hover:block z-50" style="margin-top: 35px;">
+                <li class=""><a class="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap text-gray-700"
+                        href="{{ route('admin.finance.create') }}">Phiếu thu</a></li>
+                <li class=""><a class="rounded-b bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap text-gray-700"
+                    href="{{ route('admin.finance.create') }}?type=1">Phiếu chi</a></li>
+            </ul>
+            <button onclick=""
+            class="flex items-center h-full px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border-0 rounded-lg active:bg-purple-700 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+            Tạo mới
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+              </svg>
         </button>
-        <button onclick="location.href='{{ route('admin.order.export') }}'"
+        </div>
+        <button onclick=""
             class="flex items-center px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border-0 rounded-lg active:bg-green-700 hover:bg-green-700 focus:outline-none focus:shadow-outline-purple">
             Xuất Excel
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -31,80 +37,97 @@ $current = 1;
             </svg>
         </button>
     </div>
-    <div class="w-full overflow-x-auto rounded-lg shadow-xs mb-4" v-dragscroll style="max-height: 600px;">
-        <div class="w-full">
+    <div class="w-full overflow-hidden rounded-lg shadow-xs">
+        <div class="w-full overflow-x-auto">
             <table class="w-full whitespace-no-wrap">
-                @if($orders->count() > 0)
+                @if($finances->count() > 0)
                 <thead>
                     <tr
-                        class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 sticky top-0">
+                        class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                         <th class="px-4 py-3 font-bold">#</th>
-                        <th class="px-4 py-3">Khách hàng</th>
-                        <th class="px-4 py-3">Liên hệ</th>
-                        <th class="px-4 py-3">Tổng tiền</th>
-                        <th class="px-4 py-3">Tiền còn lại</th>
-                        <th class="px-4 py-3">Đã thanh toán</th>
-                        <th class="px-4 py-3">Tạo bởi</th>
-                        <th class="px-4 py-3">Cập nhật</th>
+                        <th class="px-2 py-3">Mã phiếu</th>
+                        <th class="px-2 py-3">Loại phiếu</th>
+                        <th class="px-4 py-3">Tên chi phí</th>
+                        <th class="px-4 py-3">Nội dung</th>
+                        <th class="px-4 py-3">Số tiền</th>
+                        <th class="px-4 py-3">Trạng thái</th>
+                        <th class="px-4 py-3">Ngày tạo</th>
+                        <th class="px-4 py-3">Ngày duyệt</th>
+                        <th class="px-4 py-3">Người duyệt</th>
                         <th class="px-4 py-3">Hành động</th>
                     </tr>
                 </thead>
                 <tbody class="bg-[#ffffff] divide-y dark:divide-gray-700 dark:bg-gray-800">
                     @php
-                    $index = $orders->firstItem();
+                    $index = $finances->firstItem();
                     @endphp
-                    @foreach($orders as $order)
+                    @foreach($finances as $finance)
                     <tr class="text-gray-700 dark:text-gray-400">
                         <td class="px-4 py-3 flex">  
                             {{ $index }}                     
                         </td>
-                        <td class="px-4 py-3 text-sm">
-                            {{ $order->customer->name }}
+                        <td class="px-2 py-3 text-sm">
+                            {{$finance->code}}
+                        </td>
+                        <td class="px-2 py-3 text-sm">
+                            {{$finance->type == 1 ? 'Phiếu thu' : 'Phiếu chi'}}
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{ $order->customer->phone_number }}
-                        </td>
-                        <td class="px-4 py-3 text-sm font-bold text-green-500">
-                            {{ number_format(\App\Models\Order::totalPaid($order->id),0,',','.') }}
-                        </td>
-                        @if(\App\Models\Order::totalPaid($order->id) - $order->export_details->sum('paid') <= 0)
-                        <td class="px-4 py-3 text-sm text-green-500 font-bold">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                class="h-5 w-5 mx-auto">
-                                <path fill-rule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                        </td>
-                        @else
-                        <td class="px-4 py-3 text-sm text-red-500 font-bold">
-                            {{ number_format((\App\Models\Order::totalPaid($order->id) - $order->export_details->sum('paid')),0,',','.') }}
-                        </td>
-                        @endif
-                        <td class="px-4 py-3 text-sm font-bold text-green-500">
-                            {{ number_format($order->export_details->sum('paid'),0,',','.') }}
+                            {{$finance->title}}
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            <img v-tooltip.top-start="'{{ $order->user->name }}'"
-                                src="{{asset('/img/user').'/'.$order->user->image }}"
-                                class="h-12 w-12 object-cover object-center rounded-full" />
+                            {{$finance->detail}}
+                        </td>
+                        <td class="px-4 py-3 text-sm {{ $finance->type==1 ? 'text-green-500' : 'text-red-500'}}">
+                            {{ $finance->type==1 ? '+' : '-'}}{{number_format($finance->total,0,',','.')}}
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{ \Carbon\Carbon::parse($order->updated_at)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y')
-                            }}
+                            @switch($finance->status)
+                            @case(1)
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-orange-100 text-orange-700 dark:bg-orange-600">
+                                Chờ duyệt
+                            </span>
+                            @break
+                            @case(2)
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-green-100 text-green-700 dark:bg-green-600">
+                                Đã duyệt
+                            </span>
+                            @break
+                            @default
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-red-100 text-red-700 dark:bg-red-600">
+                                Không duyệt
+                            </span>
+                            @break
+                            @endswitch
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                            {{\Carbon\Carbon::parse($finance->create_date)->format('d/m/Y')}}
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                            {{ $finance->reviewer_date ? \Carbon\Carbon::parse($finance->reviewer_date)->format('d/m/Y') : ''}}
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                            <img v-tooltip.top-start="'{{ $finance->user->name }} - {{ $finance->user->role->name }}'"
+                            src="{{asset('/img/user').'/'.$finance->user->image }}"
+                            class="h-12 w-12 object-cover object-center rounded-full" />
                         </td>
                         <td class="px-4 py-3 text-sm flex items-center">
-                            <button title="Chỉnh sửa" v-tooltip="'Chỉnh sửa'"
+                            @if($finance->status == 1)
+                            <button v-tooltip="'Chỉnh sửa'" title="Chỉnh sửa"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Edit"
-                                onclick="location.href='{{ route('admin.order.update',['id' => $order->id]) }}'">
+                                onclick="location.href='{{ route('admin.finance.update',['id' => $finance->id]) }}'">
                                 <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                                     <path
                                         d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
                                     </path>
                                 </svg>
                             </button>
-                            <button v-tooltip="'Xóa'" title="Xóa" @click="openModal({{$order->id}})"
+                            @endif
+                            <button v-tooltip="'Xóa'" title="Xóa" @click="openModal({{$finance->id}})"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Delete">
                                 <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
@@ -113,53 +136,36 @@ $current = 1;
                                         clip-rule="evenodd"></path>
                                 </svg>
                             </button>
-                            <button v-tooltip="'Xuất PDF'" title="Xuất PDF"
-                                @click="this.location.href='/admin/invoice/{{$order->id}}'"
-                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                                aria-label="Delete">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                            <button v-tooltip="'Xem chi tiết'" title="Xem chi tiết"
-                                @click.prevent="handleClickViewOrder({{ $order->load(['detail','detail.quality','detail.product', 'detail.product.unit_cal']) }})"
-                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                                aria-label="Delete">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                    <path fill-rule="evenodd"
-                                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </button>
-
+                            @if($finance->status == 1)
+                            <div class="inline-block relative group">                           
+                                <ul class="absolute hidden text-gray-700 pt-1 right-0 top-[25] group-hover:block z-50" style="margin-top: 25px;">
+                                    <li class=""><a class="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap text-gray-700"
+                                            href="{{ route('admin.finance.updateStatus', ['id' => $finance->id, 'status' => 2]) }}">Duyệt</a></li>
+                                    <li class=""><a class="rounded-b bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap text-gray-700"
+                                        href="{{ route('admin.finance.updateStatus', ['id' => $finance->id, 'status' => 3]) }}">Không duyệt</a></li>
+                                </ul>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  </svg>
+                            </div>  
+                            @endif                       
                         </td>
                     </tr>
-                    @php
-                    $index++;
-                    @endphp
+                    @php $index++; @endphp
                     @endforeach
                 </tbody>
                 @else
                 <div class="text-sm text-center dark:text-gray-200">Không tìm thấy dữ liệu nào</div>
                 @endif
             </table>
-            {{ $orders->links() }}
         </div>
     </div>
 </div>
-
-<transition enter-class="ease-in opacity-0" enter-to-class="opacity-100" leave-class="ease-out opacity-100"
-    leave-to-class="opacity-0">
-    <modal-detail v-if="this.isOpenView" @toggle-detail="closeModalView" :order="this.detailOrder"
-        class="transition duration-150">
-    </modal-detail>
+<transition enter-class="opacity-0" enter-to-class="opacity-100" leave-to-class="opacity-0">
+    <quota-modal v-if="isModalQuota" class="z-50 transition ease-in-out duration-150"
+        :product="objProduct" @toggle-profile="toggleQuotaModal">
+    </quota-modal>
 </transition>
-
 <transition enter-class="ease-out opacity-0" enter-to-class="opacity-100" leave-class="ease-in opacity-100"
     leave-to-class="opacity-0">
     <div v-show="this.isModalOpen" class="
@@ -212,11 +218,11 @@ $current = 1;
                 <div class="mt-4 mb-6">
                     <!-- Modal title -->
                     <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
-                        Xóa đơn hàng
+                        Xóa
                     </p>
                     <!-- Modal description -->
                     <p class="text-sm text-gray-700 dark:text-gray-400">
-                        Bạn có chắc chắn muốn xóa đơn hàng này ?
+                        Bạn có chắc chắn muốn xóa ?
                     </p>
                 </div>
                 <footer class="
@@ -249,7 +255,7 @@ $current = 1;
               active:bg-purple-600
               hover:bg-purple-700
               focus:outline-none focus:shadow-outline-purple
-            " @click="handleDeleteOrder(idDelete)">
+            " @click="handleDelete('/admin/finances/delete/')">
                         Chắc chắn
                     </button>
                     <button @click="closeModal" class="
@@ -278,6 +284,5 @@ $current = 1;
             </div>
         </transition>
     </div>
-
 </transition>
 @endsection

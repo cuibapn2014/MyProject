@@ -57,7 +57,7 @@
           <span class="text-center">Tổng tiền</span>
         </div>
         <div
-          class="grid grid-cols-5 gap-2 my-3 items-center"
+          class="grid grid-cols-5 gap-2 my-3 items-center px-2 py-1 rounded-md hover:bg-gray-50 hover:text-gray-700 hover:font-bold cursor-pointer ease-in duration-150"
           v-for="detail in this.order.detail"
           :key="detail.id"
         >
@@ -76,7 +76,7 @@
           />
           <span class="col-span-2"
             >{{ detail.product.Ten }} x {{ detail.amount }}
-            {{ detail.product.ingredient_type.name }}</span
+            {{ detail.product.unit_cal.name }}</span
           >
           <span class="text-center">{{
             detail.quality && detail.quality.Ten
@@ -90,19 +90,19 @@
           Thông tin thanh toán
         </h3>
         <ul>
-          <li>
+          <li class="flex justify-between">
             Tổng thành tiền:
             <span class="font-bold text-base text-green-500">{{
               this.formatPrice(getTotalPaid())
             }}</span>
           </li>
-          <li>
+          <li class="flex justify-between">
             Đã thanh toán:
             <span class="font-bold text-base text-green-500">{{
               this.formatPrice(getPaid())
             }}</span>
           </li>
-          <li>
+          <li class="flex justify-between">
             Còn lại:
             <span class="font-bold text-base text-red-500">{{
               this.formatPrice(getTotalPaid() - getPaid())
@@ -166,7 +166,7 @@ export default {
     order: Object,
   },
   mounted() {
-    mediumZoom(document.querySelector(".product__thumbnail"), {
+    mediumZoom(document.querySelectorAll(".product__thumbnail"), {
       background: "rgba(0,0,0,0)",
     });
   },

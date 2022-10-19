@@ -58,7 +58,7 @@ $current = 14;
                     @endphp
                     @foreach($exports as $export)
                     <tr class="text-gray-700 dark:text-gray-400">
-                        <td class="px-3 py-3 flex">
+                        <td class="px-3 py-3">
                             {{ $index }}
                         </td>
                         <!-- <td class="px-4 py-3 text-sm">
@@ -365,11 +365,11 @@ $current = 14;
                 <div class="mt-4 mb-6">
                     <!-- Modal title -->
                     <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
-                        Xóa đề nghị sản xuất
+                        Xóa
                     </p>
                     <!-- Modal description -->
                     <p class="text-sm text-gray-700 dark:text-gray-400">
-                        Bạn có chắc chắn muốn xóa đề nghị sản xuất này ?
+                        Bạn có chắc chắn muốn xóa ?
                     </p>
                 </div>
                 <footer class="

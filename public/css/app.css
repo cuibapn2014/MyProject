@@ -11795,6 +11795,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .top-\[25\] {
   top: 25;
 }
+.top-\[50\] {
+  top: 50;
+}
 .z-50 {
   z-index: 50;
 }
@@ -12121,9 +12124,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .w-14 {
   width: 3.5rem;
-}
-.w-10 {
-  width: 2.5rem;
 }
 .w-36 {
   width: 9rem;
@@ -12998,6 +12998,11 @@ div.medium-zoom-overlay, img.medium-zoom-image{
   background-color: rgb(126 34 206 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-gray-50:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+}
+
 .hover\:bg-indigo-700:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(67 56 202 / var(--tw-bg-opacity));
@@ -13021,6 +13026,10 @@ div.medium-zoom-overlay, img.medium-zoom-image{
 .hover\:bg-red-600:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(220 38 38 / var(--tw-bg-opacity));
+}
+
+.hover\:font-bold:hover {
+  font-weight: 700;
 }
 
 .hover\:text-white:hover {
@@ -13175,6 +13184,11 @@ div.medium-zoom-overlay, img.medium-zoom-image{
 .active\:bg-green-700:active {
   --tw-bg-opacity: 1;
   background-color: rgb(21 128 61 / var(--tw-bg-opacity));
+}
+
+.active\:bg-purple-700:active {
+  --tw-bg-opacity: 1;
+  background-color: rgb(126 34 206 / var(--tw-bg-opacity));
 }
 
 .active\:text-gray-500:active {

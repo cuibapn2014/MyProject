@@ -23,7 +23,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'image',
-        'role',
+        'id_role',
+        'status',
         'password',
     ];
 
@@ -51,11 +52,21 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Role::class, 'id_role', 'id');
     }
 
-    public function assigns(){
+    public function assigns()
+    {
         return $this->hasMany(Assign::class, 'id_NguoiNhan', 'id');
     }
-    
-    public function assign($id){
-        return $this->hasOne(Assign::class, 'id_NguoiNhan', 'id')->where('id_CongViec',$id)->first();
+
+    public function assign($id)
+    {
+        return $this->hasOne(Assign::class, 'id_NguoiNhan', 'id')->where('id_CongViec', $id)->first();
+    }
+
+    public function hasRole($role)
+    {
+        if (auth()->user()->role->alias === $role) {
+            return true;
+        }
+        return false;
     }
 }

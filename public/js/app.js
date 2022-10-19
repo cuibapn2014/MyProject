@@ -9427,7 +9427,7 @@ __webpack_require__.r(__webpack_exports__);
     order: Object
   },
   mounted: function mounted() {
-    (0,medium_zoom__WEBPACK_IMPORTED_MODULE_0__["default"])(document.querySelector(".product__thumbnail"), {
+    (0,medium_zoom__WEBPACK_IMPORTED_MODULE_0__["default"])(document.querySelectorAll(".product__thumbnail"), {
       background: "rgba(0,0,0,0)"
     });
   },
@@ -11726,7 +11726,7 @@ var app = new Vue({
     },
     toggleCustomModal: function toggleCustomModal() {
       var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-      this.objRequestProduct = obj;
+      this.objRequestProduct = obj != null ? obj : this.objRequestProduct;
       this.isCustomModal = !this.isCustomModal;
     },
     toggleUpdateAmountModal: function toggleUpdateAmountModal() {
@@ -57286,7 +57286,8 @@ var render = function () {
                   "div",
                   {
                     key: detail.id,
-                    staticClass: "grid grid-cols-5 gap-2 my-3 items-center",
+                    staticClass:
+                      "grid grid-cols-5 gap-2 my-3 items-center px-2 py-1 rounded-md hover:bg-gray-50 hover:text-gray-700 hover:font-bold cursor-pointer ease-in duration-150",
                   },
                   [
                     _c("img", {
@@ -57301,7 +57302,7 @@ var render = function () {
                           " x " +
                           _vm._s(detail.amount) +
                           "\n          " +
-                          _vm._s(detail.product.ingredient_type.name)
+                          _vm._s(detail.product.unit_cal.name)
                       ),
                     ]),
                     _vm._v(" "),
@@ -57333,7 +57334,7 @@ var render = function () {
               ),
               _vm._v(" "),
               _c("ul", [
-                _c("li", [
+                _c("li", { staticClass: "flex justify-between" }, [
                   _vm._v("\n          Tổng thành tiền:\n          "),
                   _c(
                     "span",
@@ -57342,7 +57343,7 @@ var render = function () {
                   ),
                 ]),
                 _vm._v(" "),
-                _c("li", [
+                _c("li", { staticClass: "flex justify-between" }, [
                   _vm._v("\n          Đã thanh toán:\n          "),
                   _c(
                     "span",
@@ -57351,7 +57352,7 @@ var render = function () {
                   ),
                 ]),
                 _vm._v(" "),
-                _c("li", [
+                _c("li", { staticClass: "flex justify-between" }, [
                   _vm._v("\n          Còn lại:\n          "),
                   _c(
                     "span",

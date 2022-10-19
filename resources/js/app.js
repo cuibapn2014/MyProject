@@ -372,7 +372,7 @@ const app = new Vue({
             this.isOpenView = e.isOpen
         },
         toggleCustomModal(obj = null) {
-            this.objRequestProduct = obj
+            this.objRequestProduct = obj != null ? obj : this.objRequestProduct
             this.isCustomModal = !this.isCustomModal
         },
         toggleUpdateAmountModal(idProduction = null) {

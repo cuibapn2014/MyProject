@@ -15,13 +15,13 @@ class TaskController extends Controller
     //
     public function index()
     {
-        if (Auth::user()->id_role < 2) return redirect()->route('admin.task.user.index');
+        if (Auth::user()->role->alias != 'CUSTOMER') return redirect()->route('admin.task.user.index');
         return view('admin.manage.task.task', ['tasks' => Task::orderByDesc('created_at')->paginate(25)]);
     }
 
     public function getByUser()
     {
-        if (Auth::user()->id_role > 2) return abort(401);
+        if (Auth::user()->role->alias == 'CUSTOMER') return abort(401);
         $id = Auth::user()->id;
 
         // return view('admin.manage.task.ListTask');

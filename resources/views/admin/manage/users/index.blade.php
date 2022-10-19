@@ -26,6 +26,7 @@ $current = 9;
                         <th class="px-4 py-3">Chức vụ</th>
                         <th class="px-4 py-3">Trạng thái</th>
                         <th class="px-4 py-3">Ngày tham gia</th>
+                        <th class="px-4 py-3">Hành động</th>
                     </tr>
                 </thead>
                 <tbody class="bg-[#ffffff] divide-y dark:divide-gray-700 dark:bg-gray-800">
@@ -39,8 +40,8 @@ $current = 9;
                         </td>
                         <td class="px-4 py-3 text-sm">
                             <img v-tooltip.top-start="'{{ $user->name }}'"
-                            src="{{asset('/img/user').'/'.$user->image }}"
-                            class="h-12 w-12 object-cover object-center rounded-full" />
+                                src="{{asset('/img/user').'/'.$user->image }}"
+                                class="h-12 w-12 object-cover object-center rounded-full" />
                         </td>
                         <td class="px-4 py-3 text-sm ">
                             {{ $user->name }}
@@ -52,16 +53,57 @@ $current = 9;
                             {{ $user->email ?? 'Chưa có' }}
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{ $user->id_role == 1 ? 'Nhân viên' : 'Quản trị viên' }} 
+                            {{ $user->role->name }}
                         </td>
+                        @switch($user->status)
+                        @case(1)
                         <td class="px-4 py-3 text-sm">
-                            <span class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white {{ $user->status != 1 ? 'bg-red-100 text-red-700 dark:bg-red-600' : 'bg-green-100 text-green-700 dark:bg-green-600' }}">
-                                {{ $user->status == 1 ? 'Đang sử dụng' : 'Ngưng sử dụng' }}
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-green-100 text-green-700 dark:bg-green-600">
+                                Đang sử dụng
                             </span>
                         </td>
+                        @break
+                        @case(2)
+                        <td class="px-4 py-3 text-sm">
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-orange-100 text-orange-700 dark:bg-orange-600">
+                                Tạm khóa
+                            </span>
+                        </td>
+                        @break
+                        @case(3)
+                        <td class="px-4 py-3 text-sm">
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-red-100 text-red-700 dark:bg-red-600">
+                                Ngưng sử dụng
+                            </span>
+                        </td>
+                        @break
+                        @endswitch
                         <td class="px-4 py-3 text-sm">
                             {{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y') }}
-                        </td>                             
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                            <button title="Chỉnh sửa"
+                                class="flex items-center float-left justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                aria-label="Edit" @click="toggleCustomModal({{ json_encode($user) }})">
+                                <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
+                                    </path>
+                                </svg>
+                            </button>
+                            <button title="Xóa" @click="openModal({{$user->id}})"
+                                class="flex items-center float-left justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                aria-label="Delete">
+                                <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                        </td>
                     </tr>
                     @php
                     $index++;
@@ -77,11 +119,177 @@ $current = 9;
     </div>
 </div>
 
-<transition enter-class="ease-in opacity-0" enter-to-class="opacity-100" leave-class="ease-out opacity-100"
+<transition enter-class="ease-out opacity-0" enter-to-class="opacity-100" leave-class="ease-in opacity-100"
     leave-to-class="opacity-0">
-    <modal-detail v-if="this.isOpenView" @toggle-detail="closeModalView" :order="this.detailOrder"
-        class="transition duration-150">
-    </modal-detail>
+    <div v-show="this.isCustomModal" class="
+        fixed
+        inset-0
+        z-30
+        flex
+        items-end
+        transition duration-150
+        bg-black bg-opacity-50
+        sm:items-center sm:justify-center
+      " id="backdrop-overlay" @click="toggleCustomModal()">
+        <transition enter-class="ease-out opacity-0 transform translate-y-1/2" enter-to-class="opacity-100"
+            leave-class="ease-in opacity-100" leave-to-class="opacity-0 transform translate-y-1/2">
+            <!-- Modal -->
+            <div v-show="this.isCustomModal" class="
+          w-full
+          px-6
+          py-4
+          overflow-hidden
+          bg-[#ffffff]
+          rounded-t-lg
+          duration-150
+          dark:bg-gray-800
+          sm:rounded-lg sm:m-4 sm:max-w-xl
+        " role="dialog" id="modal" @click.stop="">
+                <form :action="'/admin/employee/update/' + objRequestProduct?.id" method="POST">
+                    @csrf
+                    <!-- Remove header if you don't want a close icon. Use modal body to place modal tile. -->
+                    <header class="flex justify-end">
+                        <button class="
+              inline-flex
+              items-center
+              justify-center
+              w-6
+              h-6
+              text-gray-400
+              transition-colors
+              duration-150
+              rounded
+              dark:hover:text-gray-200
+              hover: hover:text-gray-700
+            " aria-label="close" @click="toggleCustomModal()" type="button">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" role="img" aria-hidden="true">
+                                <path
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" fill-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </header>
+                    <!-- Modal body -->
+                    <div class="mt-4 mb-6">
+                        <!-- Modal title -->
+                        <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
+                            Cập nhật người dùng
+                        </p>
+                        <!-- Modal description -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="block text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Tên người dùng</span>
+                                <input class="
+                                    block
+                                    w-full
+                                    mt-1
+                                    text-sm
+                                    dark:border-gray-600 dark:bg-gray-700
+                                    focus:border-purple-400
+                                    focus:outline-none
+                                    focus:shadow-outline-purple
+                                    dark:text-gray-300 dark:focus:shadow-outline-gray
+                                    form-input
+                                  " type="text" disabled :value="objRequestProduct?.name" />
+                            </label>
+                            <label class="block text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Số điện thoại</span>
+                                <input class="
+                                    block
+                                    w-full
+                                    mt-1
+                                    text-sm
+                                    dark:border-gray-600 dark:bg-gray-700
+                                    focus:border-purple-400
+                                    focus:outline-none
+                                    focus:shadow-outline-purple
+                                    dark:text-gray-300 dark:focus:shadow-outline-gray
+                                    form-input
+                                  " type="text" disabled :value="objRequestProduct?.phone" />
+                            </label>
+                            <label class="block text-sm my-2">
+                                <span class="text-gray-700 dark:text-gray-400">Trạng thái</span>
+                                <select
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-select"
+                                    name="status">
+                                    <option value="1" :selected="objRequestProduct?.status == 1">Đang sử dụng</option>
+                                    <option value="2" :selected="objRequestProduct?.status == 2">Tạm khóa</option>
+                                    <option value="3" :selected="objRequestProduct?.status == 3">Ngưng sử dụng</option>
+                                </select>
+                            </label>
+                            <label class="block text-sm my-2">
+                                <span class="text-gray-700 dark:text-gray-400">Chức vụ</span>
+                                <select
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-select"
+                                    name="role">
+                                    <option v-for="role in {{ json_encode($roles) }}" :key="role.id" :value="role.id"
+                                        :selected="role.id == objRequestProduct?.role.id">[[
+                                        role.name ]]</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                    <footer class="
+            flex flex-col
+            items-center
+            justify-end
+            px-6
+            py-3
+            -mx-6
+            -mb-4
+            space-y-4
+            sm:space-y-0 sm:space-x-6 sm:flex-row
+            bg-gray-50
+            dark:bg-gray-800
+          ">
+                        <button type="button" @click="toggleCustomModal()" class="
+              w-full
+              px-5
+              py-3
+              text-sm
+              font-medium
+              leading-5
+              text-gray-700
+              transition-colors
+              duration-150
+              border border-gray-300
+              rounded-lg
+              dark:text-gray-400
+              sm:px-4 sm:py-2 sm:w-auto
+              active:bg-transparent
+              hover:border-gray-500
+              focus:border-gray-500
+              active:text-gray-500
+              focus:outline-none focus:shadow-outline-gray
+            ">
+                            Hủy bỏ
+                        </button>
+                        <button class="
+              w-full
+              px-5
+              py-3
+              text-sm
+              font-medium
+              leading-5
+              text-white
+              transition-colors
+              duration-150
+              bg-purple-600
+              border border-transparent
+              rounded-lg
+              sm:w-auto sm:px-4 sm:py-2
+              active:bg-purple-600
+              hover:bg-purple-700
+              focus:outline-none focus:shadow-outline-purple
+            ">
+                            Cập nhật
+                        </button>
+                    </footer>
+                </form>
+            </div>
+        </transition>
+    </div>
+
 </transition>
 
 <transition enter-class="ease-out opacity-0" enter-to-class="opacity-100" leave-class="ease-in opacity-100"
@@ -136,11 +344,11 @@ $current = 9;
                 <div class="mt-4 mb-6">
                     <!-- Modal title -->
                     <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
-                        Xóa đề nghị sản xuất
+                        Xóa người dùng
                     </p>
                     <!-- Modal description -->
                     <p class="text-sm text-gray-700 dark:text-gray-400">
-                        Bạn có chắc chắn muốn xóa đề nghị sản xuất này ?
+                        Bạn có chắc chắn muốn xóa người dùng này ?
                     </p>
                 </div>
                 <footer class="

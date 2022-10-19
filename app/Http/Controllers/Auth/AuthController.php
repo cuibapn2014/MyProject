@@ -38,13 +38,12 @@ class AuthController extends Controller
         );
 
         $credentials = $req->only('email', 'password');
-        $credentials['status'] = 1;
+        // $credentials['status'] = 1;
         $remember = $req->remember == 'on' ? true : false;
         if (Auth::attempt($credentials, $remember)) {
-            $redirect = Auth::user()->id_role > 0 ?
-                redirect()->route('admin.home')->with('success', 'Logined success!') :
-                redirect()->route('home')->with('success', 'Logined success!');
-            return $redirect;
+            if (auth()->user()->role->alias != 'CUSTOMER')
+                return redirect('/admin')->with('success', 'Logined success!');
+            return redirect('/')->with('success', 'Logined success!');
         }
 
         return back()->withInput()->with('failed', 'Email hoặc mật khẩu không chính xác');
@@ -79,7 +78,7 @@ class AuthController extends Controller
         $user->name = $req->fullname;
         $user->email = $req->email;
         $user->password = Hash::make($req->password);
-        $user->id_role = 1;
+        $user->id_role = 3;
         $user->save();
 
         return back()->with('success', 'Đăng ký thành công!');

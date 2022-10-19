@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\TaskController;
 use App\Http\Controllers\Admin\ProviderController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\FinanceController;
 use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\PlanIngredientController;
 use App\Http\Controllers\Admin\ProducedController;
@@ -189,6 +190,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
         // $route->get('/export', [ProductionRequestController::class, 'export'])->name('admin.production.export');
     });
 
+    $route->group(['prefix' => 'finances'], function ($route) {
+        $route->get('/', [FinanceController::class, 'index'])->name('admin.finance.index');
+        $route->get('/create', [FinanceController::class, 'create'])->name('admin.finance.create');
+        $route->post('/create', [FinanceController::class, 'store'])->name('admin.finance.request.create');
+        $route->get('/update/{id}', [FinanceController::class, 'edit'])->name('admin.finance.update');
+        $route->post('/update/{id}', [FinanceController::class, 'update'])->name('admin.finance.request.update');
+        $route->get('/delete/{id}', [FinanceController::class, 'delete'])->name('admin.finance.delete');
+        $route->get('/export', [FinanceController::class, 'export'])->name('admin.finance.export');
+        $route->get('/update-status/{id}/{status}', [FinanceController::class, 'updateStatus'])->name('admin.finance.updateStatus');
+    });
+
     $route->group(['prefix' => 'plan-ingredient'], function ($route) {
         $route->get('/create/{id_product}', [PlanIngredientController::class, 'create'])->name('admin.planIngredient.create');
     });
@@ -215,8 +227,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
     $route->get('/requirement/update-status/{id}', [RequirementController::class, 'updateStatus'])->name('admin.requirement.updateStatus');
 
 
-    $route->group(['prefix' => 'employee'], function ($route) {
+    $route->group(['prefix' => 'employee', 'middleware' => 'role:ADMIN,CEO,USER_HR'], function ($route) {
         $route->get('/', [UserController::class, 'index'])->name('admin.employee.index');
+        $route->post('/update/{id}', [UserController::class, 'updateStatus'])->name('admin.employee.updateStatus');
     });
 });
 
