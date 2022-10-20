@@ -26,10 +26,14 @@ class UserController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        $user->update([
-            'status' => $request->status,
-            'id_role' => $request->role
-        ]);
+        if(in_array(auth()->user()->role->alias, ['ADMIN', 'USER_HR', 'CEO']) 
+        && ($user->role->alias != 'ADMIN' || auth()->user()->role->alias == $user->role->alias)){
+            $user->update([
+                'status' => $request->status,
+                'id_role' => $request->role
+            ]);
         return back()->with('success', 'Cập nhật thành công');
+        }
+        return back()->with('failed', 'Không thể cập nhật do không đủ thẩm quyền');
     }
 }

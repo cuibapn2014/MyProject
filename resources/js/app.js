@@ -198,6 +198,23 @@ const app = new Vue({
                             },
                             onClick: function () { }, // Callback after click
                         }).showToast();
+                        axios.get(`/admin/plan-ingredient/create/${dataUpdate.idRequest}`)
+                        .then(res => {
+                            Toastify({
+                                text: "Đã cập nhật kế hoạch vật tư",
+                                duration: 3000,
+                                newWindow: true,
+                                close: true,
+                                gravity: "top", // `top` or `bottom`
+                                position: "right", // `left`, `center` or `right`
+                                stopOnFocus: true, // Prevents dismissing of toast on hover
+                                className: "z-50",
+                                style: {
+                                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                                },
+                                onClick: function () { }, // Callback after click
+                            }).showToast();
+                        })
                         setTimeout(() => {
                             window.location.reload()
                         }, 3000)
@@ -213,6 +230,34 @@ const app = new Vue({
                     })
                     .catch(err => console.error(err))
             }
+        },
+        async handleCreateProduction(id) {
+            this.isLoad = true
+            await axios.get(`/admin/plan/create/${id}`)
+                .then(res => {
+                    if (res.data.code != 200) console.log(res.data.msg)
+                    else {
+                        this.isLoad = false
+                        Toastify({
+                            text: "Tạo lệnh sản xuất thành công",
+                            duration: 3000,
+                            newWindow: true,
+                            close: true,
+                            gravity: "top", // `top` or `bottom`
+                            position: "right", // `left`, `center` or `right`
+                            stopOnFocus: true, // Prevents dismissing of toast on hover
+                            className: "z-50",
+                            style: {
+                                background: "linear-gradient(to right, #00b09b, #96c93d)",
+                            },
+                            onClick: function () { }, // Callback after click
+                        }).showToast();
+                        setTimeout(() => {
+                            window.location.reload()
+                        }, 3000)
+                    }
+                })
+                .catch(err => console.log(err))
         },
         getListTask() {
             window.Echo.private(`task.${this.user}`)

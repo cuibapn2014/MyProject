@@ -9,7 +9,9 @@ $current = 9;
         Nhân sự
     </h2>
     @if(session('success'))
-    <p class="p-2 rounded-md my-2 bg-green-100 text-green-400 text-sm">{{ session('success') }}</p>
+    <p class="p-2 rounded-md my-2 bg-green-100 text-green-500 text-sm">{{ session('success') }}</p>
+    @elseif(session('failed'))
+    <p class="p-2 rounded-md my-2 bg-red-100 text-red-500 text-sm">{{ session('failed') }}</p>
     @endif
     <div class="w-full overflow-x-auto rounded-lg shadow-xs mb-4" v-dragscroll style="max-height: 600px;">
         <div class="w-full">

@@ -57,7 +57,7 @@ $current = 4;
                         <div class="flex items-center mx-2">
                             <img src="{{ asset('/img/user').'/'.$user->image }}"
                                 class="h-9 w-9 rounded-full object-cover" />
-                            <span class="mx-2">{{ $user->name }}</span>
+                            <span class="mx-2">{{ $user->name . ' - ' . $user->role->name }}</span>
                         </div>
                     </label>
                 </div>

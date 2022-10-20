@@ -15,7 +15,7 @@ class TaskController extends Controller
     //
     public function index()
     {
-        if (Auth::user()->role->alias != 'CUSTOMER') return redirect()->route('admin.task.user.index');
+        if (!in_array(auth()->user()->role->alias,array('CEO', 'ADMIN'))) return redirect()->route('admin.task.user.index');
         return view('admin.manage.task.task', ['tasks' => Task::orderByDesc('created_at')->paginate(25)]);
     }
 
@@ -41,7 +41,7 @@ class TaskController extends Controller
     public function create()
     {
         $this->middleware('admin');
-        $user =  User::where('id', '!=', auth()->user()->id)->where('role', '<', 3)->get();
+        $user =  User::where('id', '!=', auth()->user()->id)->whereNotIn('id_role', [3, 4])->get();
         return view('admin.manage.task.createTask', ['users' => $user]);
     }
 

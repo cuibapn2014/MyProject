@@ -13,6 +13,7 @@ class FinanceController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('role:ADMIN,CEO,USER_ACCOUNTANT,USER_SALES');
     }
 
     public function index(){
@@ -21,7 +22,7 @@ class FinanceController extends Controller
     }
 
     public function create(Request $request){
-        $title = $request->type ? "Phiếu chi" : "Phiếu thu";
+        $title = $request->type == 2 ? "Phiếu chi" : "Phiếu thu";
         $count = Finance::count() + 1;
         $alias = $request->type ? 'PC' : 'PT';
         $code = $alias . str_pad($count, 6, "0", STR_PAD_LEFT);
@@ -35,10 +36,10 @@ class FinanceController extends Controller
         return redirect()->route('admin.finance.index')->with('success', 'Tạo mới thành công');
     }
 
-    public function edit($id){
-        $title = $request->type == 1 ? "Phiếu chi" : "Phiếu thu";
-        $finances = Finance::findOrFail($id);
-        return view('admin.manage.finances.edit', compact('finances', 'title'));
+    public function edit(Request $request, $id){
+        $title = $request->type == 1 ? "Phiếu thu" : "Phiếu chi";
+        $finance = Finance::findOrFail($id);
+        return view('admin.manage.finances.edit', compact('finance', 'title'));
     }
 
     public function update(FinanceRequest $req, $id){

@@ -21,6 +21,7 @@ class ProductionRequest extends Model
         'completed',
         'image',
         'note',
+        'priority',
         'status',
         'creator'
     ];

@@ -14,6 +14,7 @@ class ProviderController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('role:ADMIN,CEO,USER_ACCOUNTANT,USER_SALES');
     }
 
     public function index()
@@ -32,7 +33,7 @@ class ProviderController extends Controller
         DB::beginTransaction();
         try {
             $provider = Provider::create($req->all());
-            $provider->status = $req->status == 1 ? 'Đang hợp tác' : 'Ngưng hợp tác';
+            $provider->status = $req->status;
             $provider->save();
             DB::commit();
         } catch (\Exception $ex) {
@@ -54,7 +55,7 @@ class ProviderController extends Controller
         try {
             $provider = Provider::findOrFail($id);
             $provider->update($req->all());
-            $provider->status = $req->status == 1 ? 'Đang hợp tác' : 'Ngưng hợp tác';
+            $provider->status = $req->status;
             $provider->save();
             DB::commit();
         } catch (\Exception $ex) {

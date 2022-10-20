@@ -29,9 +29,11 @@ $current = 11;
             mb-1" name="detail_order_id" id="provider" aria-placeholder="Chọn đơn hàng">
                     <option value="" disabled selected>-- Chọn đơn hàng --</option>
                     @foreach($orders as $order)
-                    <option value="{{ $order->detail->id }}" {{ old('detail_order_id')==$order->detail->id ? 'selected'
+                    @foreach($order->detail as $detail)
+                    <option value="{{ $detail->id }}" {{ old('detail_order_id')==$detail->id ? 'selected'
                         :
-                        null }}>{{ $order->TenKhachHang . __(' - ') . $order->detail->TenSP }}</option>
+                        null }}>{{ $order->customer->name . __(' - ') . $detail->product->Ten }}</option>
+                        @endforeach
                     @endforeach
                 </select>
                 @error('detail_order_id')

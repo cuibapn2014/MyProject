@@ -66,9 +66,24 @@ $current = 7;
                             style="max-width: 200px;text-overflow:ellipsis">
                             {{ $provider->address }}
                         </td>
+                        @switch($provider->status)
+                        @case(1)
                         <td class="px-4 py-3 text-sm">
-                            {{ $provider->status }}
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-green-100 text-green-700 dark:bg-green-600">
+                                Đang hợp tác
+                            </span>
                         </td>
+                        @break
+                        @case(2)
+                        <td class="px-4 py-3 text-sm">
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-red-100 text-red-700 dark:bg-red-600">
+                                Ngưng hợp tác
+                            </span>
+                        </td>
+                        @break
+                        @endswitch
                         <td class="px-4 py-3 text-sm">
                             {{ $provider->note }}
                         </td>

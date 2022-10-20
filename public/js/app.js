@@ -11545,6 +11545,26 @@ var app = new Vue({
                       onClick: function onClick() {} // Callback after click
 
                     }).showToast();
+                    axios__WEBPACK_IMPORTED_MODULE_0___default().get("/admin/plan-ingredient/create/".concat(dataUpdate.idRequest)).then(function (res) {
+                      toastify_js__WEBPACK_IMPORTED_MODULE_8___default()({
+                        text: "Đã cập nhật kế hoạch vật tư",
+                        duration: 3000,
+                        newWindow: true,
+                        close: true,
+                        gravity: "top",
+                        // `top` or `bottom`
+                        position: "right",
+                        // `left`, `center` or `right`
+                        stopOnFocus: true,
+                        // Prevents dismissing of toast on hover
+                        className: "z-50",
+                        style: {
+                          background: "linear-gradient(to right, #00b09b, #96c93d)"
+                        },
+                        onClick: function onClick() {} // Callback after click
+
+                      }).showToast();
+                    });
                     setTimeout(function () {
                       window.location.reload();
                     }, 3000);
@@ -11589,16 +11609,63 @@ var app = new Vue({
         }, _callee6);
       }))();
     },
-    getListTask: function getListTask() {
+    handleCreateProduction: function handleCreateProduction(id) {
       var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+        return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                _this4.isLoad = true;
+                _context7.next = 3;
+                return axios__WEBPACK_IMPORTED_MODULE_0___default().get("/admin/plan/create/".concat(id)).then(function (res) {
+                  if (res.data.code != 200) console.log(res.data.msg);else {
+                    _this4.isLoad = false;
+                    toastify_js__WEBPACK_IMPORTED_MODULE_8___default()({
+                      text: "Tạo lệnh sản xuất thành công",
+                      duration: 3000,
+                      newWindow: true,
+                      close: true,
+                      gravity: "top",
+                      // `top` or `bottom`
+                      position: "right",
+                      // `left`, `center` or `right`
+                      stopOnFocus: true,
+                      // Prevents dismissing of toast on hover
+                      className: "z-50",
+                      style: {
+                        background: "linear-gradient(to right, #00b09b, #96c93d)"
+                      },
+                      onClick: function onClick() {} // Callback after click
+
+                    }).showToast();
+                    setTimeout(function () {
+                      window.location.reload();
+                    }, 3000);
+                  }
+                })["catch"](function (err) {
+                  return console.log(err);
+                });
+
+              case 3:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7);
+      }))();
+    },
+    getListTask: function getListTask() {
+      var _this5 = this;
 
       window.Echo["private"]("task.".concat(this.user)).listen('TaskEvent', function (e) {
         console.log(e);
 
-        _this4.dataTask.push(e.assign);
+        _this5.dataTask.push(e.assign);
 
-        console.log(_this4.dataTask);
-        _this4.countTask += 1;
+        console.log(_this5.dataTask);
+        _this5.countTask += 1;
       });
     },
     getThemeFromLocalStorage: function getThemeFromLocalStorage() {

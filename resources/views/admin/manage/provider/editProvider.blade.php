@@ -61,7 +61,7 @@ $current = 7;
                     class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
                     rows="3" placeholder="Nhập ghi chú" name="note" value="{{ $provider->note }}"></textarea>
             </label>
-            <button class="mt-4 text-white px-4 py-2 rounded-lg border-0 bg-indigo-600">Thêm</button>
+            <button class="mt-4 text-white px-4 py-2 rounded-lg border-0 bg-indigo-600">Lưu thay đổi</button>
             <button type="button" class="mt-4 text-white px-4 py-2 rounded-lg border-0 bg-indigo-600 cursor-pointer"
                 @click.prevent="openModal">Quay về</button>
         </div>
