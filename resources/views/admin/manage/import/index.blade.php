@@ -75,13 +75,10 @@ $current = 10;
                         <td class="px-3 py-3 text-sm ">
                             @switch($import->type)
                             @case(1)
-                            Nhập kho nguyên phụ liệu
+                            Lưu kho
                             @break
                             @case(2)
-                            Nhập kho thành phẩm
-                            @break
-                            @case(3)
-                            Nhập kho phế phẩm
+                            Sản xuất
                             @break
                             @endswitch
                         </td>

@@ -39,7 +39,10 @@ class IngredientController extends Controller
         $units = UnitCalculate::all();
         $ingredientTypes = IngredientType::all();
         $title = $request->type == 1 ? "Thành phẩm" : "Nguyên phụ liệu";
-        return view('admin.manage.ingredient.createIngredient', compact('providers', 'units', 'ingredientTypes', 'title'));
+        $char = $request->type == 1 ? "MTP" : "MVT";
+        $count = Ingredient::count() + 1;
+        $code = $char . str_pad($count, 6, '0', STR_PAD_LEFT);
+        return view('admin.manage.ingredient.createIngredient', compact('providers', 'units', 'ingredientTypes', 'title', 'code'));
     }
 
     public function store(Request $req)

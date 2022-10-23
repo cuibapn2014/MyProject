@@ -131,7 +131,7 @@ $current = 0;
                     Nợ công
                 </p>
                 <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                    {{ number_format($debt->first()->debt) }} <sup>đ</sup>
+                    {{ number_format($debt->sum('debt')) }} <sup>đ</sup>
                 </p>
             </div>
         </div>

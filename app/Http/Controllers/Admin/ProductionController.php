@@ -33,7 +33,7 @@ class ProductionController extends Controller
         $productRequest = ProductionRequest::findOrFail($idProduction);
         if($exists->count() > 0) $exists->delete();
         if(count($planIngredient) <= 0)
-            return back()->withErrors(['available' => 'Vui lòng tạo kế hoạch vật tư trước khi tạo lệnh sản xuất']);
+            return response()->json(['code' => 500, 'status' => 'failed','msg' => 'Thất bại! Hãy tạo kế hoạch vật tư trước khi tạo lệnh sản xuất']);
         DB::beginTransaction();
         try {        
             foreach ($planIngredient as $plan) {
@@ -59,7 +59,7 @@ class ProductionController extends Controller
             throw $ex;
         }
 
-        return response()->json(['code' => 200, 'msg' => 'success']);
+        return response()->json(['code' => 200, 'status' => 'success', 'msg' => 'Tạo lệnh sản xuất thành công']);
     }
 
     public function updateStatus(Request $req, $id)

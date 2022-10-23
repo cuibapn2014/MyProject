@@ -235,11 +235,26 @@ const app = new Vue({
             this.isLoad = true
             await axios.get(`/admin/plan/create/${id}`)
                 .then(res => {
-                    if (res.data.code != 200) console.log(res.data.msg)
-                    else {
-                        this.isLoad = false
+                    this.isLoad = false
+                    if (res.data.code != 200) {
                         Toastify({
-                            text: "Tạo lệnh sản xuất thành công",
+                            text: res.data.msg,
+                            duration: 3000,
+                            newWindow: true,
+                            close: true,
+                            gravity: "top", // `top` or `bottom`
+                            position: "right", // `left`, `center` or `right`
+                            stopOnFocus: true, // Prevents dismissing of toast on hover
+                            className: "z-50",
+                            style: {
+                                background: "#dc3545",
+                            },
+                            onClick: function () { }, // Callback after click
+                        }).showToast();
+                    }
+                    else {
+                        Toastify({
+                            text: res.data.msg,
                             duration: 3000,
                             newWindow: true,
                             close: true,

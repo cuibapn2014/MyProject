@@ -11,6 +11,7 @@ use App\Models\Cost;
 use App\Models\Customer;
 use App\Models\DetailOrder;
 use App\Models\WarehouseExport;
+use App\Models\WarehouseImport;
 use Illuminate\Support\Facades\File;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -21,16 +22,20 @@ class AdminController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     public function index()
     {
         $revenue = WarehouseExport::selectRaw('sum(paid) as total')->first();
         $countOrder = Order::selectRaw('count(id) as total')->first();
         $countClient = Customer::all();
-        $debt = WarehouseExport::selectRaw('(sum(ingredients.GiaThanh * warehouse_exports.amount - warehouse_exports.paid)) as debt')
-        ->join('ingredients', 'warehouse_exports.id_ingredient', 'ingredients.id')
+        $debtSale = WarehouseExport::selectRaw('(sum(ingredients.GiaThanh * warehouse_exports.amount - warehouse_exports.paid)) as debt')
+            ->join('ingredients', 'warehouse_exports.id_ingredient', 'ingredients.id')
+            ->get();
+        $debtBuy = WarehouseImport::selectRaw('(sum(ingredients.Gia * warehouse_imports.amount - warehouse_imports.paid)) as debt')
+        ->join('ingredients', 'warehouse_imports.id_ingredient', 'ingredients.id')
         ->get();
-        return view('admin.home',['revenue' => $revenue,'countOrder' => $countOrder,'countClient' => $countClient,'debt' => $debt]);
+        $debt = collect(array($debtSale[0], $debtBuy[0]));
+        return view('admin.home', compact('revenue', 'countOrder', 'countClient', 'debt'));
     }
 
     public function getInvoice($id)
@@ -45,7 +50,7 @@ class AdminController extends Controller
         // }
         // $pdf = PDF::loadView('admin.invoice',['order' => $order,'cost' => $price])->setOptions(['defaultFont' => 'time-new-roman']);
         // return $pdf->stream('invoice.pdf', array('Attachment'=> 1));         
-        return view('admin.invoice', ['order' => $order,'cost' => $price]);
+        return view('admin.invoice', ['order' => $order, 'cost' => $price]);
     }
 
     public function updateImageUser(Request $req, $id)
@@ -79,38 +84,41 @@ class AdminController extends Controller
                 'name.required' => 'Tên của bạn không được để trống',
                 'phone.required' => 'Số điện thoại không được để trống',
                 'phone.numeric' => 'Số điện thoại không hợp lệ',
-                'phone.digits' => 'Số điện thoại không hợp lệ' 
+                'phone.digits' => 'Số điện thoại không hợp lệ'
             ]
         );
         $user->name = $req->name;
         $user->phone = $req->phone;
         $user->save();
-        
+
         return response()->json($user);
     }
 
-    public function getRevenue(){
+    public function getRevenue()
+    {
         return Order::selectRaw('month(orders.created_at) as month, sum(warehouse_exports.paid) as total')
-        ->join('warehouse_exports', 'orders.id', 'id_order')
-        ->whereYear('orders.created_at', date('Y'))
-        ->groupBy('month')
-        ->orderBy('month','asc')
-        ->get();
+            ->join('warehouse_exports', 'orders.id', 'id_order')
+            ->whereYear('orders.created_at', date('Y'))
+            ->groupBy('month')
+            ->orderBy('month', 'asc')
+            ->get();
     }
 
-    public function countTypeOrder(){
+    public function countTypeOrder()
+    {
         return DetailOrder::selectRaw('count(id) as total, LoaiHang')
-        ->groupBy('LoaiHang')
-        ->get();
+            ->groupBy('LoaiHang')
+            ->get();
     }
 
-    public function getDebt(){
+    public function getDebt()
+    {
         return Order::selectRaw('month(orders.created_at) as month, sum(warehouse_exports.paid) as total, (sum(ingredients.GiaThanh * warehouse_exports.amount - warehouse_exports.paid)) as debt')
-        ->join('warehouse_exports', 'orders.id', 'id_order')
-        ->join('ingredients', 'warehouse_exports.id_ingredient', 'ingredients.id')
-        ->whereYear('orders.created_at', date('Y'))
-        ->groupBy('month')
-        ->orderBy('month','asc')
-        ->get();
+            ->join('warehouse_exports', 'orders.id', 'id_order')
+            ->join('ingredients', 'warehouse_exports.id_ingredient', 'ingredients.id')
+            ->whereYear('orders.created_at', date('Y'))
+            ->groupBy('month')
+            ->orderBy('month', 'asc')
+            ->get();
     }
 }

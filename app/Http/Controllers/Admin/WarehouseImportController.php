@@ -26,7 +26,7 @@ class WarehouseImportController extends Controller
     {
         $products = Ingredient::orderBy('id_ingredient_type')->get();
         $count = WarehouseImport::count() + 1;
-        $code = 'NK'.str_pad($count, 6, '0', STR_PAD_LEFT);
+        $code = 'NK' . str_pad($count, 6, '0', STR_PAD_LEFT);
         return view('admin.manage.import.create', compact('products', 'code'));
     }
 
@@ -75,16 +75,19 @@ class WarehouseImportController extends Controller
         ]);
 
         $ingredient = Ingredient::findOrFail($import->id_ingredient);
-        $ingredient->update([
-            'amount' => $ingredient->amount + $import->amount,
-            'used_amount' => $ingredient->used_amount + $import->amount
-        ]);
-        
-        if($import->type == 3)
-        {
-                $ingredient->update([
-                    'waste_amount' => $ingredient->waste_amount + $import->amount
-                ]);
+
+        if ($import->type == 1) {
+            $ingredient->update([
+                'amount' => $ingredient->amount + $import->amount
+            ]);
+        } else if ($import->type == 2) {
+            $ingredient->update([
+                'used_amount' => $ingredient->used_amount + $import->amount
+            ]);
+        } else if ($import->type == 3) {
+            $ingredient->update([
+                'waste_amount' => $ingredient->waste_amount + $import->amount
+            ]);
         }
 
         return back()->with('success', 'Cập nhật trạng thái thành công');

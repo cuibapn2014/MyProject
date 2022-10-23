@@ -11,7 +11,8 @@ $current = 11;
     @if(session('success'))
     <p class="p-2 rounded-md my-2 bg-green-100 text-green-400 text-sm">{{ session('success') }}</p>
     @endif
-    <form action="{{ route('admin.production.request.update', ['id' => $production->id]) }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('admin.production.request.update', ['id' => $production->id]) }}" method="post"
+        enctype="multipart/form-data">
         @csrf
         <div class="flex flex-row items-center sm:flex-col">
             <label class="block text-sm">
@@ -27,11 +28,16 @@ $current = 11;
             focus:shadow-outline-purple
             dark:focus:shadow-outline-gray
             mb-1" name="detail_order_id" id="provider" aria-placeholder="Chọn đơn hàng">
-                    <option value="" disabled selected>-- Chọn đơn hàng --</option>
+                    <option value="" disabled>-- Chọn đơn hàng --</option>
+                    <option value="0" selected>Lưu kho</option>
                     @foreach($orders as $order)
-                    <option value="{{ $order->detail->id }}" {{ $production->detail_order_id ==$order->detail->id ? 'selected'
+
+                    @foreach($order->detail as $detail)
+                    <option value="{{ $detail->id }}" {{ $production->detail_order_id == $detail->id ?
+                        'selected'
                         :
-                        null }}>{{ $order->TenKhachHang . __(' - ') . $order->detail->TenSP }}</option>
+                        null }}>{{ $order->customer->name . __(' - ') . $detail->product->Ten }}</option>
+                    @endforeach
                     @endforeach
                 </select>
                 @error('detail_order_id')
@@ -42,8 +48,7 @@ $current = 11;
                 <span class="text-gray-700 dark:text-gray-400">Mã đề nghị<span class="text-red-500">*</span></span>
                 <input
                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    placeholder="Nhập mã đề nghị" name="code"
-                    value="{{ $production->code }}" />
+                    placeholder="Nhập mã đề nghị" name="code" value="{{ $production->code }}" />
                 @error('code')
                 <span class="text-red-500 pt-2">{{ $message }}</span>
                 @enderror
@@ -94,7 +99,8 @@ $current = 11;
               " name="id_product" id="id_product" aria-placeholder="Chọn sản phẩm">
                 <option value="">-- Chọn sản phẩm --</option>
                 @foreach($product as $product)
-                <option {{ $production->id_product == $product->id ? 'selected' : ''}} value="{{ $product->id }}">{{ $product->Ten }}</option>
+                <option {{ $production->id_product == $product->id ? 'selected' : ''}} value="{{ $product->id }}">{{
+                    $product->Ten }}</option>
                 @endforeach
             </select>
             @error('id_ingredient')
@@ -118,7 +124,8 @@ $current = 11;
                 <span class="text-gray-700 dark:text-gray-400">Số lượng <span class="text-red-500">*</span></span>
                 <input
                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    type="number" placeholder="Nhập số lượng" min="1" value="{{ $production->amount ?? 1 }}" name="amount" />
+                    type="number" placeholder="Nhập số lượng" min="1" value="{{ $production->amount ?? 1 }}"
+                    name="amount" />
                 @error('amount')
                 <span class="text-red-500 pt-2">{{ $message }}</span>
                 @enderror

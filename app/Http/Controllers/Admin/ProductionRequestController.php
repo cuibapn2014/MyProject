@@ -113,7 +113,7 @@ class ProductionRequestController extends Controller
     {
         $requestProduction = ProductionRequest::findOrFail($request->idRequest);
         $maxAmount = Ingredient::findOrFail($request->idIngredient);
-   
+
         $validator = Validator::make($request->all(), [
             'completed' => [
                 'min:0',
@@ -128,7 +128,7 @@ class ProductionRequestController extends Controller
         if ($validator->fails()) {
             return response()->json(['code' => 500, 'msg' => 'Update failed']);
         }
-        
+
         $calAmount =  $requestProduction->completed - $request->completed;
         $maxAmount->amount += $calAmount;
         $maxAmount->save();

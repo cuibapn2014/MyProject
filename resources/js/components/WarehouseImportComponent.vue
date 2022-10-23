@@ -48,9 +48,8 @@
           v-model="productData.type"
         >
           <option value="" disabled selected>-- Loại nhập kho --</option>
-          <option value="1" selected>Nguyên phụ liệu</option>
-          <option value="2">Thành phẩm sản xuất</option>
-          <option value="3">Phế phẩm</option>
+          <option value="1" selected>Lưu kho</option>
+          <option value="2">Sản xuất</option>
         </select>
       </label>
       <label class="block text-sm my-2 mx-2">

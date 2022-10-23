@@ -27,7 +27,8 @@ $current = 11;
             focus:shadow-outline-purple
             dark:focus:shadow-outline-gray
             mb-1" name="detail_order_id" id="provider" aria-placeholder="Chọn đơn hàng">
-                    <option value="" disabled selected>-- Chọn đơn hàng --</option>
+                    <option value="" disabled>-- Chọn đơn hàng --</option>
+                    <option value="0" selected>Lưu kho</option>
                     @foreach($orders as $order)
                     @foreach($order->detail as $detail)
                     <option value="{{ $detail->id }}" {{ old('detail_order_id')==$detail->id ? 'selected'

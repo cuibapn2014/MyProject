@@ -11206,7 +11206,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     product_update: Object,
@@ -11620,10 +11619,30 @@ var app = new Vue({
                 _this4.isLoad = true;
                 _context7.next = 3;
                 return axios__WEBPACK_IMPORTED_MODULE_0___default().get("/admin/plan/create/".concat(id)).then(function (res) {
-                  if (res.data.code != 200) console.log(res.data.msg);else {
-                    _this4.isLoad = false;
+                  _this4.isLoad = false;
+
+                  if (res.data.code != 200) {
                     toastify_js__WEBPACK_IMPORTED_MODULE_8___default()({
-                      text: "Tạo lệnh sản xuất thành công",
+                      text: res.data.msg,
+                      duration: 3000,
+                      newWindow: true,
+                      close: true,
+                      gravity: "top",
+                      // `top` or `bottom`
+                      position: "right",
+                      // `left`, `center` or `right`
+                      stopOnFocus: true,
+                      // Prevents dismissing of toast on hover
+                      className: "z-50",
+                      style: {
+                        background: "#dc3545"
+                      },
+                      onClick: function onClick() {} // Callback after click
+
+                    }).showToast();
+                  } else {
+                    toastify_js__WEBPACK_IMPORTED_MODULE_8___default()({
+                      text: res.data.msg,
                       duration: 3000,
                       newWindow: true,
                       close: true,
@@ -59242,14 +59261,10 @@ var render = function () {
                 ),
                 _vm._v(" "),
                 _c("option", { attrs: { value: "1", selected: "" } }, [
-                  _vm._v("Nguyên phụ liệu"),
+                  _vm._v("Lưu kho"),
                 ]),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "2" } }, [
-                  _vm._v("Thành phẩm sản xuất"),
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "3" } }, [_vm._v("Phế phẩm")]),
+                _c("option", { attrs: { value: "2" } }, [_vm._v("Sản xuất")]),
               ]
             ),
           ]),

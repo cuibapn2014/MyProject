@@ -44,6 +44,7 @@ $current = 11;
                         <th class="px-4 py-3 font-bold">#</th>
                         <th class="px-4 py-3">Hình ảnh</th>
                         <th class="px-4 py-3">Đề nghị</th>
+                        <th class="px-4 py-3">Loại</th>
                         <th class="px-4 py-3">Sản phẩm</th>
                         <th class="px-4 py-3">Thuộc tính</th>
                         <th class="px-4 py-3">Yêu cầu</th>
@@ -69,6 +70,9 @@ $current = 11;
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{ $production->code }}
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                            {{ $production->detail_order_id > 0 ? 'Sản xuất theo đơn' : 'Sản xuất lưu kho' }}
                         </td>
                         <td class="px-4 py-3 text-sm ">
                             {{ $production->product->Ten }}
@@ -186,7 +190,7 @@ $current = 11;
                                         clip-rule="evenodd" />
                                 </svg>
                             </button>
-                            @else
+                            @elseif($production->status < 4)
                             <!-- <button v-tooltip="'Cập nhật trạng thái'"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
