@@ -9,8 +9,11 @@
     @if(session('success'))
     <meta http-equiv="refresh" content="2; url={{ route('login') }}">
     @endif
+    <link rel="stylesheet" href="{{ asset('css/tailwind.output.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/app.css')}} " />
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('/img/favicons/favicon-16x16.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="icon" type="image/png" sizes="16x16" href="">
 
     <title>Register | {{config('app.name')}}</title>
 
@@ -19,71 +22,73 @@
 
 <body>
 
-    <section class="min-h-screen flex items-stretch text-white ">
-        <div class="lg:flex w-1/2 hidden bg-gray-500 bg-no-repeat bg-cover relative items-center"
-            style="background-image: url(https://media.travelmag.vn/files/thuannguyen/2020/04/25/cach-chup-anh-dep-tai-da-lat-1-2306.jpeg);">
-            <div class="absolute bg-black opacity-40 inset-0 z-0"></div>
-            <div class="w-full px-24 z-10">
-                <h1 class="text-5xl font-bold text-left tracking-wide"></h1>
-                <p class="text-5xl my-4 text-blod text-center"> {{ config('app.name') }}</p>
-                <p class="text-xl my-4 text-center">{{ __('Garment Factory Association') }}</p>
-            </div>
-
-        </div>
-        <div class="lg:w-1/2 w-full flex items-center justify-center text-center md:px-16 px-0 z-0 bg-gray-300">
-            <div class="absolute lg:hidden z-10 inset-0 bg-gray-500 bg-no-repeat bg-cover items-center"
-                style="background-image: url(https://media.travelmag.vn/files/thuannguyen/2020/04/25/cach-chup-anh-dep-tai-da-lat-1-2306.jpeg);">
-                <div class="absolute bg-black opacity-60 inset-0 z-0"></div>
-            </div>
-            <div class="w-full py-6 z-20 ">
-                <h1 class="my-6">
-                    <div class="w-auto h-7 sm:h-8 inline-flex text-4xl text-blod lg:text-black md:text-white">
-                        {{ config('app.name') }}
-                    </div>
-                </h1>
-
-                <div class="lg:text-black md:text-white text-blod ">
-                    Đăng ký tài khoản
+    <div class="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900">
+        <div class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-[#ffffff] rounded-lg shadow-xl dark:bg-gray-800">
+            <div class="flex flex-col overflow-y-auto md:flex-row">
+                <div class="h-32 md:h-auto md:w-1/2">
+                    <img aria-hidden="true" class="object-cover w-full h-full dark:hidden"
+                        src="{{ asset('img/create-account-office.jpeg') }}" alt="Office" />
+                    <img aria-hidden="true" class="hidden object-cover w-full h-full dark:block"
+                        src="{{ asset('img/create-account-office-dark.jpeg') }}" alt="Office" />
                 </div>
-                <form action="{{ route('request.register') }}" class="sm:w-2/3 w-full px-4 lg:px-0 mx-auto"
-                    method="post">
-                    @csrf
-                    @if(session('success'))
-                    <p class="bg-green-100 text-green-500 text-left text-lg rounded-lg p-3 shadow-sm">{{
-                        session('success') }}</p>
-                    @endif
-                    @if($errors->any())
-                    <p class="bg-red-100 text-red-500 text-left text-lg rounded-lg p-3 shadow-sm">{{
-                        $errors->first() }}</p>
-                    @endif
-                    <div class="py-4">
-                        <input name="fullname" type="text" id="fullname" placeholder="Tên của bạn" value="{{ old('fullname') }}"
-                            class=" block w-full p-3 text-lg  text-black rounded-lg">
+                <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
+                    <div class="w-full">
+                        <h1 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
+                            Đăng ký
+                        </h1>
+                        @if(session('success'))
+                        <p class="bg-green-100 text-green-500 text-left text-lg rounded-lg p-3 shadow-sm">{{
+                            session('success') }}</p>
+                        @endif
+                        @if($errors->any())
+                        <p class="bg-red-100 text-red-500 text-left text-sm rounded-md p-2 mb-2 shadow-sm">{{
+                            $errors->first() }}</p>
+                        @endif
+                        <form action="{{ route('request.register') }}" method="POST">
+                            @csrf
+                            <label class="block text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Tên</span>
+                                <input
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-indigo-400 focus:outline-none focus:shadow-outline-indigo dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                    placeholder="Jane Doe" name="fullname" value="{{ old('fullname') }}" />
+                            </label>
+                            <label class="block text-sm mt-3">
+                                <span class="text-gray-700 dark:text-gray-400">Email</span>
+                                <input
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-indigo-400 focus:outline-none focus:shadow-outline-indigo dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                    placeholder="JaneDoe@exam.com" name="email" value="{{ old('email') }}" />
+                            </label>
+                            <label class="block mt-4 text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Mật khẩu</span>
+                                <input
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-indigo-400 focus:outline-none focus:shadow-outline-indigo dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                    placeholder="***************" type="password" name="password" />
+                            </label>
+                            <label class="block mt-4 text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">
+                                    Xác nhận mật khẩu
+                                </span>
+                                <input
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-indigo-400 focus:outline-none focus:shadow-outline-indigo dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                    placeholder="***************" type="password" name="password_confirmation" />
+                            </label>
+                            <!-- You should use a button here, as the anchor is only used for the example  -->
+                            <button
+                                class="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-indigo-600 border border-transparent rounded-lg active:bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:shadow-outline-indigo">
+                                Đăng ký
+                            </button>
+                        </form>
+                        <p class="mt-4">
+                            <a class="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline"
+                                href="{{ route('login') }}">
+                                Đã có tài khoản? Đăng nhập
+                            </a>
+                        </p>
                     </div>
-                    <div class="py-2">
-                        <input name="email" type="email" id="email" placeholder="Email" value="{{ old('email') }}"
-                            class=" block w-full p-3 text-lg  text-black rounded-lg">
-                    </div>
-                    <div class="py-2">
-                        <input class="block w-full p-3 text-lg rounded-lg bg-[#ffffff] text-black" type="password"
-                            name="password" id="password" placeholder="Mật Khẩu">
-                    </div>
-                    <div class="py-2">
-                        <input class="block w-full p-3 text-lg rounded-lg bg-[#ffffff] text-black" type="password"
-                            name="password_confirmation" id="password_confirm" placeholder="Xác nhận mật Khẩu">
-                    </div>
-                    <div class="text-right text-black hover:underline hover:text-gray-500 text-base">
-                        <a href="{{ route('login') }}" class="text-[#ffffff] lg:text-black">Đã có tài khoản? Đăng nhập</a>
-                    </div>
-                    <div class="my-4">
-                        <button
-                            class="uppercase block w-full p-3 text-lg rounded-lg bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none text-blod">
-                            Đăng Ký</button>
-                    </div>
-
-                </form>
+                </div>
             </div>
         </div>
+    </div>
 </body>
 <script type="text/javascript" src="{{ asset('js/app.js') }}" defer></script>
 

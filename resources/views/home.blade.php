@@ -12,6 +12,7 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <style>
         /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
         html {
@@ -423,6 +424,26 @@
         {{\Carbon\Carbon::parse(now())->format('Y')}} ©
         All right Reserved, Developed by Manh Tuan
     </footer>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+        var str = '{{ session("isAdmin") }}'
+        if (str != '') {
+            Toastify({
+                text: str + '. Nhấp để thoát',
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "center",
+                stopOnFocus: true,
+                style: {
+                    background: "#dc3545",
+                },
+                onClick: function () {
+                    window.location.href = '{{ route("logout") }}'
+                 }
+            }).showToast();
+        }
+    </script>
 </body>
 
 </html>
