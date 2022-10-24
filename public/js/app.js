@@ -9421,6 +9421,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
@@ -57373,7 +57377,7 @@ var render = function () {
                   {
                     key: detail.id,
                     staticClass:
-                      "grid grid-cols-5 gap-2 my-3 items-center px-2 py-1 rounded-md hover:bg-gray-50 hover:text-gray-700 hover:font-bold cursor-pointer ease-in duration-150",
+                      "grid grid-cols-6 gap-x-1 gap-y-2 my-3 items-center px-2 py-1 rounded-md hover:bg-gray-50 hover:text-gray-700 hover:font-bold cursor-pointer ease-in duration-150",
                   },
                   [
                     _c("img", {
@@ -57394,6 +57398,15 @@ var render = function () {
                     _vm._v(" "),
                     _c("span", { staticClass: "text-center" }, [
                       _vm._v(_vm._s(detail.quality && detail.quality.Ten)),
+                    ]),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "text-center" }, [
+                      _vm._v(
+                        _vm._s(
+                          detail.product &&
+                            detail.product.GiaThanh.toLocaleString()
+                        )
+                      ),
                     ]),
                     _vm._v(" "),
                     _c("span", { staticClass: "text-center" }, [
@@ -57530,7 +57543,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "grid grid-cols-5 gap-2 my-3 items-center" },
+      { staticClass: "grid grid-cols-6 gap-x-1 gap-y-2 my-3 items-center" },
       [
         _c("span", [_vm._v("Hình ảnh")]),
         _vm._v(" "),
@@ -57539,6 +57552,8 @@ var staticRenderFns = [
         ]),
         _vm._v(" "),
         _c("span", { staticClass: "text-center" }, [_vm._v("Chất lượng")]),
+        _vm._v(" "),
+        _c("span", { staticClass: "text-center" }, [_vm._v("Đơn giá")]),
         _vm._v(" "),
         _c("span", { staticClass: "text-center" }, [_vm._v("Tổng tiền")]),
       ]
