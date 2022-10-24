@@ -50,14 +50,15 @@
       </div>
       <div class="w-full border-bottom py-2 flex flex-col">
         <h3 class="font-bold">Thông tin đơn hàng</h3>
-        <div class="grid grid-cols-5 gap-2 my-3 items-center">
+        <div class="grid grid-cols-6 gap-x-1 gap-y-2 my-3 items-center">
           <span>Hình ảnh</span>
           <span class="col-span-2">Tên sản phẩm - Số lượng</span>
           <span class="text-center">Chất lượng</span>
+          <span class="text-center">Đơn giá</span>
           <span class="text-center">Tổng tiền</span>
         </div>
         <div
-          class="grid grid-cols-5 gap-2 my-3 items-center px-2 py-1 rounded-md hover:bg-gray-50 hover:text-gray-700 hover:font-bold cursor-pointer ease-in duration-150"
+          class="grid grid-cols-6 gap-x-1 gap-y-2 my-3 items-center px-2 py-1 rounded-md hover:bg-gray-50 hover:text-gray-700 hover:font-bold cursor-pointer ease-in duration-150"
           v-for="detail in this.order.detail"
           :key="detail.id"
         >
@@ -80,6 +81,9 @@
           >
           <span class="text-center">{{
             detail.quality && detail.quality.Ten
+          }}</span>
+          <span class="text-center">{{
+            detail.product && detail.product.GiaThanh.toLocaleString()
           }}</span>
           <span class="text-center">{{
             Number(detail.amount * detail.product.GiaThanh).toLocaleString()
