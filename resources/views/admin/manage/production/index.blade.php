@@ -16,7 +16,7 @@ $current = 11;
     @enderror
     <div class="flex justify-end py-2">
         <button onclick="location.href='{{ route('admin.production.create') }}'"
-            class="flex items-center px-2 py-2 mx-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border-0 rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+            class="flex items-center px-3 py-2 mx-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border-0 rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
             Thêm mới
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor" stroke-width="2">
@@ -25,7 +25,7 @@ $current = 11;
             </svg>
         </button>
         <button onclick="location.href='{{ route('admin.production.export') }}'"
-            class="flex items-center px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border-0 rounded-lg active:bg-green-700 hover:bg-green-700 focus:outline-none focus:shadow-outline-purple">
+            class="flex items-center px-3 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border-0 rounded-lg active:bg-green-700 hover:bg-green-700 focus:outline-none focus:shadow-outline-purple">
             Xuất Excel
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor" stroke-width="2">
@@ -41,18 +41,19 @@ $current = 11;
                 <thead>
                     <tr
                         class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 sticky top-0">
-                        <th class="px-4 py-3 font-bold">#</th>
-                        <th class="px-4 py-3">Hình ảnh</th>
-                        <th class="px-4 py-3">Đề nghị</th>
-                        <th class="px-4 py-3">Loại</th>
-                        <th class="px-4 py-3">Sản phẩm</th>
-                        <th class="px-4 py-3">Thuộc tính</th>
-                        <th class="px-4 py-3">Yêu cầu</th>
-                        <th class="px-4 py-3">Hoàn thành</th>
-                        <th class="px-4 py-3">Trạng thái</th>
-                        <th class="px-4 py-3">Người tạo</th>
-                        <th class="px-4 py-3">Ngày tạo</th>
-                        <th class="px-4 py-3">Hành động</th>
+                        <th class="px-3 py-3 font-bold">#</th>
+                        <th class="px-3 py-3">Hình ảnh</th>
+                        <th class="px-3 py-3">Đề nghị</th>
+                        <th class="px-3 py-3">Loại</th>
+                        <th class="px-3 py-3">Sản phẩm</th>
+                        <th class="px-3 py-3">Thuộc tính</th>
+                        <th class="px-3 py-3">Yêu cầu</th>
+                        <th class="px-3 py-3">Hoàn thành</th>
+                        <td class="px-3 py-3">Ghi chú</td>
+                        <th class="px-3 py-3">Trạng thái</th>
+                        <th class="px-3 py-3">Người tạo</th>
+                        <th class="px-3 py-3">Ngày tạo</th>
+                        <th class="px-3 py-3">Hành động</th>
                     </tr>
                 </thead>
                 <tbody class="bg-[#ffffff] divide-y dark:divide-gray-700 dark:bg-gray-800">
@@ -61,33 +62,32 @@ $current = 11;
                     @endphp
                     @foreach($productions as $production)
                     <tr class="text-gray-700 dark:text-gray-400">
-                        <td class="px-4 py-3 flex">
+                        <td class="px-3 py-3 flex">
                             {{ $index }}
                         </td>
-                        <td class="px-4 py-3 text-sm">
+                        <td class="px-3 py-3 text-sm">
                             <img class="img__mthumbnail h-14 w-14 rounded-lg object-cover object-center"
                                 src="{{ asset('/img_product/') . '/' . $production->image }}">
                         </td>
-                        <td class="px-4 py-3 text-sm">
+                        <td class="px-3 py-3 text-sm">
                             {{ $production->code }}
                         </td>
-                        <td class="px-4 py-3 text-sm">
+                        <td class="px-3 py-3 text-sm">
                             {{ $production->detail_order_id > 0 ? 'Sản xuất theo đơn' : 'Sản xuất lưu kho' }}
                         </td>
-                        <td class="px-4 py-3 text-sm ">
+                        <td class="px-3 py-3 text-sm ">
                             {{ $production->product->Ten }}
                         </td>
-                        <td class="px-4 py-3 text-sm">
+                        <td class="px-3 py-3 text-sm">
                             {{ $production->size }}{{$production->color ? ' - ' . $production->color : ''}}
                         </td>
-                        <td class="px-4 py-3 text-sm">
+                        <td class="px-3 py-3 text-sm">
                             {{ number_format($production->amount) }} cái
                         </td>
-                        <td class="px-4 py-3 text-sm">
+                        <td class="px-3 py-3 text-sm">
                             {{ number_format($production->completed) }} cái
-                            @if($production->status < 2)
-                            <button title="Phân bổ" v-tooltip="'Phân bổ'"
-                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                            @if($production->status < 2) <button title="Phân bổ" v-tooltip="'Phân bổ'"
+                                class="flex items-center justify-between px-3 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 @click="toggleCustomModal({{ $production->load('product.unit_cal') }})"
                                 aria-label="Edit">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
@@ -98,51 +98,54 @@ $current = 11;
                                         d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
                                         clip-rule="evenodd" />
                                 </svg>
-                            </button>
-                            @endif
+                                </button>
+                                @endif
                         </td>
-                        <td class="px-4 py-3 text-sm">
+                        <td class="px-3 py-3 text-sm">
+                            {{ $production->note }}
+                        </td>
+                        <td class="px-3 py-3 text-sm">
                             @switch($production->status)
                             @case(1)
                             <span
-                                class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
+                                class="px-3 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
                                 Chờ xử lý
                             </span>
                             @break
                             @case(2)
                             <span
-                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-orange-100 text-orange-700 dark:bg-orange-600">
+                                class="px-3 py-1 font-semibold leading-tight rounded-full dark:text-white bg-orange-100 text-orange-700 dark:bg-orange-600">
                                 Đang sản xuất
                             </span>
                             @break
                             @case(3)
                             <span
-                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-green-100 text-green-700 dark:bg-green-600">
+                                class="px-3 py-1 font-semibold leading-tight rounded-full dark:text-white bg-green-100 text-green-700 dark:bg-green-600">
                                 Hoàn thành
                             </span>
                             @break
                             @case(4)
                             <span
-                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-red-100 text-red-700 dark:bg-red-600">
+                                class="px-3 py-1 font-semibold leading-tight rounded-full dark:text-white bg-red-100 text-red-700 dark:bg-red-600">
                                 Ngưng sản xuất
                             </span>
                             @break
                             @endswitch
                         </td>
-                        <td class="px-4 py-3 text-sm">
+                        <td class="px-3 py-3 text-sm">
                             <img v-tooltip.top-start="'{{ $production->user->name }}'"
                                 src="{{asset('/img/user').'/'.$production->user->image }}"
                                 class="h-12 w-12 object-cover object-center rounded-full" />
                         </td>
-                        <td class="px-4 py-3 text-sm">
+                        <td class="px-3 py-3 text-sm">
                             {{
                             \Carbon\Carbon::parse($production->updated_at)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y')
                             }}
                         </td>
-                        <td class="px-4 py-3 text-sm flex items-center">
+                        <td class="px-3 py-3 text-sm flex items-center">
                             @if($production->status == 1)
                             <button title="Chỉnh sửa" v-tooltip="'Chỉnh sửa'"
-                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                class="flex items-center justify-between px-3 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Edit"
                                 onclick="location.href='{{ route('admin.production.update',['id' => $production->id]) }}'">
                                 <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
@@ -152,7 +155,7 @@ $current = 11;
                                 </svg>
                             </button>
                             <button v-tooltip="'Xóa'" title="Xóa" @click="openModal({{$production->id}})"
-                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                class="flex items-center justify-between px-3 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Delete">
                                 <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
@@ -162,7 +165,7 @@ $current = 11;
                             </button>
                             <button v-tooltip="'Tạo yêu cầu mua hàng'" title="Tạo yêu cầu mua hàng"
                                 onclick="location.href='{{ route('admin.buy.create',['id' => $production->id]) }}'"
-                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                class="flex items-center justify-between px-3 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Delete">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor" stroke-width="2">
@@ -172,7 +175,7 @@ $current = 11;
                             </button>
                             <button v-tooltip="'Tạo kế hoạch vật tư'" title="Tạo kế hoạch vật tư"
                                 onclick="location.href='/admin/plan-ingredient/create/{{ $production->id }}'"
-                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                class="flex items-center justify-between px-3 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Delete">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor" stroke-width="2">
@@ -180,8 +183,9 @@ $current = 11;
                                         d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                                 </svg>
                             </button>
-                            <button v-tooltip="'Tạo lệnh sản xuất'" title="Tạo lệnh sản xuất" @click="handleCreateProduction({{ $production->id }})"
-                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                            <button v-tooltip="'Tạo lệnh sản xuất'" title="Tạo lệnh sản xuất"
+                                @click="handleCreateProduction({{ $production->id }})"
+                                class="flex items-center justify-between px-3 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="create">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
                                     fill="currentColor">
@@ -190,23 +194,25 @@ $current = 11;
                                         clip-rule="evenodd" />
                                 </svg>
                             </button>
-                            @elseif($production->status < 4)
-                            <!-- <button v-tooltip="'Cập nhật trạng thái'"
-                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
+                            @elseif($production->status < 4) <!-- <button v-tooltip="'Cập nhật trạng thái'"
+                                class="flex items-center justify-between px-3 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
                                     fill="currentColor">
                                     <path
                                         d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z" />
                                 </svg>
-                            </button>  -->
-                            <button v-tooltip="'Ngưng sản xuất'"
-                            onclick="location.href='{{ route('admin.plan.updateStatus', ['id' => $production->id]) }}?status=4'"
-                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                                  </svg>
-                            </button>                          
-                            @endif
+                                </button> -->
+                                <button v-tooltip="'Ngưng sản xuất'"
+                                    onclick="location.href='{{ route('admin.plan.updateStatus', ['id' => $production->id]) }}?status=4'"
+                                    class="flex items-center justify-between px-3 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                                @endif
                         </td>
                     </tr>
                     @php
@@ -378,8 +384,7 @@ $current = 11;
         transition duration-150
         bg-black bg-opacity-50
         sm:items-center sm:justify-center
-      " id="backdrop-overlay"
-        @click="closeModal">
+      " id="backdrop-overlay" @click="closeModal">
         <transition enter-class="ease-out opacity-0 transform translate-y-1/2" enter-to-class="opacity-100"
             leave-class="ease-in opacity-100" leave-to-class="opacity-0 transform translate-y-1/2">
             <!-- Modal -->
