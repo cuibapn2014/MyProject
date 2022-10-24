@@ -11390,6 +11390,7 @@ var app = new Vue({
       countProduct: 1,
       countProductEdit: [],
       isOpenView: false,
+      isOpenSettingModal: false,
       detailOrder: null,
       dark: this.getThemeFromLocalStorage(),
       isSideMenuOpen: false,
@@ -11839,6 +11840,9 @@ var app = new Vue({
     },
     setCountProductEdit: function setCountProductEdit(data) {
       this.countProductEdit = data;
+    },
+    toggleSettingModal: function toggleSettingModal() {
+      this.isOpenSettingModal = !this.isOpenSettingModal;
     }
   }
 });

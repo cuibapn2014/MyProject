@@ -27,6 +27,6 @@ class AuthUser
             if ($alias != 'CUSTOMER')
                 return $next($request);
         }
-        return redirect()->route('login');
+        return redirect()->route('home')->with('isAdmin', 'Không được phép truy cập! Do bạn không phải là nhân viên');
     }
 }

@@ -314,8 +314,7 @@ $current = 12;
                 <th class="px-4 py-3">
                   <img v-tooltip.top-start="produced.user_create.name"
                   :src="'{{asset('/img/user')}}/' + produced.user_create.image"
-                  class="h-12 w-12 object-cover object-center rounded-full" /></th>
-                
+                  class="h-12 w-12 object-cover object-center rounded-full" /></th>       
               </tr>
             </tbody>
           </table>

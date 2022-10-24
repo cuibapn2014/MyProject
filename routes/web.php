@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\WarehouseController;
 use App\Http\Controllers\Admin\WarehouseExportController;
 use App\Http\Controllers\Admin\WarehouseImportController;
+use App\Http\Controllers\Auth\ChangePasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -69,6 +70,9 @@ Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->name(
 Route::post('/forgot-password', [AuthController::class, 'postForgotPassword'])->name('auth.forgot.request');
 Route::get('/reset-password/{token}', [AuthController::class, 'resetPassword'])->name('password.reset');
 Route::post('/reset-password', [AuthController::class, 'updatePassword'])->name('auth.password.update');
+
+//Change password
+Route::post('/change-password', [ChangePasswordController::class, 'changePassword'])->name('auth.password.request.change');
 
 //Admin Route
 Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {

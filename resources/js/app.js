@@ -115,6 +115,7 @@ const app = new Vue({
             countProduct: 1,
             countProductEdit: [],
             isOpenView: false,
+            isOpenSettingModal: false,
             detailOrder: null,
             dark: this.getThemeFromLocalStorage(),
             isSideMenuOpen: false,
@@ -454,6 +455,9 @@ const app = new Vue({
         },
         setCountProductEdit(data) {
             this.countProductEdit = data
+        },
+        toggleSettingModal(){
+            this.isOpenSettingModal = !this.isOpenSettingModal
         }
     }
 });
