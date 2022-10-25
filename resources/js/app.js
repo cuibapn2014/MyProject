@@ -117,6 +117,7 @@ const app = new Vue({
             isOpenView: false,
             isOpenSettingModal: false,
             detailOrder: null,
+            dataAnalyze: null,
             dark: this.getThemeFromLocalStorage(),
             isSideMenuOpen: false,
             isNotificationsMenuOpen: false,
@@ -458,6 +459,19 @@ const app = new Vue({
         },
         toggleSettingModal(){
             this.isOpenSettingModal = !this.isOpenSettingModal
-        }
+        },
+        openAnalyzeModal(dataAnalyze = null) {     
+            this.dataAnalyze = dataAnalyze
+        },
+        calPerProcess(obj){
+            let total = obj.require_total
+            let produceds = obj.produceds
+            let totalProduced = 0
+            produceds?.map(item => {
+                totalProduced += item.amount
+            })
+            
+            return (totalProduced / total) * 100
+        },
     }
 });

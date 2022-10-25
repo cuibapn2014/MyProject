@@ -49,7 +49,7 @@ class Production extends Model
         return $this->belongsTo(\App\Models\User::class, 'reviewer', 'id');
     }
 
-    public function produced()
+    public function produceds()
     {
         return $this->hasMany(\App\Models\Produced::class, 'id_production', 'id');
     }

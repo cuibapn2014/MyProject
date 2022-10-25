@@ -11392,6 +11392,7 @@ var app = new Vue({
       isOpenView: false,
       isOpenSettingModal: false,
       detailOrder: null,
+      dataAnalyze: null,
       dark: this.getThemeFromLocalStorage(),
       isSideMenuOpen: false,
       isNotificationsMenuOpen: false,
@@ -11843,6 +11844,19 @@ var app = new Vue({
     },
     toggleSettingModal: function toggleSettingModal() {
       this.isOpenSettingModal = !this.isOpenSettingModal;
+    },
+    openAnalyzeModal: function openAnalyzeModal() {
+      var dataAnalyze = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+      this.dataAnalyze = dataAnalyze;
+    },
+    calPerProcess: function calPerProcess(obj) {
+      var total = obj.require_total;
+      var produceds = obj.produceds;
+      var totalProduced = 0;
+      produceds === null || produceds === void 0 ? void 0 : produceds.map(function (item) {
+        totalProduced += item.amount;
+      });
+      return totalProduced / total * 100;
     }
   }
 });

@@ -36,9 +36,9 @@ class ProductionRequest extends Model
         return $this->belongsTo(\App\Models\User::class, 'creator', 'id');
     }
 
-    public function plan_production()
+    public function productions()
     {
-        return $this->hasMany(\App\Models\PlanProduction::class, 'id_production_request', 'id');
+        return $this->hasMany(\App\Models\Production::class, 'id_production_request', 'id');
     }
 
     public function product()

@@ -74,7 +74,7 @@ $current = 12;
               {{ number_format($plan->require_total, 0, ',', '.') . ' ' . $plan->product->unit_cal->name }}
             </td>
             <td class="px-4 py-3 text-sm">
-              {{ number_format($plan->produced->sum('amount')) . ' ' . $plan->product->unit_cal->name }}
+              {{ $plan->produceds ? number_format($plan->produceds->sum('amount')) : 0}} {{$plan->product->unit_cal->name}}
             </td>
             <td class="px-4 py-3 text-sm flex items-center">
               @if($plan->priority == 0)
@@ -105,7 +105,7 @@ $current = 12;
             </td>
             <td class="px-4 py-3 text-sm">
               @php
-              $status = $plan->produced->sum('amount') == $plan->require_total && $plan->production_request->status == 2
+              $status = $plan->produceds->sum('amount') == $plan->require_total && $plan->production_request->status == 2
               ? 3 : $plan->production_request->status;
               @endphp
               @switch($status)
@@ -143,7 +143,7 @@ $current = 12;
               @if($status == 2)
               <button title="Cập nhật" v-tooltip="'Cập nhật'"
                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                aria-label="Edit" @click="toggleUpdateAmountModal({{ $plan->load(['produced', 'produced.user_create']) }})">
+                aria-label="Edit" @click="toggleUpdateAmountModal({{ $plan->load(['produceds', 'produceds.user_create']) }})">
                 <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                   <path
                     d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
@@ -305,7 +305,7 @@ $current = 12;
               </tr>
             </thead>
             <tbody class="bg-[#ffffff] divide-y dark:divide-gray-700 dark:bg-gray-800">
-              <tr v-for="(produced, index) in this.idProduction.produced" :key="produced.id" class="text-gray-700 dark:text-gray-400">
+              <tr v-for="(produced, index) in this.idProduction.produceds" :key="produced.id" class="text-gray-700 dark:text-gray-400">
                 <th class="px-4 py-3">[[ ++index ]]</th>
                 <th class="px-4 py-3">[[ produced.lot_number ]]</th>
                 <th class="px-4 py-3">[[ produced.amount ]]</th>
@@ -318,7 +318,7 @@ $current = 12;
               </tr>
             </tbody>
           </table>
-          <div v-if="this.idProduction.produced.length == 0" class="text-sm text-center dark:text-gray-200 my-4">Không tìm thấy dữ liệu nào</div>
+          <div v-if="this.idProduction.produceds.length == 0" class="text-sm text-center dark:text-gray-200 my-4">Không tìm thấy dữ liệu nào</div>
         </div>
       </div>
     </div>
