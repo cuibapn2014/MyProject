@@ -41,7 +41,7 @@ class AdminController extends Controller
     public function getInvoice($id)
     {
         $order = Order::findOrFail($id);
-        $costs = Cost::where('id_ChatLuong', $order->detail->id_ChatLuong)->where('id_DanhMuc', $order->detail->id_DanhMuc)->get();
+        // $costs = Cost::where('id_ChatLuong', $order->detail->id_ChatLuong)->get();
         $min = 20;
         $price = 0;
         // foreach ($costs as $cost) {
@@ -49,8 +49,8 @@ class AdminController extends Controller
         //     else if($quantity < $min && $cost->LimitStart = $min) $price = $cost->Gia; break;
         // }
         // $pdf = PDF::loadView('admin.invoice',['order' => $order,'cost' => $price])->setOptions(['defaultFont' => 'time-new-roman']);
-        // return $pdf->stream('invoice.pdf', array('Attachment'=> 1));         
-        return view('admin.invoice', ['order' => $order, 'cost' => $price]);
+        // return $pdf->stream('invoice.pdf', array('Attachment'=> 1));       
+        return view('admin.invoice', ['order' => $order]);
     }
 
     public function updateImageUser(Request $req, $id)

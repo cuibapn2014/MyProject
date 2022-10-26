@@ -114,7 +114,7 @@ $current = 1;
                                 </svg>
                             </button>
                             <button v-tooltip="'Xuất PDF'" title="Xuất PDF"
-                                @click="this.location.href='/admin/invoice/{{$order->id}}'"
+                                onclick="window.open('/admin/invoice/{{$order->id}}', '_blank')"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Delete">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"

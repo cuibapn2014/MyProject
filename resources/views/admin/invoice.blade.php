@@ -48,10 +48,10 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="invoice-top-left">
-                                        <h2 class="client-company-name fs-1">{{ $order->TenKhachHang }}</h2>
+                                        <h2 class="client-company-name fs-1">{{ $order->customer->name }}</h2>
                                         <h6 class="client-address fs-5">
-                                            {{ $order->DiaChi }}<br />
-                                            {{ $order->SoDienThoai }}
+                                            {{ $order->customer->address }}<br />
+                                            {{ $order->customer->phone_number }}
                                             <!-- 31 Lake Floyd Circle, <br>Delaware, AC 987869 <br>India -->
                                         </h6>
                                         <!-- <h4>Reference</h4>
@@ -61,8 +61,7 @@
                                 <div class="col-sm-6 d-flex flex-row justify-content-end">
 
                                     <div class="logo-wrapper">
-                                        <img src="" class="img-responsive pull-right logo"
-                                            width="80px" />
+                                        <img src="https://png.pngtree.com/png-vector/20190830/ourmid/pngtree-sewing-machine-needle-and-scisor-icon-vector-illustration-png-image_1715862.jpg" class="img-responsive pull-right logo" width="80px" />
                                     </div>
                                 </div>
                             </div>
@@ -85,78 +84,31 @@
                                             <thead>
                                                 <tr>
                                                     <th>Số lượng</th>
+                                                    <th>Hình ảnh</th>
                                                     <th>Sản phẩm</th>
-                                                    <th>Tên sản phẩm</th>
-                                                    <th>Chiều cao</th>
-                                                    <th>Cân nặng</th>
-                                                    <th>Chất lượng may</th>
-                                                    <th>Cung cấp vải</th>
+                                                    <th>Chất lượng</th>
+                                                    <th>Đơn giá</th>
+                                                    <th>Thành tiền</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                        
+                                                @php 
+                                                $total = 0;
+                                                @endphp
+                                                @foreach($order->detail as $od)
                                                 <tr>
-                                                    <td>0</td>
-                                                    <td><img src="/img/{{ $order->detail->image }}"
-                                                            class="object-contain" alt="product" width="60px"></td>
-                                                    <td>0</td>
-                                                    <td>0</td>
-                                                    <td>0</td>
-                                                    <td>0</td>
-                                                    <td>0</td>
+                                                    <td>{{ $od->amount }}</td>
+                                                    <td><img src="/img/{{ $od->image }}" class="object-contain"
+                                                            alt="product" width="60px"></td>
+                                                    <td>{{ $od->product->Ten }}</td>
+                                                    <td>{{ $od->quality->Ten }}</td>
+                                                    <td>{{ number_format_str($od->product->GiaThanh) }}</td>
+                                                    <td>{{ number_format_str($od->product->GiaThanh * $od->amount) }}</td>
                                                 </tr>
+                                                @php $total += $od->product->GiaThanh * $od->amount @endphp
+                                                @endforeach
                                                 <tr style="height: 40px;"></tr>
                                             </tbody>
-                                            <thead>
-                                                <tr>
-                                                    <th>Giá áp dụng </th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th>{{ number_format($order->detail->Gia) }}đ/sản phẩm</th>
-                                                </tr>
-                                                <tr>
-                                                    <th>Tổng số lượng </th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th>0 sản phẩm</th>
-                                                </tr>
-                                                <tr>
-                                                    <th>Tổng tiền gia công </th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th class="text-success">+ {{ number_format($order->detail->TongTien) }}đ</th>
-                                                </tr>
-                                            </thead>
-                                            <thead>
-
-                                                <tr>
-                                                    <th>Tiền vải </th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th class="text-success">đ</th>
-                                                </tr>
-                                                <tr>
-                                                    <th>Tiền Nguyên phụ liệu </th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th class="text-success">+ đ</th>
-                                                </tr>
-                                            </thead>
                                             <thead>
                                                 <tr>
                                                     <th>Tổng thành tiền</th>
@@ -164,8 +116,7 @@
                                                     <th></th>
                                                     <th></th>
                                                     <th></th>
-                                                    <th></th>
-                                                    <th>{{ number_format($order->TongTien) }}đ</th>
+                                                    <th>{{ number_format_str($total) }}</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -234,7 +185,7 @@
         crossorigin="anonymous"></script>
 
     <script src="{{ asset('js/app.js') }}" defer></script>
-
+    <script>window.print()</script>
 
 </body>
 
