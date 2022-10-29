@@ -44,7 +44,7 @@ export const barChart = (data) => {
         yAxes: [{
           ticks: {
             callback: function (value, index, values) {
-              return value.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+              return value.toLocaleString("vi-VN");
             }
           },
         }],

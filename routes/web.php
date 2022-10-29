@@ -132,6 +132,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
         $route->post('/update/{id}', [OrderController::class, 'update'])->name('admin.order.request.update');
         $route->get('/delete/{id}', [OrderController::class, 'delete'])->name('admin.order.delete');
         $route->get('/export', [OrderController::class, 'export'])->name('admin.order.export');
+        $route->get('/update/{id}/{status}', [OrderController::class, 'updateStatus'])->name('admin.order.updateStatus');
     });
 
     $route->group(['prefix' => 'task'], function ($route) {

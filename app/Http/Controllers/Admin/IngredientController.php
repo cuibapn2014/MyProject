@@ -18,7 +18,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class IngredientController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
         return view('admin.manage.ingredient.ingredient', ['ingredient' => Ingredient::where('id_ingredient_type', 1)->paginate(25)]);
     }

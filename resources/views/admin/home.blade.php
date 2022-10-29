@@ -144,18 +144,18 @@ $current = 0;
     <div class="grid gap-6 mb-8 md:grid-cols-2">
         <div class="min-w-0 p-4 bg-[#ffffff] rounded-lg shadow-xs dark:bg-gray-800">
             <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
-                Tổng số lượng loại hàng được mua trong năm {{ date('Y') }}
+                Thống kê các đơn hàng trong năm {{ date('Y') }}
             </h4>
             <canvas id="pie"></canvas>
             <div class="flex justify-center mt-4 space-x-3 text-sm text-gray-600 dark:text-gray-400">
                 <!-- Chart legend -->
                 <div class="flex items-center">
                     <span class="inline-block w-3 h-3 mr-1 bg-blue-500 rounded-full"></span>
-                    <span>Hàng may</span>
+                    <span>Đã hủy</span>
                 </div>
                 <div class="flex items-center">
                     <span class="inline-block w-3 h-3 mr-1 bg-teal-600 rounded-full"></span>
-                    <span>Hàng mẫu</span>
+                    <span>Đang xử lý</span>
                 </div>
                 <!-- <div class="flex items-center">
                     <span class="inline-block w-3 h-3 mr-1 bg-purple-600 rounded-full"></span>
@@ -183,14 +183,14 @@ $current = 0;
         <!-- Bars chart -->
         <div class="min-w-0 p-4 bg-[#ffffff] rounded-lg shadow-xs dark:bg-gray-800">
             <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
-                Tổng nợ công trong năm {{ date('Y') }}
+                Thống kê đơn hàng trong năm {{ date('Y') }}
             </h4>
             <canvas id="bars"></canvas>
             <div class="flex justify-center mt-4 space-x-3 text-sm text-gray-600 dark:text-gray-400">
                 <!-- Chart legend -->
                 <div class="flex items-center">
                     <span class="inline-block w-3 h-3 mr-1 bg-teal-500 rounded-full"></span>
-                    <span>Nợ công</span>
+                    <span>Khách hàng</span>
                 </div>
                 <div class="flex items-center">
                     <span class="inline-block w-3 h-3 mr-1 bg-purple-600 rounded-full"></span>

@@ -94,8 +94,7 @@ class AdminController extends Controller
 
     public function getRevenue()
     {
-        return Order::selectRaw('month(orders.created_at) as month, sum(warehouse_exports.paid) as total')
-            ->join('warehouse_exports', 'orders.id', 'id_order')
+        return Order::selectRaw('month(orders.created_at) as month, sum(paid) as total')
             ->whereYear('orders.created_at', date('Y'))
             ->groupBy('month')
             ->orderBy('month', 'asc')
@@ -104,16 +103,17 @@ class AdminController extends Controller
 
     public function countTypeOrder()
     {
-        return DetailOrder::selectRaw('count(id) as total, LoaiHang')
-            ->groupBy('LoaiHang')
+        return Order::selectRaw('count(id) as total, status')
+        ->where('status',2)
+        ->orWhere('status',4)
+            ->groupBy('status')
+            ->orderBy('status')
             ->get();
     }
 
     public function getDebt()
     {
-        return Order::selectRaw('month(orders.created_at) as month, sum(warehouse_exports.paid) as total, (sum(ingredients.GiaThanh * warehouse_exports.amount - warehouse_exports.paid)) as debt')
-            ->join('warehouse_exports', 'orders.id', 'id_order')
-            ->join('ingredients', 'warehouse_exports.id_ingredient', 'ingredients.id')
+        return Order::selectRaw('month(orders.created_at) as month, count(id) as total, count(DISTINCT(id_customer)) as debt')
             ->whereYear('orders.created_at', date('Y'))
             ->groupBy('month')
             ->orderBy('month', 'asc')

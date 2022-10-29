@@ -5,7 +5,11 @@ export const pieChart = (data) => {
   const labels = []
   const values = []
   data.map(item => {
-    labels.push(item.LoaiHang)
+    if (parseInt(item.status) == 2)
+      labels.push("Đang xử lý")
+    else
+      labels.push("Đã hủy")
+
     values.push(item.total)
   })
 

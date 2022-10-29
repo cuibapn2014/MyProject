@@ -11932,10 +11932,7 @@ var barChart = function barChart(data) {
         yAxes: [{
           ticks: {
             callback: function callback(value, index, values) {
-              return value.toLocaleString("vi-VN", {
-                style: "currency",
-                currency: "VND"
-              });
+              return value.toLocaleString("vi-VN");
             }
           }
         }]
@@ -12069,7 +12066,7 @@ var pieChart = function pieChart(data) {
   var labels = [];
   var values = [];
   data.map(function (item) {
-    labels.push(item.LoaiHang);
+    if (parseInt(item.status) == 2) labels.push("Đang xử lý");else labels.push("Đã hủy");
     values.push(item.total);
   });
   var pieConfig = {

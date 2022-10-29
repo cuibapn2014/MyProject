@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 class OrderController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
         $orders = Order::orderByDesc('created_at')->paginate(25);
         return view('admin.manage.order.order', compact('orders'));
@@ -33,8 +33,8 @@ class OrderController extends Controller
 
     public function store(Request $req)
     {
-        foreach($req->price as $price){
-            if($price <= 0) return back()->withErrors(['id_product' => 'Vui lòng cập nhật đơn giá cho sản phẩm']);
+        foreach ($req->price as $price) {
+            if ($price <= 0) return back()->withErrors(['id_product' => 'Vui lòng cập nhật đơn giá cho sản phẩm']);
         }
 
         DB::beginTransaction();
@@ -67,7 +67,7 @@ class OrderController extends Controller
                 'NgayTraDon' => $req->duration,
                 'id_NhanVien' => Auth::user()->id,
                 'vat' => $req->vat,
-                'total' => str_replace('.','', $req->total),
+                'total' => str_replace('.', '', $req->total),
                 'paid' => $req->paid,
                 'note' => $req->note
             ]);
@@ -80,10 +80,10 @@ class OrderController extends Controller
                         $file = $req->image[0];
                         $extension = $file->getClientOriginalExtension();
                         $accept = array("png", "jpg", "jpeg", "bmp");
-        
+
                         if (!in_array($extension, $accept))
                             return back()->with('error', 'Định dạng ảnh không hợp lệ! Vui lòng thử lại');
-        
+
                         $file_name = current(explode('.', $file->getClientOriginalName())) . '_' . time() . '.' . $extension;
                         $file->move('img', $file_name);
                     }
@@ -122,8 +122,8 @@ class OrderController extends Controller
 
     public function update(Request $req, $id)
     {
-        foreach($req->price as $price){
-            if($price <= 0) return back()->withErrors(['id_product' => 'Vui lòng cập nhật đơn giá cho sản phẩm']);
+        foreach ($req->price as $price) {
+            if ($price <= 0) return back()->withErrors(['id_product' => 'Vui lòng cập nhật đơn giá cho sản phẩm']);
         }
 
         try {
@@ -136,7 +136,7 @@ class OrderController extends Controller
                 'id_customer' => $req->id_customer,
                 'NgayTraDon' => $req->duration,
                 'vat' => $req->vat,
-                'total' => str_replace('.','', $req->total),
+                'total' => str_replace('.', '', $req->total),
                 'paid' => $req->paid,
                 'note' => $req->note
             ]);
@@ -196,37 +196,12 @@ class OrderController extends Controller
         }
     }
 
-    private function validateProductUnavailable($req)
-    {
-        $validator = Validator::make(
-            $req->all(),
-            [
-                'product_name' => 'required',
-                'quantity.*' => 'min:1',
-                'price' => 'required|numeric',
-                'image.0' => 'mimes:jpeg,jpg,png,bmp|max:3000',
-            ],
-            [
-                'quantity.*.required' => 'Không được để trống sớ lượng sản phẩm',
-                'quality.required' => 'Không được để trống chất lượng sản phẩm',
-                'price.numeric' => 'Giá tiền không hợp lệ',
-                // 'duration.required' => 'Không được để trống ngày trả đơn',
-                'image.0.mimes' => 'Định dạng file ảnh không hợp lệ',
-                'image.0.max' => 'Dung lượng tối đa của hình ảnh không phải nhỏ hơn 3MB'
-            ]
-        );
-
-        if ($validator->fails()) {
-            return back()->withInput()->withErrors($validator);
-        }
-    }
-
     public function export()
     {
         return Excel::download(new OrderExport, 'orders.xlsx');
     }
 
-     public function getDataEdit($id)
+    public function getDataEdit($id)
     {
         $order = Order::with([
             'detail',
@@ -236,4 +211,11 @@ class OrderController extends Controller
         return response()->json(['data' => $order->detail]);
     }
 
+    public function updateStatus($id, $status)
+    {
+        $order = Order::findOrFail($id);
+        $order->update(['status' => $status]);
+
+        return back()->with('success', 'Cập nhật trạng thái thành công');
+    }
 }

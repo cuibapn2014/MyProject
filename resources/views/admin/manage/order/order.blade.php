@@ -21,7 +21,7 @@ $current = 1;
                     d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z" />
             </svg>
         </button>
-        <button onclick="location.href='{{ route('admin.order.export') }}'"
+        <button onclick=""
             class="flex items-center px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border-0 rounded-lg active:bg-green-700 hover:bg-green-700 focus:outline-none focus:shadow-outline-purple">
             Xuất Excel
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -42,8 +42,7 @@ $current = 1;
                         <th class="px-4 py-3">Khách hàng</th>
                         <th class="px-4 py-3">Liên hệ</th>
                         <th class="px-4 py-3">Tổng tiền</th>
-                        <th class="px-4 py-3">Tiền còn lại</th>
-                        <th class="px-4 py-3">Đã thanh toán</th>
+                        <th class="px-4 py-3">Trạng thái</th>
                         <th class="px-4 py-3">Tạo bởi</th>
                         <th class="px-4 py-3">Cập nhật</th>
                         <th class="px-4 py-3">Hành động</th>
@@ -55,8 +54,8 @@ $current = 1;
                     @endphp
                     @foreach($orders as $order)
                     <tr class="text-gray-700 dark:text-gray-400">
-                        <td class="px-4 py-3 flex">  
-                            {{ $index }}                     
+                        <td class="px-4 py-3 flex">
+                            {{ $index }}
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{ $order->customer->name }}
@@ -67,22 +66,39 @@ $current = 1;
                         <td class="px-4 py-3 text-sm font-bold text-green-500">
                             {{ number_format_str($order->total) }}
                         </td>
-                        @if($order->total - $order->paid <= 0)
-                        <td class="px-4 py-3 text-sm text-green-500 font-bold">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                class="h-5 w-5 mx-auto">
-                                <path fill-rule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                        </td>
-                        @else
-                        <td class="px-4 py-3 text-sm text-red-500 font-bold">
-                            {{ number_format(($order->total - $order->paid),0,',','.') }}
-                        </td>
-                        @endif
                         <td class="px-4 py-3 text-sm font-bold text-green-500">
-                            {{ number_format($order->paid,0,',','.') }}
+                            @switch($order->status)
+                            @case(-1)
+                            <span
+                            class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-red-100 text-red-700 dark:bg-red-600">
+                                Không duyệt
+                            </span>
+                            @break
+                            @case(1)
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
+                                Chờ duyệt
+                            </span>
+                            @break
+                            @case(2)
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-orange-100 text-orange-700 dark:bg-orange-600">
+                                Đã duyệt
+                            </span>
+                            @break
+                            @case(3)
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-green-100 text-green-700 dark:bg-green-600">
+                                Hoàn thành
+                            </span>
+                            @break
+                            @case(4)
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-red-100 text-red-700 dark:bg-red-600">
+                                Đã hủy
+                            </span>
+                            @break
+                            @endswitch
                         </td>
                         <td class="px-4 py-3 text-sm">
                             <img v-tooltip.top-start="'{{ $order->user->name }}'"
@@ -136,6 +152,34 @@ $current = 1;
                                         clip-rule="evenodd" />
                                 </svg>
                             </button>
+
+                            <div class="inline-block relative group">
+                                <ul class="absolute hidden text-gray-700 pt-1 right-0 top-[25] group-hover:block z-50"
+                                    style="margin-top: 25px;">
+                                    @if($order->status == 1)
+                                    <li class=""><a
+                                            class="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
+                                            href="{{ route('admin.order.updateStatus', ['id' => $order->id, 'status' => 2]) }}">Duyệt</a>
+                                    </li>
+                                    <li class=""><a
+                                            class="rounded-b bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
+                                            href="{{ route('admin.order.updateStatus', ['id' => $order->id, 'status' => -1]) }}">Không
+                                            duyệt</a></li>
+                                    @elseif($order->status == 2)
+                                    <li class=""><a
+                                        class="rounded-b bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
+                                        href="{{ route('admin.order.updateStatus', ['id' => $order->id, 'status' => 3]) }}">Hoàn thành</a></li>
+                                        <li class=""><a
+                                            class="rounded-b bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
+                                            href="{{ route('admin.order.updateStatus', ['id' => $order->id, 'status' => 4]) }}">Hủy</a></li>
+                                    @endif
+                                </ul>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 cursor-pointer" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
 
                         </td>
                     </tr>
