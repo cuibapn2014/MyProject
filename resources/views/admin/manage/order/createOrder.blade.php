@@ -44,8 +44,8 @@ $current = 1;
             <h3 class="mt-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                 Thông tin đơn hàng
             </h3>
-            <div v-for="(key, index) in countProduct" :key="key" class="flex items-center">
-                <label class="block text-sm mx-2 w-96">
+            <div v-for="(product, index) in countProduct" :key="index" class="grid md:grid-cols-7 gap-2 items-center">
+                <label class="block text-sm mx-2 col-span-4">
                     <span class="flex text-gray-700 dark:text-gray-400">Sản phẩm
                         <p class="text-red-500 mx-1">*</p>
                     </span>
@@ -59,10 +59,11 @@ $current = 1;
             form-select
             focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
             dark:focus:shadow-outline-gray
-          " name="id_product[]">
+          " name="id_product[]" v-model="product.id_product">
                         <option disabled value="">Chọn sản phẩm</option>
                         @foreach($products as $product)
-                        <option selected value="{{ $product->id }}">{{ $product->Ten }}
+                        <option selected value="{{ $product->id }}">
+                            {{ $product->Ten }} - Giá thành: {{ number_format_str($product->GiaThanh) }}
                         </option>
                         @endforeach
                     </select>
@@ -82,7 +83,24 @@ $current = 1;
               focus:shadow-outline-purple
               dark:text-gray-300 dark:focus:shadow-outline-gray
               form-input
-            " type="number" min="1" placeholder="" value="1" name="quantity[]" />
+            " type="number" min="1" placeholder="" v-model="product.amount" name="quantity[]" />
+                </label>
+                <label class="block text-sm my-1 mx-2">
+                    <span class="flex text-gray-700 dark:text-gray-400">Đơn giá
+                        <p class="text-red-500 mx-1">*</p>
+                    </span>
+                    <input class="
+              block
+              w-full
+              mt-1
+              text-sm
+              dark:border-gray-600 dark:bg-gray-700
+              focus:border-purple-400
+              focus:outline-none
+              focus:shadow-outline-purple
+              dark:text-gray-300 dark:focus:shadow-outline-gray
+              form-input
+            " type="number" placeholder="" step="1000" v-model="product.price" name="price[]" />
                 </label>
                 <label class="block my-2 text-sm">
                     <span class="flex text-gray-700 dark:text-gray-400">
@@ -98,7 +116,7 @@ $current = 1;
           form-select
           focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
           dark:focus:shadow-outline-gray
-        " name="quality[]">
+        " name="quality[]" v-model="product.id_ChatLuong">
                         <option selected value="">Chọn chất lượng</option>
                         <option value="1">Thường</option>
                         <option value="2">Cao</option>
@@ -123,10 +141,27 @@ $current = 1;
                     </svg>
                 </button>
             </div>
-            <label class="block text-sm my-2 mx-2">
-                <span class="flex text-gray-700 dark:text-gray-400"> Thuế (%VAT)
-                </span>
-                <input class="
+            <div class="flex items-center">
+                <label class="block text-sm my-1 mr-2 w-48">
+                    <span class="flex text-gray-700 dark:text-gray-400">Tổng tiền
+                    </span>
+                    <input class="
+          block
+          w-full
+          mt-1
+          text-sm
+          dark:border-gray-600 dark:bg-gray-700
+          focus:border-purple-400
+          focus:outline-none
+          focus:shadow-outline-purple
+          dark:text-gray-300 dark:focus:shadow-outline-gray
+          form-input
+        " type="text" readonly name="total" placeholder="" :value="this.totalPrice.toLocaleString('vi-vn')" />
+                </label>
+                <label class="block text-sm my-2 mx-2">
+                    <span class="flex text-gray-700 dark:text-gray-400"> Thuế (%VAT)
+                    </span>
+                    <input class="
           block
           w-16
           mt-1
@@ -138,7 +173,24 @@ $current = 1;
           dark:text-gray-300 dark:focus:shadow-outline-gray
           form-input
         " type="number" min="0" max="100" value="0" name="vat" />
-            </label>
+                </label>
+                <label class="block text-sm my-1 mx-2">
+                    <span class="flex text-gray-700 dark:text-gray-400">Đã thanh toán
+                    </span>
+                    <input class="
+          block
+          w-48
+          mt-1
+          text-sm
+          dark:border-gray-600 dark:bg-gray-700
+          focus:border-purple-400
+          focus:outline-none
+          focus:shadow-outline-purple
+          dark:text-gray-300 dark:focus:shadow-outline-gray
+          form-input
+        " type="number" name="paid" placeholder="" value="0" step="1000" />
+                </label>
+            </div>
             <label class="block text-sm my-1 lg:w-1/4">
                 <span class="flex text-gray-700 dark:text-gray-400">Ngày giao hàng</span>
                 <input class="
@@ -151,7 +203,7 @@ $current = 1;
           focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
           dark:text-gray-300 dark:focus:shadow-outline-gray
           form-input
-        " type="date" name="delivery_date" placeholder=""/>
+        " type="date" name="delivery_date" placeholder="" />
             </label>
             <label class="block mt-4 text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Yêu cầu khách hàng</span>

@@ -19,6 +19,7 @@ class WarehouseImport extends Model
         'amount',
         'note',
         'status',
+        'price',
         'import_date',
         'id_creator',
         'is_pay',

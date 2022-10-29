@@ -19,8 +19,10 @@ $current = 14;
             class="flex items-center px-2 py-2 mx-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border-0 rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
             Thêm mới
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-              </svg>
+                <path fill-rule="evenodd"
+                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                    clip-rule="evenodd" />
+            </svg>
         </button>
         <button onclick=""
             class="flex items-center px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border-0 rounded-lg active:bg-green-700 hover:bg-green-700 focus:outline-none focus:shadow-outline-purple">
@@ -77,13 +79,14 @@ $current = 14;
                         <td class="px-3 py-3 text-sm">
                             {{ number_format($export->amount) . ' ' . $export->ingredient->unit_cal->name}}
                         </td>
-                        <td class="px-3 py-3 text-sm max-w-xs overflow-hidden text-ellipsis" v-tooltip="'{{ $export->note }}'">
+                        <td class="px-3 py-3 text-sm max-w-xs overflow-hidden text-ellipsis"
+                            v-tooltip="'{{ $export->note }}'">
                             {{ $export->note }}
                         </td>
                         <td class="px-3 py-3 text-sm">
                             {{
-                                \Carbon\Carbon::parse($export->export_date)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y')
-                            }}                    
+                            \Carbon\Carbon::parse($export->export_date)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y')
+                            }}
                         </td>
                         <td class="px-3 py-3 text-sm">
                             @switch($export->status)
@@ -117,10 +120,9 @@ $current = 14;
                             <img v-tooltip.top-start="'{{ $export->reviewer->name . ' - ' . $export->reviewer->role->name }}'"
                                 src="{{asset('/img/user').'/'.$export->reviewer->image }}"
                                 class="h-12 w-12 object-cover object-center rounded-full" />
-                                @endif
+                            @endif
                         </td>
                         <td class="px-3 py-3 text-sm flex items-center">
-                            @if($export->status == 1)
                             <button title="Chỉnh sửa" v-tooltip="'Chỉnh sửa'"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Edit"
@@ -131,6 +133,7 @@ $current = 14;
                                     </path>
                                 </svg>
                             </button>
+                            @if($export->status == 1)
                             <button v-tooltip="'Xóa'" title="Xóa" @click="openModal({{$export->id}})"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Delete">
@@ -140,16 +143,23 @@ $current = 14;
                                         clip-rule="evenodd"></path>
                                 </svg>
                             </button>
-                            <div class="inline-block relative group">                           
-                                <ul class="absolute hidden text-gray-700 pt-1 right-0 top-[25] group-hover:block z-50" style="margin-top: 25px;">
-                                    <li class=""><a class="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
-                                            href="{{ route('admin.warehouse.export.updateStatus', ['id' => $export->id, 'status' => 2]) }}">Duyệt xuất kho</a></li>
-                                    <li class=""><a class="rounded-b bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
-                                        href="{{ route('admin.warehouse.export.updateStatus', ['id' => $export->id, 'status' => 1]) }}">Không duyệt</a></li>
+                            <div class="inline-block relative group">
+                                <ul class="absolute hidden text-gray-700 pt-1 right-0 top-[25] group-hover:block z-50"
+                                    style="margin-top: 25px;">
+                                    <li class=""><a
+                                            class="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
+                                            href="{{ route('admin.warehouse.export.updateStatus', ['id' => $export->id, 'status' => 2]) }}">Duyệt
+                                            xuất kho</a></li>
+                                    <li class=""><a
+                                            class="rounded-b bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
+                                            href="{{ route('admin.warehouse.export.updateStatus', ['id' => $export->id, 'status' => 1]) }}">Không
+                                            duyệt</a></li>
                                 </ul>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                  </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 cursor-pointer" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
                             </div>
                             @endif
                         </td>
@@ -323,8 +333,7 @@ $current = 14;
         transition duration-150
         bg-black bg-opacity-50
         sm:items-center sm:justify-center
-      " id="backdrop-overlay"
-        @click="closeModal">
+      " id="backdrop-overlay" @click="closeModal">
         <transition enter-class="ease-out opacity-0 transform translate-y-1/2" enter-to-class="opacity-100"
             leave-class="ease-in opacity-100" leave-to-class="opacity-0 transform translate-y-1/2">
             <!-- Modal -->

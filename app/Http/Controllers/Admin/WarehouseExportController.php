@@ -64,7 +64,7 @@ class WarehouseExportController extends Controller
     public function edit($id)
     {
         $products = Ingredient::all(); 
-        $orders = ProductionRequest::with(['detail_order','detail_order.order'])->get();
+        $orders = Order::with(['detail','detail.production_request', 'customer'])->get();
         $productions = Production::all();
         $export = WarehouseExport::findOrFail($id);
         return view('admin.manage.export.edit', compact('export' ,'products', 'orders', 'productions'));
@@ -77,7 +77,7 @@ class WarehouseExportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(WarehouseExportRequest $request, $id)
     {
         //
         $data = $request->all();

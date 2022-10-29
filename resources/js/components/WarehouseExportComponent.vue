@@ -2,8 +2,8 @@
   <div
     class="px-4 py-3 mb-8 bg-[#ffffff] rounded-lg shadow-md dark:bg-gray-800"
   >
-    <div class="flex flex-row items-center sm:flex-col flex-wrap">
-      <label class="block text-sm mb-2 mr-4">
+    <div class="grid md:grid-cols-5 gap-4 items-center">
+      <label class="block text-sm">
         <span class="text-gray-700 dark:text-gray-400"
           >Mã xuất kho<span class="text-red-500">*</span></span
         >
@@ -54,7 +54,7 @@
           <option value="2">Bán hàng</option>
         </select>
       </label>
-      <label class="block text-sm my-2 mx-2">
+      <label class="block text-sm">
         <span class="text-gray-700 dark:text-gray-400"
           >Sản phẩm<span class="text-red-500">*</span></span
         >
@@ -76,6 +76,7 @@
           id="id_ingredient"
           v-model="productData.id_ingredient"
           aria-placeholder="Chọn sản phẩm"
+          @change="setPrice()"
         >
           <option value="">-- Chọn sản phẩm --</option>
           <option
@@ -87,7 +88,7 @@
           </option>
         </select>
       </label>
-      <label class="block text-sm mb-2 ml-4">
+      <label class="block text-sm">
         <span class="text-gray-700 dark:text-gray-400"
           >Số lượng<span class="text-red-500">*</span></span
         >
@@ -112,9 +113,7 @@
           value="1"
         />
       </label>
-    </div>
-    <div v-if="productData.type == 2" class="flex flex-row items-center sm:flex-col flex-wrap">
-      <label  class="block text-sm">
+      <label class="block text-sm" v-if="productData.type == 2">
         <span class="text-gray-700 dark:text-gray-400"
           >Đơn hàng <span class="text-red-500">*</span></span
         >
@@ -138,59 +137,17 @@
           aria-placeholder="Chọn đơn hàng"
         >
           <option value="" disabled selected>-- Đơn hàng --</option>
-          <option v-for="order in orders" v-if="order.detail.reduce((acc, item) => acc && item.id_product == productData.id_ingredient)" :key="order.id" :value="order.id">
+          <option
+            v-for="order in orders"
+            v-if="order.detail.reduce((acc, item) => acc && item.id_product == productData.id_ingredient)"
+            :key="order.id"
+            :value="order.id"
+          >
             {{ order.customer.name + " - " + order.customer.phone_number }}
           </option>
         </select>
-      </label>
-      <label class="block text-sm mb-2 ml-4">
-        <span class="text-gray-700 dark:text-gray-400">Đơn giá</span>
-        <input
-          class="
-            block
-            w-full
-            mt-1
-            text-sm
-            dark:border-gray-600 dark:bg-gray-700
-            focus:border-purple-400
-            focus:outline-none
-            focus:shadow-outline-purple
-            dark:text-gray-300 dark:focus:shadow-outline-gray
-            form-input
-          "
-          placeholder="Đơn giá"
-          step="100"
-          min="0"
-          type="number"
-          readonly
-          :value="this.price"
-        />
-      </label>
-      <label class="block text-sm mb-2 max-w-xs lg:ml-4">
-        <span class="text-gray-700 dark:text-gray-400"
-          >Tổng thanh toán</span
-        >
-        <input
-          class="
-            block
-            w-full
-            mt-1
-            text-sm
-            dark:border-gray-600 dark:bg-gray-700
-            focus:border-purple-400
-            focus:outline-none
-            focus:shadow-outline-purple
-            dark:text-gray-300 dark:focus:shadow-outline-gray
-            form-input
-          "
-          readonly
-          type="text"
-          :value="getPrice.toLocaleString() + ' đ'"
-        />
-      </label>
-      <label
-        class="block text-sm w-40 mb-2 max-w-xs ml-2"
-      >
+      </label>    
+      <label class="block text-sm max-w-xs" v-if="productData.type == 2">
         <span class="text-gray-700 dark:text-gray-400">Đã thanh toán</span>
         <input
           class="
@@ -208,85 +165,91 @@
           placeholder="Nhập số tiền đã thanh toán"
           name="paid"
           type="number"
-          min="0"
+          :min="(product_update && product_update.paid) || 0"
           :max="getPrice"
           v-model="productData.paid"
         />
       </label>
-    </div>
-    <label v-if="productData.type == 1" class="block text-sm">
-      <span class="text-gray-700 dark:text-gray-400"
-        >Lệnh sản xuất <span class="text-red-500">*</span></span
-      >
-      <select
-        class="
-          block
-          w-full
-          mt-1
-          text-sm
-          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
-          form-select
-          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
-          dark:focus:shadow-outline-gray
-          mb-1
-        "
-        name="id_production"
-        id="id_production"
-        v-model="productData.id_production"
-        aria-placeholder="Chọn lệnh sản xuất"
-      >
-        <option value="" disabled selected>-- Lệnh sản xuất --</option>
-        <option
-          v-for="production in productions"
-          :key="production.id"
-          :value="production.id"
+      <label v-if="productData.type == 1" class="block text-sm">
+        <span class="text-gray-700 dark:text-gray-400"
+          >Lệnh sản xuất <span class="text-red-500">*</span></span
         >
-          {{ production.code + " - " + production.product.Ten }}
-        </option>
-      </select>
-    </label>
-    <label class="block text-sm my-2">
-      <span class="text-gray-700 dark:text-gray-400"
-        >Ngày xuất kho<span class="text-red-500">*</span></span
-      >
-      <input
-        class="
-          block
-          w-full
-          mt-1
-          text-sm
-          dark:border-gray-600
-          max-w-xs
-          dark:bg-gray-700
-          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
-          dark:text-gray-300 dark:focus:shadow-outline-gray
-          form-input
-        "
-        placeholder="Ngày nhập kho"
-        name="export_date"
-        v-model="productData.export_date"
-        type="date"
-      />
-    </label>
-    <label class="block mt-4 text-sm">
-      <span class="text-gray-700 dark:text-gray-400">Ghi chú</span>
-      <textarea
-        class="
-          block
-          w-full
-          mt-1
-          text-sm
-          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
-          form-textarea
-          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
-          dark:focus:shadow-outline-gray
-        "
-        rows="3"
-        placeholder="Nhập ghi chú"
-        name="note"
-        v-model="productData.note"
-      ></textarea>
-    </label>
+        <select
+          class="
+            block
+            w-full
+            mt-1
+            text-sm
+            dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+            form-select
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:focus:shadow-outline-gray
+            mb-1
+          "
+          name="id_production"
+          id="id_production"
+          v-model="productData.id_production"
+          aria-placeholder="Chọn lệnh sản xuất"
+        >
+          <option value="" disabled selected>-- Lệnh sản xuất --</option>
+          <option
+            v-for="production in productions"
+            :key="production.id"
+            :value="production.id"
+          >
+            {{ production.code + " - " + production.product.Ten }}
+          </option>
+        </select>
+      </label>
+      <label class="block text-sm">
+        <span class="text-gray-700 dark:text-gray-400"
+          >Ngày xuất kho<span class="text-red-500">*</span></span
+        >
+        <input
+          class="
+            block
+            w-full
+            mt-1
+            text-sm
+            dark:border-gray-600
+            max-w-xs
+            dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:text-gray-300 dark:focus:shadow-outline-gray
+            form-input
+          "
+          placeholder="Ngày nhập kho"
+          name="export_date"
+          v-model="productData.export_date"
+          type="date"
+        />
+      </label>
+      <label class="block text-sm col-span-5">
+        <span class="text-gray-700 dark:text-gray-400">Ghi chú</span>
+        <textarea
+          class="
+            block
+            w-full
+            mt-1
+            text-sm
+            dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+            form-textarea
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:focus:shadow-outline-gray
+          "
+          rows="4"
+          placeholder="Nhập ghi chú"
+          name="note"
+          v-model="productData.note"
+        ></textarea>
+      </label>
+    </div>
     <div class="flex justify-end">
       <button
         class="mt-4 text-white px-4 py-2 rounded-md border-0 bg-indigo-600 mx-2"
@@ -489,13 +452,7 @@ export default {
   },
   computed: {
     getPrice() {
-      let product = this.products.find(
-        (item) => item.id === this.productData.id_ingredient
-      );
-
-      this.price = product != null ? product.GiaThanh : 0;
-
-      return this.price * parseInt(this.productData.amount);
+      return this.productData.price * parseInt(this.productData.amount);
     },
   },
   mounted() {
@@ -506,7 +463,6 @@ export default {
   data() {
     return {
       isModalOpen: false,
-      price: 0,
       productData: {
         code: this.quick_code,
         type: 1,
@@ -517,6 +473,7 @@ export default {
         id_production: 0,
         export_date: null,
         note: null,
+        price: 0
       },
     };
   },
@@ -524,6 +481,13 @@ export default {
     toggleModal() {
       this.isModalOpen = !this.isModalOpen;
     },
+    setPrice() {
+      let product = this.products.find(
+        (item) => item.id === this.productData.id_ingredient
+      );
+
+      this.productData.price = product != null ? product.GiaThanh : 0;
+    }
   },
 };
 </script>

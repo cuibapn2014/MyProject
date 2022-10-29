@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="flex flex-row items-center sm:flex-col flex-wrap">
-      <label class="block text-sm mb-2 mr-4">
+    <div class="grid md:grid-cols-5 items-center gap-3">
+      <label class="block text-sm">
         <span class="text-gray-700 dark:text-gray-400"
           >Mã nhập kho<span class="text-red-500">*</span></span
         >
@@ -52,7 +52,7 @@
           <option value="2">Sản xuất</option>
         </select>
       </label>
-      <label class="block text-sm my-2 mx-2">
+      <label class="block text-sm">
         <span class="text-gray-700 dark:text-gray-400"
           >Nguyên phụ liệu<span class="text-red-500">*</span></span
         >
@@ -74,11 +74,15 @@
           id="id_ingredient"
           aria-placeholder="Chọn nguyên phụ liệu"
           v-model="productData.id_ingredient"
+          @change="setPrice"
         >
           <option value="">-- Chọn nguyên phụ liệu --</option>
           <option
             v-for="product in this.products"
-            v-if="parseInt(productData.type) === product.id_ingredient_type || parseInt(productData.type) === 3"
+            v-if="
+              parseInt(productData.type) === product.id_ingredient_type ||
+              parseInt(productData.type) === 3
+            "
             :key="product.id"
             :value="product.id"
           >
@@ -86,7 +90,7 @@
           </option>
         </select>
       </label>
-      <label class="block text-sm mb-2 ml-4">
+      <label class="block text-sm">
         <span class="text-gray-700 dark:text-gray-400"
           >Số lượng<span class="text-red-500">*</span></span
         >
@@ -109,10 +113,8 @@
           v-model="productData.amount"
         />
       </label>
-      <label v-if="productData.type == 1" class="block text-sm mb-2 ml-4">
-        <span class="text-gray-700 dark:text-gray-400"
-          >Đơn giá</span
-        >
+      <label v-if="productData.type == 1" class="block text-sm">
+        <span class="text-gray-700 dark:text-gray-400">Đơn giá</span>
         <input
           class="
             block
@@ -126,61 +128,52 @@
             dark:text-gray-300 dark:focus:shadow-outline-gray
             form-input
           "
-          readonly
           placeholder="Đơn giá"
-          type="text"
-          :value="this.price.toLocaleString() + ' đ'"
-        />
-      </label>
-    </div>
-    <div class="flex flex-row items-center sm:flex-col flex-wrap">
-      <label v-if="productData.type == 1" class="block text-sm mb-2 max-w-xs">
-        <span class="text-gray-700 dark:text-gray-400"
-          >Tổng thanh toán</span
-        >
-        <input
-          class="
-            block
-            w-full
-            mt-1
-            text-sm
-            dark:border-gray-600 dark:bg-gray-700
-            focus:border-purple-400
-            focus:outline-none
-            focus:shadow-outline-purple
-            dark:text-gray-300 dark:focus:shadow-outline-gray
-            form-input
-          "
-          readonly
-          type="text"
-          :value="totalPay.toLocaleString() + ' đ'"
-        />
-      </label>
-      <label v-if="productData.type == 1" class="block text-sm mb-2 max-w-xs ml-2">
-        <span class="text-gray-700 dark:text-gray-400"
-          >Đã thanh toán</span
-        >
-        <input
-          class="
-            block
-            w-full
-            mt-1
-            text-sm
-            dark:border-gray-600 dark:bg-gray-700
-            focus:border-purple-400
-            focus:outline-none
-            focus:shadow-outline-purple
-            dark:text-gray-300 dark:focus:shadow-outline-gray
-            form-input
-          "
-          placeholder="Nhập số tiền đã thanh toán"
-          name="paid"
           type="number"
-          :max="totalPay"
-          v-model="productData.paid"
+          v-model="productData.price"
         />
       </label>
-    </div>
+      <label v-if="productData.type == 1" class="block text-sm max-w-xs">
+      <span class="text-gray-700 dark:text-gray-400">Tổng thanh toán</span>
+      <input
+        class="
+          block
+          w-full
+          mt-1
+          text-sm
+          dark:border-gray-600 dark:bg-gray-700
+          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
+          dark:text-gray-300 dark:focus:shadow-outline-gray
+          form-input
+        "
+        readonly
+        type="text"
+        :value="totalPay.toLocaleString() + ' đ'"
+      />
+    </label>
+    <label
+      v-if="productData.type == 1"
+      class="block text-sm max-w-xs"
+    >
+      <span class="text-gray-700 dark:text-gray-400">Đã thanh toán</span>
+      <input
+        class="
+          block
+          w-full
+          mt-1
+          text-sm
+          dark:border-gray-600 dark:bg-gray-700
+          focus:border-purple-400 focus:outline-none focus:shadow-outline-purple
+          dark:text-gray-300 dark:focus:shadow-outline-gray
+          form-input
+        "
+        placeholder="Nhập số tiền đã thanh toán"
+        name="paid"
+        type="number"
+        :max="totalPay"
+        v-model="productData.paid"
+      />
+    </label>
     <label class="block text-sm mb-2">
       <span class="text-gray-700 dark:text-gray-400"
         >Ngày nhập kho<span class="text-red-500">*</span></span
@@ -204,6 +197,7 @@
         v-model="productData.import_date"
       />
     </label>
+    </div>
     <label class="block mt-4 text-sm">
       <span class="text-gray-700 dark:text-gray-400">Ghi chú</span>
       <textarea
@@ -431,15 +425,7 @@ export default {
   },
   computed: {
     totalPay() {
-      let product = this.products.find(
-        (item) => item.id === this.productData.id_ingredient
-      );
-      
-      this.price = product != null ? product.Gia : 0
-
-      return (
-        this.price * parseInt(this.productData.amount)
-      );
+      return this.productData.price * parseInt(this.productData.amount);
     },
   },
   data() {
@@ -452,7 +438,8 @@ export default {
         id_ingredient: 0,
         amount: 1,
         id_order: 0,
-        paid:0,
+        paid: 0,
+        price:0,
         is_pay: 0,
         import_date: null,
         note: null,
@@ -463,6 +450,13 @@ export default {
     toggleModal() {
       this.isModalOpen = !this.isModalOpen;
     },
+    setPrice() {
+      let product = this.products.find(
+        (item) => item.id === this.productData.id_ingredient
+      );
+
+      this.productData.price = product != null ? product.Gia : 0;
+    }
   },
 };
 </script>

@@ -25,14 +25,12 @@ class AdminController extends Controller
 
     public function index()
     {
-        $revenue = WarehouseExport::selectRaw('sum(paid) as total')->first();
+        $revenue = Order::selectRaw('sum(paid) as total')->first();
         $countOrder = Order::selectRaw('count(id) as total')->first();
         $countClient = Customer::all();
-        $debtSale = WarehouseExport::selectRaw('(sum(ingredients.GiaThanh * warehouse_exports.amount - warehouse_exports.paid)) as debt')
-            ->join('ingredients', 'warehouse_exports.id_ingredient', 'ingredients.id')
+        $debtSale = Order::selectRaw('sum(total - paid) as debt')
             ->get();
-        $debtBuy = WarehouseImport::selectRaw('(sum(ingredients.Gia * warehouse_imports.amount - warehouse_imports.paid)) as debt')
-        ->join('ingredients', 'warehouse_imports.id_ingredient', 'ingredients.id')
+        $debtBuy = WarehouseImport::selectRaw('(sum(price * amount - paid)) as debt')
         ->get();
         $debt = collect(array($debtSale[0], $debtBuy[0]));
         return view('admin.home', compact('revenue', 'countOrder', 'countClient', 'debt'));

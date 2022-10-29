@@ -406,8 +406,8 @@
     </style>
 </head>
 
-<body>
-    <section class="container grid grid-cols-2 items-center lg:px-24">
+<body class="h-screen overflow-hidden max-h-screen">
+    <section class="container h-full grid md:grid-cols-2 items-center">
         <div>
             <h1 class="text-3xl font-bold text-gray-800">Ứng dụng website quản lý xưởng may</h1>
             <p class="text-base my-2 text-gray-800">Giải pháp quản lý sản xuất dành cho doanh nghiệp của bạn</p>

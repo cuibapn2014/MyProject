@@ -17,6 +17,7 @@ class DetailOrder extends Model
         'id_DonHang',
         'LoaiHang',
         'amount',
+        'price',
         'id_product',
         'id_ChatLuong',
         'NguonCungCap',

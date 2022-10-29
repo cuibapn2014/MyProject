@@ -33,10 +33,14 @@ class OrderController extends Controller
 
     public function store(Request $req)
     {
+        foreach($req->price as $price){
+            if($price <= 0) return back()->withErrors(['id_product' => 'Vui lòng cập nhật đơn giá cho sản phẩm']);
+        }
+
         DB::beginTransaction();
         try {
             // $address = $req->address . ', ' . $req->ward . ' - ' . $req->district . ' - ' . $req->province;
-            if (!$req->hasFile('image')) return back()->withErrors(['image' => 'Bạn chưa thêm ảnh cho sản phẩm']);
+            // if (!$req->hasFile('image')) return back()->withErrors(['image' => 'Bạn chưa thêm ảnh cho sản phẩm']);
 
             $validator = Validator::make(
                 $req->all(),
@@ -44,13 +48,13 @@ class OrderController extends Controller
                     'quantity.*' => 'min:1',
                     'quality' => 'required',
                     // 'duration' => 'required|date',
-                    'image.0' => 'mimes:jpeg,jpg,png,bmp|max:3000'
+                    // 'image.0' => 'mimes:jpeg,jpg,png,bmp|max:3000'
                 ],
                 [
                     'quality.required' => 'Không được để trống chất lượng sản phẩm',
                     // 'duration.required' => 'Không được để trống ngày trả đơn',
-                    'image.0.mimes' => 'Định dạng file ảnh không hợp lệ',
-                    'image.0.max' => 'Dung lượng tối đa của hình ảnh phải nhỏ hơn 3MB'
+                    // 'image.0.mimes' => 'Định dạng file ảnh không hợp lệ',
+                    // 'image.0.max' => 'Dung lượng tối đa của hình ảnh phải nhỏ hơn 3MB'
                 ]
             );
 
@@ -63,6 +67,8 @@ class OrderController extends Controller
                 'NgayTraDon' => $req->duration,
                 'id_NhanVien' => Auth::user()->id,
                 'vat' => $req->vat,
+                'total' => str_replace('.','', $req->total),
+                'paid' => $req->paid,
                 'note' => $req->note
             ]);
 
@@ -85,6 +91,7 @@ class OrderController extends Controller
                     DetailOrder::create([
                         'id_DonHang' => $order->id,
                         'id_product' => $product,
+                        'price' => $req->price[$key],
                         'id_ChatLuong' => $req->quality[$key] ? $req->quality[$key] : 1,
                         'amount' => $req->quantity[$key],
                         'image' => $file_name,
@@ -115,6 +122,10 @@ class OrderController extends Controller
 
     public function update(Request $req, $id)
     {
+        foreach($req->price as $price){
+            if($price <= 0) return back()->withErrors(['id_product' => 'Vui lòng cập nhật đơn giá cho sản phẩm']);
+        }
+
         try {
             DetailOrder::where('id_DonHang', $id)->delete();
 
@@ -125,6 +136,8 @@ class OrderController extends Controller
                 'id_customer' => $req->id_customer,
                 'NgayTraDon' => $req->duration,
                 'vat' => $req->vat,
+                'total' => str_replace('.','', $req->total),
+                'paid' => $req->paid,
                 'note' => $req->note
             ]);
 
@@ -136,9 +149,9 @@ class OrderController extends Controller
                     DetailOrder::create([
                         'id_DonHang' => $order->id,
                         'id_product' => $product,
+                        'price' => $req->price[$key],
                         'id_ChatLuong' => $req->quality[$key] ? $req->quality[$key] : 1,
-                        'amount' => $req->quantity[$key],
-                        'GhiChu' => $req->note
+                        'amount' => $req->quantity[$key]
                     ]);
                 }
             }

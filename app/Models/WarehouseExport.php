@@ -22,8 +22,7 @@ class WarehouseExport extends Model
         'status',
         'export_date',
         'id_creator',
-        'id_reviewer',
-        'paid'
+        'id_reviewer'
     ];
 
     public function ingredient()

@@ -83,10 +83,10 @@
             detail.quality && detail.quality.Ten
           }}</span>
           <span class="text-center">{{
-            detail.product && detail.product.GiaThanh.toLocaleString()
+            detail.product && detail.price.toLocaleString()
           }}</span>
           <span class="text-center">{{
-            Number(detail.amount * detail.product.GiaThanh).toLocaleString()
+            Number(detail.amount * detail.price).toLocaleString()
           }}</span>
         </div>
         <span class="py-2 border-top">Ghi chú: {{ this.order.note }}</span>
@@ -97,19 +97,19 @@
           <li class="flex justify-between">
             Tổng thành tiền:
             <span class="font-bold text-base text-green-500">{{
-              this.formatPrice(getTotalPaid())
+              this.formatPrice(this.order.total)
             }}</span>
           </li>
           <li class="flex justify-between">
             Đã thanh toán:
             <span class="font-bold text-base text-green-500">{{
-              this.formatPrice(getPaid())
+              this.formatPrice(this.order.paid)
             }}</span>
           </li>
           <li class="flex justify-between">
             Còn lại:
             <span class="font-bold text-base text-red-500">{{
-              this.formatPrice(getTotalPaid() - getPaid())
+              this.formatPrice(this.order.total - this.order.paid)
             }}</span>
           </li>
         </ul>
@@ -200,21 +200,7 @@ export default {
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
         .concat("đ");
-    },
-    getTotalPaid() {
-      let total = 0
-      this.order.detail.map(item => {
-        total = total + (item.amount * item.product.GiaThanh)
-      })
-      return total;
-    },
-    getPaid() {
-      let total = 0
-      this.order.export_details.map(item => {
-        total += item.paid
-      })
-      return total;
-    },
+    }
   },
 };
 </script>

@@ -9458,20 +9458,6 @@ __webpack_require__.r(__webpack_exports__);
     formatPrice: function formatPrice(value) {
       var val = (value / 1).toFixed(0).replace(".", ",");
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".").concat("đ");
-    },
-    getTotalPaid: function getTotalPaid() {
-      var total = 0;
-      this.order.detail.map(function (item) {
-        total = total + item.amount * item.product.GiaThanh;
-      });
-      return total;
-    },
-    getPaid: function getPaid() {
-      var total = 0;
-      this.order.export_details.map(function (item) {
-        total += item.paid;
-      });
-      return total;
     }
   }
 });
@@ -10693,43 +10679,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     product_update: Object,
@@ -10740,13 +10689,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     getPrice: function getPrice() {
-      var _this = this;
-
-      var product = this.products.find(function (item) {
-        return item.id === _this.productData.id_ingredient;
-      });
-      this.price = product != null ? product.GiaThanh : 0;
-      return this.price * parseInt(this.productData.amount);
+      return this.productData.price * parseInt(this.productData.amount);
     }
   },
   mounted: function mounted() {
@@ -10757,7 +10700,6 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       isModalOpen: false,
-      price: 0,
       productData: {
         code: this.quick_code,
         type: 1,
@@ -10767,13 +10709,22 @@ __webpack_require__.r(__webpack_exports__);
         id_order: 0,
         id_production: 0,
         export_date: null,
-        note: null
+        note: null,
+        price: 0
       }
     };
   },
   methods: {
     toggleModal: function toggleModal() {
       this.isModalOpen = !this.isModalOpen;
+    },
+    setPrice: function setPrice() {
+      var _this = this;
+
+      var product = this.products.find(function (item) {
+        return item.id === _this.productData.id_ingredient;
+      });
+      this.productData.price = product != null ? product.GiaThanh : 0;
     }
   }
 });
@@ -11204,12 +11155,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     product_update: Object,
@@ -11223,13 +11168,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     totalPay: function totalPay() {
-      var _this = this;
-
-      var product = this.products.find(function (item) {
-        return item.id === _this.productData.id_ingredient;
-      });
-      this.price = product != null ? product.Gia : 0;
-      return this.price * parseInt(this.productData.amount);
+      return this.productData.price * parseInt(this.productData.amount);
     }
   },
   data: function data() {
@@ -11243,6 +11182,7 @@ __webpack_require__.r(__webpack_exports__);
         amount: 1,
         id_order: 0,
         paid: 0,
+        price: 0,
         is_pay: 0,
         import_date: null,
         note: null
@@ -11252,6 +11192,14 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     toggleModal: function toggleModal() {
       this.isModalOpen = !this.isModalOpen;
+    },
+    setPrice: function setPrice() {
+      var _this = this;
+
+      var product = this.products.find(function (item) {
+        return item.id === _this.productData.id_ingredient;
+      });
+      this.productData.price = product != null ? product.Gia : 0;
     }
   }
 });
@@ -11377,6 +11325,22 @@ var app = new Vue({
   updated: function updated() {
     this.getTheme();
   },
+  computed: {
+    totalPrice: function totalPrice() {
+      var total = 0;
+      this.countProduct.map(function (item) {
+        if (item.id_product > 0) total += parseInt(item.amount) * parseInt(item.price);
+      });
+      return total;
+    },
+    totalPricEdit: function totalPricEdit() {
+      var total = 0;
+      this.countProductEdit.map(function (item) {
+        if (item.id_product > 0) total += parseInt(item.amount) * parseInt(item.price);
+      });
+      return total;
+    }
+  },
   data: function data() {
     return {
       idDelete: 0,
@@ -11387,7 +11351,12 @@ var app = new Vue({
       idOrder: 0,
       isActive: 0,
       idCustom: 0,
-      countProduct: 1,
+      countProduct: [{
+        id_product: 0,
+        amount: 0,
+        price: 0,
+        id_ChatLuong: 1
+      }],
       countProductEdit: [],
       isOpenView: false,
       isOpenSettingModal: false,
@@ -11826,14 +11795,22 @@ var app = new Vue({
       this.idProduction = idProduction;
     },
     handleClickAddProduct: function handleClickAddProduct() {
-      this.countProduct = this.countProduct + 1;
+      this.countProduct.push({
+        id_product: 0,
+        amount: 0,
+        price: 0,
+        id_ChatLuong: 1
+      });
     },
     handleMinusProduct: function handleMinusProduct() {
-      if (this.countProduct > 1) this.countProduct = this.countProduct - 1;
+      if (this.countProduct.length > 1) this.countProduct.pop();
     },
     handleClickAddProductObj: function handleClickAddProductObj() {
       this.countProductEdit.push({
-        id: 0
+        id_product: 0,
+        amount: 0,
+        price: 0,
+        id_ChatLuong: 1
       });
     },
     handleMinusProductObj: function handleMinusProductObj() {
@@ -57420,19 +57397,14 @@ var render = function () {
                     _vm._v(" "),
                     _c("span", { staticClass: "text-center" }, [
                       _vm._v(
-                        _vm._s(
-                          detail.product &&
-                            detail.product.GiaThanh.toLocaleString()
-                        )
+                        _vm._s(detail.product && detail.price.toLocaleString())
                       ),
                     ]),
                     _vm._v(" "),
                     _c("span", { staticClass: "text-center" }, [
                       _vm._v(
                         _vm._s(
-                          Number(
-                            detail.amount * detail.product.GiaThanh
-                          ).toLocaleString()
+                          Number(detail.amount * detail.price).toLocaleString()
                         )
                       ),
                     ]),
@@ -57456,7 +57428,7 @@ var render = function () {
                   _c(
                     "span",
                     { staticClass: "font-bold text-base text-green-500" },
-                    [_vm._v(_vm._s(this.formatPrice(_vm.getTotalPaid())))]
+                    [_vm._v(_vm._s(this.formatPrice(this.order.total)))]
                   ),
                 ]),
                 _vm._v(" "),
@@ -57465,7 +57437,7 @@ var render = function () {
                   _c(
                     "span",
                     { staticClass: "font-bold text-base text-green-500" },
-                    [_vm._v(_vm._s(this.formatPrice(_vm.getPaid())))]
+                    [_vm._v(_vm._s(this.formatPrice(this.order.paid)))]
                   ),
                 ]),
                 _vm._v(" "),
@@ -57477,7 +57449,7 @@ var render = function () {
                     [
                       _vm._v(
                         _vm._s(
-                          this.formatPrice(_vm.getTotalPaid() - _vm.getPaid())
+                          this.formatPrice(this.order.total - this.order.paid)
                         )
                       ),
                     ]
@@ -58441,113 +58413,111 @@ var render = function () {
         "px-4 py-3 mb-8 bg-[#ffffff] rounded-lg shadow-md dark:bg-gray-800",
     },
     [
-      _c(
-        "div",
-        { staticClass: "flex flex-row items-center sm:flex-col flex-wrap" },
-        [
-          _c("label", { staticClass: "block text-sm mb-2 mr-4" }, [
-            _vm._m(0),
-            _vm._v(" "),
-            _c("input", {
+      _c("div", { staticClass: "grid md:grid-cols-5 gap-4 items-center" }, [
+        _c("label", { staticClass: "block text-sm" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.productData.code,
+                expression: "productData.code",
+              },
+            ],
+            staticClass:
+              "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          uppercase\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
+            attrs: { placeholder: "xkxxxxxx", name: "code" },
+            domProps: { value: _vm.productData.code },
+            on: {
+              input: function ($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.productData, "code", $event.target.value)
+              },
+            },
+          }),
+        ]),
+        _vm._v(" "),
+        _c("label", { staticClass: "block text-sm" }, [
+          _vm._m(1),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
               directives: [
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.productData.code,
-                  expression: "productData.code",
+                  value: _vm.productData.type,
+                  expression: "productData.type",
                 },
               ],
               staticClass:
-                "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          uppercase\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
-              attrs: { placeholder: "xkxxxxxx", name: "code" },
-              domProps: { value: _vm.productData.code },
+                "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n          form-select\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:focus:shadow-outline-gray\n          mb-1\n        ",
+              attrs: {
+                name: "type",
+                id: "type",
+                "aria-placeholder": "Chọn loại xuất kho",
+              },
               on: {
-                input: function ($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.productData, "code", $event.target.value)
+                change: function ($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function (o) {
+                      return o.selected
+                    })
+                    .map(function (o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.$set(
+                    _vm.productData,
+                    "type",
+                    $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                  )
                 },
               },
-            }),
-          ]),
+            },
+            [
+              _c(
+                "option",
+                { attrs: { value: "", disabled: "", selected: "" } },
+                [_vm._v("-- Loại xuất kho --")]
+              ),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "1" } }, [_vm._v("Sản xuất")]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "2" } }, [_vm._v("Bán hàng")]),
+            ]
+          ),
+        ]),
+        _vm._v(" "),
+        _c("label", { staticClass: "block text-sm" }, [
+          _vm._m(2),
           _vm._v(" "),
-          _c("label", { staticClass: "block text-sm" }, [
-            _vm._m(1),
-            _vm._v(" "),
-            _c(
-              "select",
-              {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.productData.type,
-                    expression: "productData.type",
-                  },
-                ],
-                staticClass:
-                  "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n          form-select\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:focus:shadow-outline-gray\n          mb-1\n        ",
-                attrs: {
-                  name: "type",
-                  id: "type",
-                  "aria-placeholder": "Chọn loại xuất kho",
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.productData.id_ingredient,
+                  expression: "productData.id_ingredient",
                 },
-                on: {
-                  change: function ($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function (o) {
-                        return o.selected
-                      })
-                      .map(function (o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.$set(
-                      _vm.productData,
-                      "type",
-                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-                    )
-                  },
-                },
+              ],
+              staticClass:
+                "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n          form-select\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:focus:shadow-outline-gray\n          mb-1\n        ",
+              attrs: {
+                name: "id_ingredient",
+                id: "id_ingredient",
+                "aria-placeholder": "Chọn sản phẩm",
               },
-              [
-                _c(
-                  "option",
-                  { attrs: { value: "", disabled: "", selected: "" } },
-                  [_vm._v("-- Loại xuất kho --")]
-                ),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "1" } }, [_vm._v("Sản xuất")]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "2" } }, [_vm._v("Bán hàng")]),
-              ]
-            ),
-          ]),
-          _vm._v(" "),
-          _c("label", { staticClass: "block text-sm my-2 mx-2" }, [
-            _vm._m(2),
-            _vm._v(" "),
-            _c(
-              "select",
-              {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.productData.id_ingredient,
-                    expression: "productData.id_ingredient",
-                  },
-                ],
-                staticClass:
-                  "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n          form-select\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:focus:shadow-outline-gray\n          mb-1\n        ",
-                attrs: {
-                  name: "id_ingredient",
-                  id: "id_ingredient",
-                  "aria-placeholder": "Chọn sản phẩm",
-                },
-                on: {
-                  change: function ($event) {
+              on: {
+                change: [
+                  function ($event) {
                     var $$selectedVal = Array.prototype.filter
                       .call($event.target.options, function (o) {
                         return o.selected
@@ -58562,356 +58532,309 @@ var render = function () {
                       $event.target.multiple ? $$selectedVal : $$selectedVal[0]
                     )
                   },
-                },
+                  function ($event) {
+                    return _vm.setPrice()
+                  },
+                ],
               },
-              [
-                _c("option", { attrs: { value: "" } }, [
-                  _vm._v("-- Chọn sản phẩm --"),
-                ]),
-                _vm._v(" "),
-                _vm._l(_vm.products, function (product) {
-                  return _c(
-                    "option",
-                    { key: product.id, domProps: { value: product.id } },
-                    [
-                      _vm._v(
-                        "\n          " + _vm._s(product.Ten) + "\n        "
-                      ),
-                    ]
-                  )
-                }),
-              ],
-              2
-            ),
-          ]),
-          _vm._v(" "),
-          _c("label", { staticClass: "block text-sm mb-2 ml-4" }, [
-            _vm._m(3),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.productData.amount,
-                  expression: "productData.amount",
-                },
-              ],
-              staticClass:
-                "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
-              attrs: {
-                placeholder: "Nhập số lượng",
-                name: "amount",
-                type: "number",
-                min: "1",
-                value: "1",
-              },
-              domProps: { value: _vm.productData.amount },
-              on: {
-                input: function ($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.productData, "amount", $event.target.value)
-                },
-              },
-            }),
-          ]),
-        ]
-      ),
-      _vm._v(" "),
-      _vm.productData.type == 2
-        ? _c(
-            "div",
-            { staticClass: "flex flex-row items-center sm:flex-col flex-wrap" },
+            },
             [
-              _c("label", { staticClass: "block text-sm" }, [
-                _vm._m(4),
-                _vm._v(" "),
-                _c(
-                  "select",
-                  {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.productData.id_order,
-                        expression: "productData.id_order",
-                      },
-                    ],
-                    staticClass:
-                      "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n          form-select\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:focus:shadow-outline-gray\n          mb-1\n        ",
-                    attrs: {
-                      name: "id_order",
-                      id: "id_order",
-                      "aria-placeholder": "Chọn đơn hàng",
-                    },
-                    on: {
-                      change: function ($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function (o) {
-                            return o.selected
-                          })
-                          .map(function (o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.$set(
-                          _vm.productData,
-                          "id_order",
-                          $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        )
-                      },
-                    },
-                  },
-                  [
-                    _c(
-                      "option",
-                      { attrs: { value: "", disabled: "", selected: "" } },
-                      [_vm._v("-- Đơn hàng --")]
-                    ),
-                    _vm._v(" "),
-                    _vm._l(_vm.orders, function (order) {
-                      return order.detail.reduce(function (acc, item) {
-                        return (
-                          acc &&
-                          item.id_product == _vm.productData.id_ingredient
-                        )
-                      })
-                        ? _c(
-                            "option",
-                            { key: order.id, domProps: { value: order.id } },
-                            [
-                              _vm._v(
-                                "\n          " +
-                                  _vm._s(
-                                    order.customer.name +
-                                      " - " +
-                                      order.customer.phone_number
-                                  ) +
-                                  "\n        "
-                              ),
-                            ]
-                          )
-                        : _vm._e()
-                    }),
-                  ],
-                  2
-                ),
+              _c("option", { attrs: { value: "" } }, [
+                _vm._v("-- Chọn sản phẩm --"),
               ]),
               _vm._v(" "),
-              _c("label", { staticClass: "block text-sm mb-2 ml-4" }, [
-                _c(
-                  "span",
-                  { staticClass: "text-gray-700 dark:text-gray-400" },
-                  [_vm._v("Đơn giá")]
-                ),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass:
-                    "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
-                  attrs: {
-                    placeholder: "Đơn giá",
-                    step: "100",
-                    min: "0",
-                    type: "number",
-                    readonly: "",
-                  },
-                  domProps: { value: this.price },
-                }),
-              ]),
-              _vm._v(" "),
-              _c(
-                "label",
-                { staticClass: "block text-sm mb-2 max-w-xs lg:ml-4" },
-                [
-                  _c(
-                    "span",
-                    { staticClass: "text-gray-700 dark:text-gray-400" },
-                    [_vm._v("Tổng thanh toán")]
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass:
-                      "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
-                    attrs: { readonly: "", type: "text" },
-                    domProps: { value: _vm.getPrice.toLocaleString() + " đ" },
-                  }),
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "label",
-                { staticClass: "block text-sm w-40 mb-2 max-w-xs ml-2" },
-                [
-                  _c(
-                    "span",
-                    { staticClass: "text-gray-700 dark:text-gray-400" },
-                    [_vm._v("Đã thanh toán")]
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.productData.paid,
-                        expression: "productData.paid",
-                      },
-                    ],
-                    staticClass:
-                      "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
-                    attrs: {
-                      placeholder: "Nhập số tiền đã thanh toán",
-                      name: "paid",
-                      type: "number",
-                      min: "0",
-                      max: _vm.getPrice,
-                    },
-                    domProps: { value: _vm.productData.paid },
-                    on: {
-                      input: function ($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.productData, "paid", $event.target.value)
-                      },
-                    },
-                  }),
-                ]
-              ),
-            ]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.productData.type == 1
-        ? _c("label", { staticClass: "block text-sm" }, [
-            _vm._m(5),
-            _vm._v(" "),
-            _c(
-              "select",
+              _vm._l(_vm.products, function (product) {
+                return _c(
+                  "option",
+                  { key: product.id, domProps: { value: product.id } },
+                  [_vm._v("\n          " + _vm._s(product.Ten) + "\n        ")]
+                )
+              }),
+            ],
+            2
+          ),
+        ]),
+        _vm._v(" "),
+        _c("label", { staticClass: "block text-sm" }, [
+          _vm._m(3),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
               {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.productData.amount,
+                expression: "productData.amount",
+              },
+            ],
+            staticClass:
+              "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
+            attrs: {
+              placeholder: "Nhập số lượng",
+              name: "amount",
+              type: "number",
+              min: "1",
+              value: "1",
+            },
+            domProps: { value: _vm.productData.amount },
+            on: {
+              input: function ($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.productData, "amount", $event.target.value)
+              },
+            },
+          }),
+        ]),
+        _vm._v(" "),
+        _vm.productData.type == 2
+          ? _c("label", { staticClass: "block text-sm" }, [
+              _vm._m(4),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.productData.id_order,
+                      expression: "productData.id_order",
+                    },
+                  ],
+                  staticClass:
+                    "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n          form-select\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:focus:shadow-outline-gray\n          mb-1\n        ",
+                  attrs: {
+                    name: "id_order",
+                    id: "id_order",
+                    "aria-placeholder": "Chọn đơn hàng",
+                  },
+                  on: {
+                    change: function ($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function (o) {
+                          return o.selected
+                        })
+                        .map(function (o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.productData,
+                        "id_order",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    },
+                  },
+                },
+                [
+                  _c(
+                    "option",
+                    { attrs: { value: "", disabled: "", selected: "" } },
+                    [_vm._v("-- Đơn hàng --")]
+                  ),
+                  _vm._v(" "),
+                  _vm._l(_vm.orders, function (order) {
+                    return order.detail.reduce(function (acc, item) {
+                      return (
+                        acc && item.id_product == _vm.productData.id_ingredient
+                      )
+                    })
+                      ? _c(
+                          "option",
+                          { key: order.id, domProps: { value: order.id } },
+                          [
+                            _vm._v(
+                              "\n          " +
+                                _vm._s(
+                                  order.customer.name +
+                                    " - " +
+                                    order.customer.phone_number
+                                ) +
+                                "\n        "
+                            ),
+                          ]
+                        )
+                      : _vm._e()
+                  }),
+                ],
+                2
+              ),
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.productData.type == 2
+          ? _c("label", { staticClass: "block text-sm max-w-xs" }, [
+              _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
+                _vm._v("Đã thanh toán"),
+              ]),
+              _vm._v(" "),
+              _c("input", {
                 directives: [
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.productData.id_production,
-                    expression: "productData.id_production",
+                    value: _vm.productData.paid,
+                    expression: "productData.paid",
                   },
                 ],
                 staticClass:
-                  "\n        block\n        w-full\n        mt-1\n        text-sm\n        dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n        form-select\n        focus:border-purple-400 focus:outline-none focus:shadow-outline-purple\n        dark:focus:shadow-outline-gray\n        mb-1\n      ",
+                  "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
                 attrs: {
-                  name: "id_production",
-                  id: "id_production",
-                  "aria-placeholder": "Chọn lệnh sản xuất",
+                  placeholder: "Nhập số tiền đã thanh toán",
+                  name: "paid",
+                  type: "number",
+                  min: (_vm.product_update && _vm.product_update.paid) || 0,
+                  max: _vm.getPrice,
                 },
+                domProps: { value: _vm.productData.paid },
                 on: {
-                  change: function ($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function (o) {
-                        return o.selected
-                      })
-                      .map(function (o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.$set(
-                      _vm.productData,
-                      "id_production",
-                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-                    )
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.productData, "paid", $event.target.value)
                   },
                 },
-              },
-              [
-                _c(
-                  "option",
-                  { attrs: { value: "", disabled: "", selected: "" } },
-                  [_vm._v("-- Lệnh sản xuất --")]
-                ),
-                _vm._v(" "),
-                _vm._l(_vm.productions, function (production) {
-                  return _c(
-                    "option",
-                    { key: production.id, domProps: { value: production.id } },
-                    [
-                      _vm._v(
-                        "\n        " +
-                          _vm._s(
-                            production.code + " - " + production.product.Ten
-                          ) +
-                          "\n      "
-                      ),
-                    ]
-                  )
-                }),
-              ],
-              2
-            ),
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _c("label", { staticClass: "block text-sm my-2" }, [
-        _vm._m(6),
+              }),
+            ])
+          : _vm._e(),
         _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.productData.export_date,
-              expression: "productData.export_date",
+        _vm.productData.type == 1
+          ? _c("label", { staticClass: "block text-sm" }, [
+              _vm._m(5),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.productData.id_production,
+                      expression: "productData.id_production",
+                    },
+                  ],
+                  staticClass:
+                    "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n          form-select\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:focus:shadow-outline-gray\n          mb-1\n        ",
+                  attrs: {
+                    name: "id_production",
+                    id: "id_production",
+                    "aria-placeholder": "Chọn lệnh sản xuất",
+                  },
+                  on: {
+                    change: function ($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function (o) {
+                          return o.selected
+                        })
+                        .map(function (o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.productData,
+                        "id_production",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    },
+                  },
+                },
+                [
+                  _c(
+                    "option",
+                    { attrs: { value: "", disabled: "", selected: "" } },
+                    [_vm._v("-- Lệnh sản xuất --")]
+                  ),
+                  _vm._v(" "),
+                  _vm._l(_vm.productions, function (production) {
+                    return _c(
+                      "option",
+                      {
+                        key: production.id,
+                        domProps: { value: production.id },
+                      },
+                      [
+                        _vm._v(
+                          "\n          " +
+                            _vm._s(
+                              production.code + " - " + production.product.Ten
+                            ) +
+                            "\n        "
+                        ),
+                      ]
+                    )
+                  }),
+                ],
+                2
+              ),
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c("label", { staticClass: "block text-sm" }, [
+          _vm._m(6),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.productData.export_date,
+                expression: "productData.export_date",
+              },
+            ],
+            staticClass:
+              "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600\n          max-w-xs\n          dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
+            attrs: {
+              placeholder: "Ngày nhập kho",
+              name: "export_date",
+              type: "date",
             },
-          ],
-          staticClass:
-            "\n        block\n        w-full\n        mt-1\n        text-sm\n        dark:border-gray-600\n        max-w-xs\n        dark:bg-gray-700\n        focus:border-purple-400 focus:outline-none focus:shadow-outline-purple\n        dark:text-gray-300 dark:focus:shadow-outline-gray\n        form-input\n      ",
-          attrs: {
-            placeholder: "Ngày nhập kho",
-            name: "export_date",
-            type: "date",
-          },
-          domProps: { value: _vm.productData.export_date },
-          on: {
-            input: function ($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.$set(_vm.productData, "export_date", $event.target.value)
+            domProps: { value: _vm.productData.export_date },
+            on: {
+              input: function ($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.productData, "export_date", $event.target.value)
+              },
             },
-          },
-        }),
-      ]),
-      _vm._v(" "),
-      _c("label", { staticClass: "block mt-4 text-sm" }, [
-        _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
-          _vm._v("Ghi chú"),
+          }),
         ]),
         _vm._v(" "),
-        _c("textarea", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.productData.note,
-              expression: "productData.note",
+        _c("label", { staticClass: "block text-sm col-span-5" }, [
+          _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
+            _vm._v("Ghi chú"),
+          ]),
+          _vm._v(" "),
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.productData.note,
+                expression: "productData.note",
+              },
+            ],
+            staticClass:
+              "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n          form-textarea\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:focus:shadow-outline-gray\n        ",
+            attrs: { rows: "4", placeholder: "Nhập ghi chú", name: "note" },
+            domProps: { value: _vm.productData.note },
+            on: {
+              input: function ($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.productData, "note", $event.target.value)
+              },
             },
-          ],
-          staticClass:
-            "\n        block\n        w-full\n        mt-1\n        text-sm\n        dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n        form-textarea\n        focus:border-purple-400 focus:outline-none focus:shadow-outline-purple\n        dark:focus:shadow-outline-gray\n      ",
-          attrs: { rows: "3", placeholder: "Nhập ghi chú", name: "note" },
-          domProps: { value: _vm.productData.note },
-          on: {
-            input: function ($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.$set(_vm.productData, "note", $event.target.value)
-            },
-          },
-        }),
+          }),
+        ]),
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "flex justify-end" }, [
@@ -59216,115 +59139,113 @@ var render = function () {
   return _c(
     "div",
     [
-      _c(
-        "div",
-        { staticClass: "flex flex-row items-center sm:flex-col flex-wrap" },
-        [
-          _c("label", { staticClass: "block text-sm mb-2 mr-4" }, [
-            _vm._m(0),
-            _vm._v(" "),
-            _c("input", {
+      _c("div", { staticClass: "grid md:grid-cols-5 items-center gap-3" }, [
+        _c("label", { staticClass: "block text-sm" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.productData.code,
+                expression: "productData.code",
+              },
+            ],
+            staticClass:
+              "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          uppercase\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
+            attrs: { placeholder: "NKxxxxxx", name: "code" },
+            domProps: { value: _vm.productData.code },
+            on: {
+              input: function ($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.productData, "code", $event.target.value)
+              },
+            },
+          }),
+        ]),
+        _vm._v(" "),
+        _c("label", { staticClass: "block text-sm" }, [
+          _vm._m(1),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
               directives: [
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.productData.code,
-                  expression: "productData.code",
+                  value: _vm.productData.type,
+                  expression: "productData.type",
                 },
               ],
               staticClass:
-                "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          uppercase\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
-              attrs: { placeholder: "NKxxxxxx", name: "code" },
-              domProps: { value: _vm.productData.code },
+                "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n          form-select\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:focus:shadow-outline-gray\n          mb-1\n        ",
+              attrs: {
+                name: "type",
+                id: "type",
+                "aria-placeholder": "Chọn đơn hàng",
+              },
               on: {
-                input: function ($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.productData, "code", $event.target.value)
+                change: function ($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function (o) {
+                      return o.selected
+                    })
+                    .map(function (o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.$set(
+                    _vm.productData,
+                    "type",
+                    $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                  )
                 },
               },
-            }),
-          ]),
+            },
+            [
+              _c(
+                "option",
+                { attrs: { value: "", disabled: "", selected: "" } },
+                [_vm._v("-- Loại nhập kho --")]
+              ),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "1", selected: "" } }, [
+                _vm._v("Lưu kho"),
+              ]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "2" } }, [_vm._v("Sản xuất")]),
+            ]
+          ),
+        ]),
+        _vm._v(" "),
+        _c("label", { staticClass: "block text-sm" }, [
+          _vm._m(2),
           _vm._v(" "),
-          _c("label", { staticClass: "block text-sm" }, [
-            _vm._m(1),
-            _vm._v(" "),
-            _c(
-              "select",
-              {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.productData.type,
-                    expression: "productData.type",
-                  },
-                ],
-                staticClass:
-                  "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n          form-select\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:focus:shadow-outline-gray\n          mb-1\n        ",
-                attrs: {
-                  name: "type",
-                  id: "type",
-                  "aria-placeholder": "Chọn đơn hàng",
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.productData.id_ingredient,
+                  expression: "productData.id_ingredient",
                 },
-                on: {
-                  change: function ($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function (o) {
-                        return o.selected
-                      })
-                      .map(function (o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.$set(
-                      _vm.productData,
-                      "type",
-                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-                    )
-                  },
-                },
+              ],
+              staticClass:
+                "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n          form-select\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:focus:shadow-outline-gray\n          mb-1\n        ",
+              attrs: {
+                name: "id_ingredient",
+                id: "id_ingredient",
+                "aria-placeholder": "Chọn nguyên phụ liệu",
               },
-              [
-                _c(
-                  "option",
-                  { attrs: { value: "", disabled: "", selected: "" } },
-                  [_vm._v("-- Loại nhập kho --")]
-                ),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "1", selected: "" } }, [
-                  _vm._v("Lưu kho"),
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "2" } }, [_vm._v("Sản xuất")]),
-              ]
-            ),
-          ]),
-          _vm._v(" "),
-          _c("label", { staticClass: "block text-sm my-2 mx-2" }, [
-            _vm._m(2),
-            _vm._v(" "),
-            _c(
-              "select",
-              {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.productData.id_ingredient,
-                    expression: "productData.id_ingredient",
-                  },
-                ],
-                staticClass:
-                  "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700\n          form-select\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:focus:shadow-outline-gray\n          mb-1\n        ",
-                attrs: {
-                  name: "id_ingredient",
-                  id: "id_ingredient",
-                  "aria-placeholder": "Chọn nguyên phụ liệu",
-                },
-                on: {
-                  change: function ($event) {
+              on: {
+                change: [
+                  function ($event) {
                     var $$selectedVal = Array.prototype.filter
                       .call($event.target.options, function (o) {
                         return o.selected
@@ -59339,173 +59260,178 @@ var render = function () {
                       $event.target.multiple ? $$selectedVal : $$selectedVal[0]
                     )
                   },
-                },
+                  _vm.setPrice,
+                ],
               },
-              [
-                _c("option", { attrs: { value: "" } }, [
-                  _vm._v("-- Chọn nguyên phụ liệu --"),
-                ]),
-                _vm._v(" "),
-                _vm._l(this.products, function (product) {
-                  return parseInt(_vm.productData.type) ===
-                    product.id_ingredient_type ||
-                    parseInt(_vm.productData.type) === 3
-                    ? _c(
-                        "option",
-                        { key: product.id, domProps: { value: product.id } },
-                        [
-                          _vm._v(
-                            "\n          " + _vm._s(product.Ten) + "\n        "
-                          ),
-                        ]
-                      )
-                    : _vm._e()
-                }),
-              ],
-              2
-            ),
-          ]),
-          _vm._v(" "),
-          _c("label", { staticClass: "block text-sm mb-2 ml-4" }, [
-            _vm._m(3),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.productData.amount,
-                  expression: "productData.amount",
-                },
-              ],
-              staticClass:
-                "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
-              attrs: {
-                placeholder: "Nhập số lượng",
-                name: "amount",
-                type: "number",
-              },
-              domProps: { value: _vm.productData.amount },
-              on: {
-                input: function ($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.productData, "amount", $event.target.value)
-                },
-              },
-            }),
-          ]),
-          _vm._v(" "),
-          _vm.productData.type == 1
-            ? _c("label", { staticClass: "block text-sm mb-2 ml-4" }, [
-                _c(
-                  "span",
-                  { staticClass: "text-gray-700 dark:text-gray-400" },
-                  [_vm._v("Đơn giá")]
-                ),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass:
-                    "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
-                  attrs: { readonly: "", placeholder: "Đơn giá", type: "text" },
-                  domProps: { value: this.price.toLocaleString() + " đ" },
-                }),
-              ])
-            : _vm._e(),
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "flex flex-row items-center sm:flex-col flex-wrap" },
-        [
-          _vm.productData.type == 1
-            ? _c("label", { staticClass: "block text-sm mb-2 max-w-xs" }, [
-                _c(
-                  "span",
-                  { staticClass: "text-gray-700 dark:text-gray-400" },
-                  [_vm._v("Tổng thanh toán")]
-                ),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass:
-                    "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
-                  attrs: { readonly: "", type: "text" },
-                  domProps: { value: _vm.totalPay.toLocaleString() + " đ" },
-                }),
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.productData.type == 1
-            ? _c("label", { staticClass: "block text-sm mb-2 max-w-xs ml-2" }, [
-                _c(
-                  "span",
-                  { staticClass: "text-gray-700 dark:text-gray-400" },
-                  [_vm._v("Đã thanh toán")]
-                ),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.productData.paid,
-                      expression: "productData.paid",
-                    },
-                  ],
-                  staticClass:
-                    "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
-                  attrs: {
-                    placeholder: "Nhập số tiền đã thanh toán",
-                    name: "paid",
-                    type: "number",
-                    max: _vm.totalPay,
-                  },
-                  domProps: { value: _vm.productData.paid },
-                  on: {
-                    input: function ($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.productData, "paid", $event.target.value)
-                    },
-                  },
-                }),
-              ])
-            : _vm._e(),
-        ]
-      ),
-      _vm._v(" "),
-      _c("label", { staticClass: "block text-sm mb-2" }, [
-        _vm._m(4),
+            },
+            [
+              _c("option", { attrs: { value: "" } }, [
+                _vm._v("-- Chọn nguyên phụ liệu --"),
+              ]),
+              _vm._v(" "),
+              _vm._l(this.products, function (product) {
+                return parseInt(_vm.productData.type) ===
+                  product.id_ingredient_type ||
+                  parseInt(_vm.productData.type) === 3
+                  ? _c(
+                      "option",
+                      { key: product.id, domProps: { value: product.id } },
+                      [
+                        _vm._v(
+                          "\n          " + _vm._s(product.Ten) + "\n        "
+                        ),
+                      ]
+                    )
+                  : _vm._e()
+              }),
+            ],
+            2
+          ),
+        ]),
         _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.productData.import_date,
-              expression: "productData.import_date",
+        _c("label", { staticClass: "block text-sm" }, [
+          _vm._m(3),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.productData.amount,
+                expression: "productData.amount",
+              },
+            ],
+            staticClass:
+              "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
+            attrs: {
+              placeholder: "Nhập số lượng",
+              name: "amount",
+              type: "number",
             },
-          ],
-          staticClass:
-            "\n        block\n        w-full\n        mt-1\n        text-sm\n        dark:border-gray-600\n        max-w-xs\n        dark:bg-gray-700\n        focus:border-purple-400 focus:outline-none focus:shadow-outline-purple\n        dark:text-gray-300 dark:focus:shadow-outline-gray\n        form-input\n      ",
-          attrs: {
-            placeholder: "Ngày nhập kho",
-            name: "import_date",
-            type: "date",
-          },
-          domProps: { value: _vm.productData.import_date },
-          on: {
-            input: function ($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.$set(_vm.productData, "import_date", $event.target.value)
+            domProps: { value: _vm.productData.amount },
+            on: {
+              input: function ($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.productData, "amount", $event.target.value)
+              },
             },
-          },
-        }),
+          }),
+        ]),
+        _vm._v(" "),
+        _vm.productData.type == 1
+          ? _c("label", { staticClass: "block text-sm" }, [
+              _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
+                _vm._v("Đơn giá"),
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.productData.price,
+                    expression: "productData.price",
+                  },
+                ],
+                staticClass:
+                  "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
+                attrs: { placeholder: "Đơn giá", type: "number" },
+                domProps: { value: _vm.productData.price },
+                on: {
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.productData, "price", $event.target.value)
+                  },
+                },
+              }),
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.productData.type == 1
+          ? _c("label", { staticClass: "block text-sm max-w-xs" }, [
+              _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
+                _vm._v("Tổng thanh toán"),
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                staticClass:
+                  "\n        block\n        w-full\n        mt-1\n        text-sm\n        dark:border-gray-600 dark:bg-gray-700\n        focus:border-purple-400 focus:outline-none focus:shadow-outline-purple\n        dark:text-gray-300 dark:focus:shadow-outline-gray\n        form-input\n      ",
+                attrs: { readonly: "", type: "text" },
+                domProps: { value: _vm.totalPay.toLocaleString() + " đ" },
+              }),
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.productData.type == 1
+          ? _c("label", { staticClass: "block text-sm max-w-xs" }, [
+              _c("span", { staticClass: "text-gray-700 dark:text-gray-400" }, [
+                _vm._v("Đã thanh toán"),
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.productData.paid,
+                    expression: "productData.paid",
+                  },
+                ],
+                staticClass:
+                  "\n        block\n        w-full\n        mt-1\n        text-sm\n        dark:border-gray-600 dark:bg-gray-700\n        focus:border-purple-400 focus:outline-none focus:shadow-outline-purple\n        dark:text-gray-300 dark:focus:shadow-outline-gray\n        form-input\n      ",
+                attrs: {
+                  placeholder: "Nhập số tiền đã thanh toán",
+                  name: "paid",
+                  type: "number",
+                  max: _vm.totalPay,
+                },
+                domProps: { value: _vm.productData.paid },
+                on: {
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.productData, "paid", $event.target.value)
+                  },
+                },
+              }),
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c("label", { staticClass: "block text-sm mb-2" }, [
+          _vm._m(4),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.productData.import_date,
+                expression: "productData.import_date",
+              },
+            ],
+            staticClass:
+              "\n        block\n        w-full\n        mt-1\n        text-sm\n        dark:border-gray-600\n        max-w-xs\n        dark:bg-gray-700\n        focus:border-purple-400 focus:outline-none focus:shadow-outline-purple\n        dark:text-gray-300 dark:focus:shadow-outline-gray\n        form-input\n      ",
+            attrs: {
+              placeholder: "Ngày nhập kho",
+              name: "import_date",
+              type: "date",
+            },
+            domProps: { value: _vm.productData.import_date },
+            on: {
+              input: function ($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.productData, "import_date", $event.target.value)
+              },
+            },
+          }),
+        ]),
       ]),
       _vm._v(" "),
       _c("label", { staticClass: "block mt-4 text-sm" }, [

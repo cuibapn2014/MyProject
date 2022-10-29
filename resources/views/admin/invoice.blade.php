@@ -102,10 +102,10 @@
                                                             alt="product" width="60px"></td>
                                                     <td>{{ $od->product->Ten }}</td>
                                                     <td>{{ $od->quality->Ten }}</td>
-                                                    <td>{{ number_format_str($od->product->GiaThanh) }}</td>
-                                                    <td>{{ number_format_str($od->product->GiaThanh * $od->amount) }}</td>
+                                                    <td>{{ number_format_str($od->price) }}</td>
+                                                    <td>{{ number_format_str($od->price * $od->amount) }}</td>
                                                 </tr>
-                                                @php $total += $od->product->GiaThanh * $od->amount @endphp
+                                                @php $total += $od->price * $od->amount @endphp
                                                 @endforeach
                                                 <tr style="height: 40px;"></tr>
                                             </tbody>

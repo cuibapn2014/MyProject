@@ -65,9 +65,9 @@ $current = 1;
                             {{ $order->customer->phone_number }}
                         </td>
                         <td class="px-4 py-3 text-sm font-bold text-green-500">
-                            {{ number_format(\App\Models\Order::totalPaid($order->id),0,',','.') }}
+                            {{ number_format_str($order->total) }}
                         </td>
-                        @if(\App\Models\Order::totalPaid($order->id) - $order->export_details->sum('paid') <= 0)
+                        @if($order->total - $order->paid <= 0)
                         <td class="px-4 py-3 text-sm text-green-500 font-bold">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                 class="h-5 w-5 mx-auto">
@@ -78,11 +78,11 @@ $current = 1;
                         </td>
                         @else
                         <td class="px-4 py-3 text-sm text-red-500 font-bold">
-                            {{ number_format((\App\Models\Order::totalPaid($order->id) - $order->export_details->sum('paid')),0,',','.') }}
+                            {{ number_format(($order->total - $order->paid),0,',','.') }}
                         </td>
                         @endif
                         <td class="px-4 py-3 text-sm font-bold text-green-500">
-                            {{ number_format($order->export_details->sum('paid'),0,',','.') }}
+                            {{ number_format($order->paid,0,',','.') }}
                         </td>
                         <td class="px-4 py-3 text-sm">
                             <img v-tooltip.top-start="'{{ $order->user->name }}'"

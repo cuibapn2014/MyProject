@@ -29,7 +29,8 @@ class WarehouseExportRequest extends FormRequest
             'type' => 'required|min:1|max:3',
             'id_ingredient' => 'required|exists:ingredients,id',
             'amount' => 'required|min:1|numeric',
-            'export_date' => 'required|date'
+            'export_date' => 'required|date',
+            'price' => 'required|numeric|gt:0'
         ];
     }
 
@@ -45,7 +46,8 @@ class WarehouseExportRequest extends FormRequest
             'required' => 'Không được để trống',
             'exists' => 'Không tồn tại trong hệ thống',
             'numeric' => 'Giá trị phải là số nguyên',
-            'date' => 'Định dạng ngày không hợp lệ'
+            'date' => 'Định dạng ngày không hợp lệ',
+            'price.gt' => 'Đơn giá không được bằng 0'
         ];
     }
 }

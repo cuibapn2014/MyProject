@@ -9,7 +9,7 @@ $current = 0;
         Bảng điều khiển
     </h2>
     <!-- hover:h-[400px] hover:lg:h-[300px] hover:md:h-[300px] -->
-    <div
+    <!-- <div
         class="bg-gradient-to-r h-11 overflow-hidden duration-150 relative from-sky-500 to-indigo-500 my-2 text-white p-2 rounded-lg">
         <p class="font-semibold flex items-center text-lg">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -40,7 +40,7 @@ $current = 0;
                 <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
         </a>
-    </div>
+    </div> -->
     @if($data_share['order_warning']->count() > 0)
     <div class="duration-150 relative bg-red-500 mb-2 text-white p-2 rounded-lg">
         <p class="font-semibold flex items-center text-lg">

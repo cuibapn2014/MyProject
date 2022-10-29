@@ -102,6 +102,24 @@ const app = new Vue({
     updated() {
         this.getTheme()
     },
+    computed:{
+        totalPrice(){
+            let total = 0
+            this.countProduct.map(item => {
+                if(item.id_product > 0)
+                total += parseInt(item.amount) * parseInt(item.price)
+            })
+            return total
+        },
+        totalPricEdit(){
+            let total = 0
+            this.countProductEdit.map(item => {
+                if(item.id_product > 0)
+                total += parseInt(item.amount) * parseInt(item.price)
+            })
+            return total
+        },
+    },
     data() {
         return {
             idDelete: 0,
@@ -112,7 +130,14 @@ const app = new Vue({
             idOrder: 0,
             isActive: 0,
             idCustom: 0,
-            countProduct: 1,
+            countProduct: [
+                {
+                    id_product:0,
+                    amount:0,
+                    price:0,
+                    id_ChatLuong:1 
+                }
+            ],
             countProductEdit: [],
             isOpenView: false,
             isOpenSettingModal: false,
@@ -201,22 +226,22 @@ const app = new Vue({
                             onClick: function () { }, // Callback after click
                         }).showToast();
                         axios.get(`/admin/plan-ingredient/create/${dataUpdate.idRequest}`)
-                        .then(res => {
-                            Toastify({
-                                text: "Đã cập nhật kế hoạch vật tư",
-                                duration: 3000,
-                                newWindow: true,
-                                close: true,
-                                gravity: "top", // `top` or `bottom`
-                                position: "right", // `left`, `center` or `right`
-                                stopOnFocus: true, // Prevents dismissing of toast on hover
-                                className: "z-50",
-                                style: {
-                                    background: "linear-gradient(to right, #00b09b, #96c93d)",
-                                },
-                                onClick: function () { }, // Callback after click
-                            }).showToast();
-                        })
+                            .then(res => {
+                                Toastify({
+                                    text: "Đã cập nhật kế hoạch vật tư",
+                                    duration: 3000,
+                                    newWindow: true,
+                                    close: true,
+                                    gravity: "top", // `top` or `bottom`
+                                    position: "right", // `left`, `center` or `right`
+                                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                                    className: "z-50",
+                                    style: {
+                                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                                    },
+                                    onClick: function () { }, // Callback after click
+                                }).showToast();
+                            })
                         setTimeout(() => {
                             window.location.reload()
                         }, 3000)
@@ -441,14 +466,24 @@ const app = new Vue({
             this.idProduction = idProduction
         },
         handleClickAddProduct() {
-            this.countProduct = this.countProduct + 1
+            this.countProduct.push({
+                id_product:0,
+                amount:0,
+                price:0,
+                id_ChatLuong:1
+            })
         },
         handleMinusProduct() {
-            if (this.countProduct > 1)
-                this.countProduct = this.countProduct - 1
+            if (this.countProduct.length > 1)
+            this.countProduct.pop()
         },
         handleClickAddProductObj() {
-            this.countProductEdit.push({ id: 0 })
+            this.countProductEdit.push({  
+                id_product:0,
+                amount:0,
+                price:0,
+                id_ChatLuong:1
+            })
         },
         handleMinusProductObj() {
             if (this.countProductEdit.length > 1)
@@ -457,21 +492,21 @@ const app = new Vue({
         setCountProductEdit(data) {
             this.countProductEdit = data
         },
-        toggleSettingModal(){
+        toggleSettingModal() {
             this.isOpenSettingModal = !this.isOpenSettingModal
         },
-        openAnalyzeModal(dataAnalyze = null) {     
+        openAnalyzeModal(dataAnalyze = null) {
             this.dataAnalyze = dataAnalyze
         },
-        calPerProcess(obj){
+        calPerProcess(obj) {
             let total = obj.require_total
             let produceds = obj.produceds
             let totalProduced = 0
             produceds?.map(item => {
                 totalProduced += item.amount
             })
-            
+
             return (totalProduced / total) * 100
-        },
+        }
     }
 });

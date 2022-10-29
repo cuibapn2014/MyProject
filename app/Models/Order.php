@@ -19,6 +19,8 @@ class Order extends Model
         'NgayTraDon',
         'id_NhanVien',
         'vat',
+        'total',
+        'paid',
         'status',
         'note'
     ];
@@ -48,7 +50,7 @@ class Order extends Model
         $total = 0;
         $order = parent::findOrFail($idOrder);
         foreach($order->detail as $detail){
-            $total += $detail->amount * $detail->product->GiaThanh;
+            $total += $detail->amount * $detail->price;
         }
         return $total;
     }
