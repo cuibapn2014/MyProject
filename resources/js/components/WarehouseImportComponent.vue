@@ -130,6 +130,7 @@
           "
           placeholder="Đơn giá"
           type="number"
+          name="price"
           v-model="productData.price"
         />
       </label>

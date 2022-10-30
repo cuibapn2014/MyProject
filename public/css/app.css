@@ -12478,6 +12478,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-bg-opacity: 1;
   background-color: rgb(254 226 226 / var(--tw-bg-opacity));
 }
+.bg-indigo-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(224 231 255 / var(--tw-bg-opacity));
+}
 .bg-blue-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(59 130 246 / var(--tw-bg-opacity));
@@ -12778,6 +12782,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 .text-blue-500 {
   --tw-text-opacity: 1;
   color: rgb(59 130 246 / var(--tw-text-opacity));
+}
+.text-indigo-500 {
+  --tw-text-opacity: 1;
+  color: rgb(99 102 241 / var(--tw-text-opacity));
 }
 .text-\[\#ffffff\] {
   --tw-text-opacity: 1;
@@ -13279,6 +13287,11 @@ div.medium-zoom-overlay, img.medium-zoom-image{
   background-color: rgb(239 68 68 / var(--tw-bg-opacity));
 }
 
+.dark .dark\:bg-indigo-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(99 102 241 / var(--tw-bg-opacity));
+}
+
 .dark .dark\:bg-red-600 {
   --tw-bg-opacity: 1;
   background-color: rgb(220 38 38 / var(--tw-bg-opacity));
@@ -13342,6 +13355,11 @@ div.medium-zoom-overlay, img.medium-zoom-image{
 .dark .dark\:text-red-100 {
   --tw-text-opacity: 1;
   color: rgb(254 226 226 / var(--tw-text-opacity));
+}
+
+.dark .dark\:text-indigo-100 {
+  --tw-text-opacity: 1;
+  color: rgb(224 231 255 / var(--tw-text-opacity));
 }
 
 .dark .dark\:text-indigo-400 {

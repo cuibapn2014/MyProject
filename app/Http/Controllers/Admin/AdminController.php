@@ -10,6 +10,9 @@ use App\Models\User;
 use App\Models\Cost;
 use App\Models\Customer;
 use App\Models\DetailOrder;
+use App\Models\Finance;
+use App\Models\ProductionRequest;
+use App\Models\RequestProduction;
 use App\Models\WarehouseExport;
 use App\Models\WarehouseImport;
 use Illuminate\Support\Facades\File;
@@ -31,9 +34,23 @@ class AdminController extends Controller
         $debtSale = Order::selectRaw('sum(total - paid) as debt')
             ->get();
         $debtBuy = WarehouseImport::selectRaw('(sum(price * amount - paid)) as debt')
-        ->get();
+            ->get();
         $debt = collect(array($debtSale[0], $debtBuy[0]));
-        return view('admin.home', compact('revenue', 'countOrder', 'countClient', 'debt'));
+        $finance = Finance::where('status', 1)->count();
+        $productionRequest = ProductionRequest::where('status', 1)->count();
+        $requirement = RequestProduction::where('status', 1)->count();
+        $warehouse = WarehouseImport::where('status', 1)->count() + WarehouseExport::where('status', 1)->count();
+
+        return view('admin.home', compact(
+            'revenue', 
+            'countOrder', 
+            'countClient', 
+            'debt', 
+            'finance',
+            'productionRequest',
+            'requirement',
+            'warehouse'
+        ));
     }
 
     public function getInvoice($id)
@@ -104,8 +121,9 @@ class AdminController extends Controller
     public function countTypeOrder()
     {
         return Order::selectRaw('count(id) as total, status')
-        ->where('status',2)
-        ->orWhere('status',4)
+            ->where('status', 2)
+            ->orWhere('status', 4)
+            ->whereYear('orders.created_at', date('Y'))
             ->groupBy('status')
             ->orderBy('status')
             ->get();

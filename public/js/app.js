@@ -11155,6 +11155,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     product_update: Object,
@@ -59334,7 +59335,11 @@ var render = function () {
                 ],
                 staticClass:
                   "\n          block\n          w-full\n          mt-1\n          text-sm\n          dark:border-gray-600 dark:bg-gray-700\n          focus:border-purple-400\n          focus:outline-none\n          focus:shadow-outline-purple\n          dark:text-gray-300 dark:focus:shadow-outline-gray\n          form-input\n        ",
-                attrs: { placeholder: "Đơn giá", type: "number" },
+                attrs: {
+                  placeholder: "Đơn giá",
+                  type: "number",
+                  name: "price",
+                },
                 domProps: { value: _vm.productData.price },
                 on: {
                   input: function ($event) {

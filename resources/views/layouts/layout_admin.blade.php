@@ -70,7 +70,8 @@
                 :user="{{ auth()->user()->load(['role']) }}" @toggle-profile="toggleProfileModal"></profile>
         </transition>
         <transition enter-class="opacity-0" enter-to-class="opacity-100" leave-to-class="opacity-0">
-            <div class="w-full h-full fixed top-0 left-0 flex items-center backdrop-blur-lg z-50" v-if="this.isOpenSettingModal">
+            <div class="w-full h-full fixed top-0 left-0 flex items-center backdrop-blur-lg z-50"
+                v-if="this.isOpenSettingModal">
                 <div class="
                 profile__modal
                 lg:w-2/5
@@ -133,7 +134,7 @@
                                 disabled:bg-gray-200
                                 dark:disabled:bg-gray-700
                                 form-input
-                            " type="password" name="confirm_password"/>
+                            " type="password" name="confirm_password" />
                                 </label>
                                 <div class="flex items-center justify-end text-sm mt-3">
                                     <button class="
@@ -161,6 +162,8 @@
         [[ setSelectedMenu({{ $current }}) ]]
     </div>
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     @yield('script')
 
 </body>
