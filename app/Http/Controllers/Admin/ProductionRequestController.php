@@ -18,9 +18,14 @@ class ProductionRequestController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $productions = ProductionRequest::orderByDesc('id')->paginate(25);
+        $productions = ProductionRequest::where('code', 'like', '%'.$request->keyword.'%')
+        ->orWhere('size', 'like', '%'.$request->keyword.'%')
+        ->orWhere('color', 'like', '%'.$request->keyword.'%')
+        ->orWhereRelation('product', 'Ten', 'like', '%'.$request->keyword.'%')
+        ->orderByDesc('id')
+        ->paginate(25);
         return view('admin.manage.production.index', compact('productions'));
     }
 

@@ -15,9 +15,15 @@ class RequirementController extends Controller
         $this->middleware('role:ADMIN,CEO,USER_ACCOUNTANT,USER_SALES');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $requirements = RequestProduction::orderByDesc('id')->paginate(25);
+        $requirements = RequestProduction::
+        whereRelation('production_request','code', 'like', '%'.$request->keyword.'%')
+        ->orWhereRelation('ingredient','Ten', 'like', '%'.$request->keyword.'%')
+        ->orWhereRelation('ingredient.provider','name', 'like', '%'.$request->keyword.'%')
+        ->orWhereRelation('ingredient.ingredient_type','name', 'like', '%'.$request->keyword.'%')
+        ->orderByDesc('id')
+        ->paginate(25);
         return view('admin.manage.requirements.index', compact('requirements'));
     }
 

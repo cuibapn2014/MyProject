@@ -15,6 +15,28 @@ $current = 10;
     <p class="p-2 rounded-md my-2 bg-red-100 text-red-400 text-sm">{{ $message }}</p>
     @enderror
     <div class="flex justify-end py-2">
+        <form action="{{ url()->current() }}" method="GET" class="flex">
+            <input class="
+            block
+            w-48
+            text-sm
+            dark:border-gray-600 dark:bg-gray-700
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:text-gray-300 dark:focus:shadow-outline-gray
+            rounded-l-md
+            form-input
+            " type="text" name="keyword" placeholder="Nhập tìm kiếm.." />
+            <button
+                class="flex items-center px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border-0 rounded-r-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                        clip-rule="evenodd" />
+                </svg>
+            </button>
+        </form>
         <button onclick="location.href='{{ route('admin.warehouse.import.create') }}'"
             class="flex items-center px-2 py-2 mx-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border-0 rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
             Thêm mới

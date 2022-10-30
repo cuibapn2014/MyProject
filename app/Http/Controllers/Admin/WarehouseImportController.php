@@ -15,10 +15,15 @@ class WarehouseImportController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
         //
-        $imports = WarehouseImport::orderBy('status')->orderByDesc('created_at')->paginate(25);
+        $imports = WarehouseImport::where('code', 'like', '%'.$request->keyword.'%')
+        ->orWhereRelation('ingredient', 'Ten', 'like', '%'.$request->keyword.'%')
+        ->orWhere('note', 'like', '%'.$request->keyword.'%')
+        ->orderBy('status')
+        ->orderByDesc('created_at')
+        ->paginate(25);
         return view('admin.manage.import.index', compact('imports'));
     }
 

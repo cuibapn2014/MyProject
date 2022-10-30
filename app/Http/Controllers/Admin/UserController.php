@@ -15,9 +15,14 @@ class UserController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::orderByDesc('id_role')->paginate(25);
+        $users = User::where('name', 'like', '%'.$request->keyword.'%')
+        ->orWhere('phone', 'like', '%'.$request->keyword.'%')
+        ->orWhere('email', 'like', '%'.$request->keyword.'%')
+        ->orWhereRelation('role', 'name', 'like', '%'.$request->keyword.'%')
+        ->orderByDesc('id_role')
+        ->paginate(25);
         $roles = Role::all();
 
         return view('admin.manage.users.index', compact('users','roles'));

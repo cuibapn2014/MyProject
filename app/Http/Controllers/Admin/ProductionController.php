@@ -17,9 +17,15 @@ class ProductionController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $plans = Production::orderByDesc('id')->orderByDesc('priority')->paginate(25);
+        $plans = Production::where('code', 'like', '%'.$request->keyword.'%')
+        ->orWhereRelation('production_request', 'code', 'like', '%'.$request->keyword.'%')
+        ->orWhereRelation('product', 'Ten', 'like', '%'.$request->keyword.'%')
+        ->orWhereRelation('product.stage_product', 'name', 'like', '%'.$request->keyword.'%')
+        ->orderByDesc('id')
+        ->orderByDesc('priority')
+        ->paginate(25);
 
         return view('admin.manage.planing.index', compact('plans'));
     }

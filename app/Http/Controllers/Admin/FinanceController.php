@@ -16,8 +16,13 @@ class FinanceController extends Controller
         $this->middleware('role:ADMIN,CEO,USER_ACCOUNTANT,USER_SALES');
     }
 
-    public function index(){
-        $finances = Finance::orderBy('status')->orderByDesc('id')->paginate(25);
+    public function index(Request $request){
+        $finances = Finance::where('code', 'like', '%'.$request->keyword.'%')
+        ->orWhere('title', 'like', '%'.$request->keyword.'%')
+        ->orWhere('detail', 'like', '%'.$request->keyword.'%')
+        ->orderBy('status')
+        ->orderByDesc('id')
+        ->paginate(25);
         return view('admin.manage.finances.index', compact('finances'));
     }
 

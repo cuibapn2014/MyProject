@@ -18,10 +18,15 @@ class WarehouseExportController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $exports = WarehouseExport::orderBy('status')->orderByDesc('created_at')->paginate(25);
+        $exports = WarehouseExport::where('code', 'like', '%'.$request->keyword.'%')
+        ->orWhereRelation('ingredient', 'Ten', 'like', '%'.$request->keyword.'%')
+        ->orWhere('note', 'like', '%'.$request->keyword.'%')
+        ->orderBy('status')
+        ->orderByDesc('created_at')
+        ->paginate(25);
         return view('admin.manage.export.index', compact('exports'));
     }
 

@@ -17,9 +17,13 @@ class ProviderController extends Controller
         $this->middleware('role:ADMIN,CEO,USER_ACCOUNTANT,USER_SALES');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $providers = Provider::orderByDesc('id')->paginate(25);
+        $providers = Provider::where('name', 'like', '%'.$request->keyword.'%')
+        ->orWhere('address', 'like', '%'.$request->keyword.'%')
+        ->orWhere('phone_number', 'like', '%'.$request->keyword.'%')
+        ->orderByDesc('id')
+        ->paginate(25);
         return view('admin.manage.provider.provider', compact('providers'));
     }
 

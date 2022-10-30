@@ -20,12 +20,30 @@ class IngredientController extends Controller
     //
     public function index(Request $request)
     {
-        return view('admin.manage.ingredient.ingredient', ['ingredient' => Ingredient::where('id_ingredient_type', 1)->paginate(25)]);
+        $ingredient = Ingredient::where(function($query) use($request){
+            $query->where('Ten', 'like', '%'.$request->keyword.'%')
+            ->orWhereRelation('provider', 'name', 'like', '%'.$request->keyword.'%')
+            ->orWhereRelation('provider', 'address', 'like', '%'.$request->keyword.'%')
+            ->orWhereRelation('provider', 'phone_number', 'like', '%'.$request->keyword.'%')
+            ->orWhere('GhiChu', 'like', '%'.$request->keyword.'%')
+            ->orWhere('code', 'like', '%'.$request->keyword.'%');
+        })
+        ->where('id_ingredient_type', 1)->paginate(25);
+        return view('admin.manage.ingredient.ingredient', compact('ingredient'));
     }
 
-    public function getAllProduct()
+    public function getAllProduct(Request $request)
     {
-        return view('admin.manage.ingredient.product', ['ingredient' => Ingredient::where('id_ingredient_type', '>', 1)->paginate(25)]);
+        $ingredient = Ingredient::where(function($query) use($request){
+            $query->where('Ten', 'like', '%'.$request->keyword.'%')
+            ->orWhereRelation('provider', 'name', 'like', '%'.$request->keyword.'%')
+            ->orWhereRelation('provider', 'address', 'like', '%'.$request->keyword.'%')
+            ->orWhereRelation('provider', 'phone_number', 'like', '%'.$request->keyword.'%')
+            ->orWhere('GhiChu', 'like', '%'.$request->keyword.'%')
+            ->orWhere('code', 'like', '%'.$request->keyword.'%');
+        })
+        ->where('id_ingredient_type', '>',1)->paginate(25);
+        return view('admin.manage.ingredient.product', compact('ingredient'));
     }
 
     public function getAll()

@@ -17,9 +17,12 @@ class CustomerController extends Controller
         $this->middleware('role:USER_SALES,ADMIN,CEO');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $customers = Customer::paginate(25);
+        $customers = Customer::where('name', 'like', '%'.$request->keyword.'%')
+        ->orWhere('phone_number', 'like', '%'.$request->keyword.'%')
+        ->orWhere('address', 'like', '%'.$request->keyword.'%')
+        ->paginate(25);
 
         return view('admin.manage.customer.customer', compact('customers'));
     }
