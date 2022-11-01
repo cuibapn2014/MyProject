@@ -29,7 +29,8 @@ class AdminController extends Controller
     public function index()
     {
         $revenue = Order::selectRaw('sum(paid) as total')->first();
-        $countOrder = Order::selectRaw('count(id) as total')->first();
+        $countOrder = Order::count();
+        $countPreOrder = Order::where('status', 1)->count();
         $countClient = Customer::all();
         $debtSale = Order::selectRaw('sum(total - paid) as debt')
             ->get();
@@ -40,6 +41,9 @@ class AdminController extends Controller
         $productionRequest = ProductionRequest::where('status', 1)->count();
         $requirement = RequestProduction::where('status', 1)->count();
         $warehouse = WarehouseImport::where('status', 1)->count() + WarehouseExport::where('status', 1)->count();
+        $earn = (int) Finance::where('type', 1)->sum('total');
+        $spent = (int) Finance::where('type', 2)->sum('total');
+        $financeTotal = (object) array('earn' => $earn,'spent' => $spent);
 
         return view('admin.home', compact(
             'revenue', 
@@ -49,7 +53,9 @@ class AdminController extends Controller
             'finance',
             'productionRequest',
             'requirement',
-            'warehouse'
+            'warehouse',
+            'countPreOrder',
+            'financeTotal'
         ));
     }
 

@@ -64,7 +64,7 @@ class OrderController extends Controller
 
             $order = Order::create([
                 'id_customer' => $req->id_customer,
-                'NgayTraDon' => $req->duration,
+                'NgayTraDon' => $req->delivery_date,
                 'id_NhanVien' => Auth::user()->id,
                 'vat' => $req->vat,
                 'total' => str_replace('.', '', $req->total),
@@ -134,7 +134,7 @@ class OrderController extends Controller
             $order = Order::findOrFail($id);
             $order->update([
                 'id_customer' => $req->id_customer,
-                'NgayTraDon' => $req->duration,
+                'NgayTraDon' => $req->delivery_date,
                 'vat' => $req->vat,
                 'total' => str_replace('.', '', $req->total),
                 'paid' => $req->paid,
