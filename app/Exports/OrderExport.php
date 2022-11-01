@@ -13,22 +13,29 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Concerns\WithTitle;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class OrderExport implements FromQuery, 
-WithHeadings, WithMapping, ShouldAutoSize, WithStyles, WithEvents, WithColumnFormatting
+WithHeadings, WithMapping, ShouldAutoSize, WithStyles, WithEvents, WithColumnFormatting, WithTitle
 {
     // use Exportable;
     private $index = 0;
+    private $order;
+
+    public function __construct($order)
+    {
+        $this->order = $order;
+    }
+
     /**
      * @return \Illuminate\Support\Collection
      */
     public function query()
     {
         //
-        $order = Order::query();
-        return $order;
+        return $this->order;
     }
 
     public function headings(): array
@@ -69,6 +76,14 @@ WithHeadings, WithMapping, ShouldAutoSize, WithStyles, WithEvents, WithColumnFor
         ];
     }
 
+     /**
+     * @return string
+     */
+    public function title(): string
+    {
+        return 'BÁO CÁO THỐNG KÊ ĐƠN HÀNG NGÀY ' . Carbon::now()->format('d/m/Y');
+    }
+
     public function styles(Worksheet $sheet)
     {
         
@@ -86,8 +101,9 @@ WithHeadings, WithMapping, ShouldAutoSize, WithStyles, WithEvents, WithColumnFor
 
     public function registerEvents(): array
     {
+        $finishRow = $this->query()->get()->count() + 1;
         return [
-            AfterSheet::class    => function (AfterSheet $event) {
+            AfterSheet::class    => function (AfterSheet $event) use ($finishRow){
                 $event->sheet->getDelegate()->getStyle('A1:M1')
                 ->getFill()
                 ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
@@ -99,7 +115,7 @@ WithHeadings, WithMapping, ShouldAutoSize, WithStyles, WithEvents, WithColumnFor
                 ->getColor()
                 ->setARGB('FFFFFF');
 
-                $event->sheet->getStyle('A1:M25')->applyFromArray([
+                $event->sheet->getStyle('A1:M'.$finishRow)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,

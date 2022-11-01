@@ -95,7 +95,7 @@ $current = 0;
                     Doanh thu
                 </p>
                 <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                    {{ number_format($revenue->total) }} <sup>đ</sup>
+                    {{ number_format_str($revenue->total) }} <sup>đ</sup>
                 </p>
             </div>
         </div>
@@ -113,7 +113,7 @@ $current = 0;
                     Đơn hàng
                 </p>
                 <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                    {{ number_format($countOrder) }}
+                    {{ number_format_str($countOrder) }}
                 </p>
             </div>
         </div>
@@ -131,7 +131,7 @@ $current = 0;
                     Nợ công bán
                 </p>
                 <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                    {{ number_format($debt->first()->debt) }} <sup>đ</sup>
+                    {{ number_format_str($debt->first()->debt) }} <sup>đ</sup>
                 </p>
             </div>
         </div>
@@ -148,7 +148,7 @@ $current = 0;
                     Nợ công mua
                 </p>
                 <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                    {{ number_format($debt->last()->debt <= 0 ? 0 : $debt->last()->debt ) }} <sup>đ</sup>
+                    {{ number_format_str($debt->last()->debt <= 0 ? 0 : $debt->last()->debt ) }} <sup>đ</sup>
                 </p>
             </div>
         </div>
@@ -165,7 +165,7 @@ $current = 0;
                     Đơn hàng chờ duyệt
                 </p>
                 <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                    {{ number_format($countPreOrder) }}
+                    {{ number_format_str($countPreOrder) }}
                 </p>
             </div>
         </div>

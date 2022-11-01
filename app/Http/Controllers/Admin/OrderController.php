@@ -198,7 +198,8 @@ class OrderController extends Controller
 
     public function export()
     {
-        return Excel::download(new OrderExport, 'orders.xlsx');
+        $order = Order::query();
+        return Excel::download(new OrderExport($order), 'orders.xlsx');
     }
 
     public function getDataEdit($id)
