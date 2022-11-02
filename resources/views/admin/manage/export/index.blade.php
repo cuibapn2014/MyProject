@@ -46,7 +46,7 @@ $current = 14;
                     clip-rule="evenodd" />
             </svg>
         </button>
-        <button onclick=""
+        {{-- <button onclick=""
             class="flex items-center px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border-0 rounded-lg active:bg-green-700 hover:bg-green-700 focus:outline-none focus:shadow-outline-purple">
             Xuất Excel
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -54,7 +54,7 @@ $current = 14;
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
-        </button>
+        </button> --}}
     </div>
     <div class="w-full overflow-x-auto rounded-lg shadow-xs mb-4" v-dragscroll style="max-height: 600px;">
         <div class="w-full">

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\ProductionExport;
 use App\Http\Controllers\Controller;
 use App\Models\PlanIngredient;
 use App\Models\Production;
 use App\Models\ProductionRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductionController extends Controller
 {
@@ -19,13 +21,13 @@ class ProductionController extends Controller
 
     public function index(Request $request)
     {
-        $plans = Production::where('code', 'like', '%'.$request->keyword.'%')
-        ->orWhereRelation('production_request', 'code', 'like', '%'.$request->keyword.'%')
-        ->orWhereRelation('product', 'Ten', 'like', '%'.$request->keyword.'%')
-        ->orWhereRelation('product.stage_product', 'name', 'like', '%'.$request->keyword.'%')
-        ->orderByDesc('id')
-        ->orderByDesc('priority')
-        ->paginate(25);
+        $plans = Production::where('code', 'like', '%' . $request->keyword . '%')
+            ->orWhereRelation('production_request', 'code', 'like', '%' . $request->keyword . '%')
+            ->orWhereRelation('product', 'Ten', 'like', '%' . $request->keyword . '%')
+            ->orWhereRelation('product.stage_product', 'name', 'like', '%' . $request->keyword . '%')
+            ->orderByDesc('id')
+            ->orderByDesc('priority')
+            ->paginate(25);
 
         return view('admin.manage.planing.index', compact('plans'));
     }
@@ -37,11 +39,11 @@ class ProductionController extends Controller
         $code = 'LSX' . str_pad(($count + 1), 6, '0', STR_PAD_LEFT);
         $exists = Production::where('id_production_request', $idProduction);
         $productRequest = ProductionRequest::findOrFail($idProduction);
-        if($exists->count() > 0) $exists->delete();
-        if(count($planIngredient) <= 0)
-            return response()->json(['code' => 500, 'status' => 'failed','msg' => 'Thất bại! Hãy tạo kế hoạch vật tư trước khi tạo lệnh sản xuất']);
+        if ($exists->count() > 0) $exists->delete();
+        if (count($planIngredient) <= 0)
+            return response()->json(['code' => 500, 'status' => 'failed', 'msg' => 'Thất bại! Hãy tạo kế hoạch vật tư trước khi tạo lệnh sản xuất']);
         DB::beginTransaction();
-        try {        
+        try {
             foreach ($planIngredient as $plan) {
                 if ($plan->ingredient->id_ingredient_type != 1) {
                     Production::create([
@@ -80,5 +82,11 @@ class ProductionController extends Controller
     public function destroy($id)
     {
         return $id;
+    }
+
+    public function export()
+    {
+        $production = Production::query();
+        return Excel::download(new ProductionExport($production), 'danh_sach_lenh_san_xuat.xlsx');
     }
 }

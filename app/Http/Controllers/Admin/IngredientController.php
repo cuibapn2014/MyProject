@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exports\IngredientExport;
+use App\Exports\ProductExport;
 use App\Http\Controllers\Controller;
 use App\Models\Image;
 use App\Models\Ingredient;
@@ -176,8 +177,13 @@ class IngredientController extends Controller
         return back()->with('success', 'Đã xóa');
     }
 
-    public function export()
+    public function export(Request $request)
     {
-        return Excel::download(new IngredientExport, 'phu_lieu.xlsx');
+        $ingredient = Ingredient::query();
+        if(isset($request->type) && $request->type > 1) {
+            $ingredient = $ingredient->where('id_ingredient_type','>', 1);
+            return Excel::download(new ProductExport($ingredient), 'thanh_pham.xlsx');
+        }
+        return Excel::download(new IngredientExport($ingredient ->where('id_ingredient_type', 1)), 'phu_lieu.xlsx');
     }
 }

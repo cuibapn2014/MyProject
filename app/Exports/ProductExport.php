@@ -16,7 +16,7 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class IngredientExport implements
+class ProductExport implements
     FromQuery,
     WithHeadings,
     WithMapping,
@@ -46,15 +46,13 @@ class IngredientExport implements
     {
         return [
             '#',
-            'Mã nguyên liệu',
-            'Tên nguyên phụ liệu',
+            'Mã thành phẩm',
+            'Tên thành phẩm',
             'Đơn vị tính',
+            'Công đoạn',
             'Tồn kho',
             'Tồn thực tế',
-            'Giá nhập',
-            'Nhà cung cấp',
-            'Địa chỉ',
-            'Số điện thoại',
+            'Giá bán',
             'Ghi chú'
         ];
     }
@@ -64,7 +62,7 @@ class IngredientExport implements
      */
     public function title(): string
     {
-        return 'BÁO CÁO THỐNG KÊ NGUYÊN PHỤ LIỆU ' . Carbon::now()->format('d/m/Y');
+        return 'BÁO CÁO THỐNG KÊ THÀNH PHẨM ' . Carbon::now()->format('d/m/Y');
     }
 
     public function map($ingredient): array
@@ -74,12 +72,10 @@ class IngredientExport implements
             $ingredient->code,
             $ingredient->Ten,
             $ingredient->unit_cal->name,
+            $ingredient->stage_product->name,
             $ingredient->amount,
             $ingredient->used_amount,
-            $ingredient->Gia,
-            $ingredient->provider->name,
-            $ingredient->provider->address,
-            $ingredient->provider->phone_number,
+            $ingredient->GiaThanh,
             $ingredient->GhiChu
         ];
     }
@@ -101,9 +97,9 @@ class IngredientExport implements
     public function columnFormats(): array
     {
         return [
-            'E' => NumberFormat::FORMAT_NUMBER_0,
             'F' => NumberFormat::FORMAT_NUMBER_0,
-            'G' => NumberFormat::FORMAT_CURRENCY_VI_SIMPLE,
+            'G' => NumberFormat::FORMAT_NUMBER_0,
+            'H' => NumberFormat::FORMAT_CURRENCY_VI_SIMPLE,
         ];
     }
 
@@ -114,18 +110,18 @@ class IngredientExport implements
         return [
             AfterSheet::class    => function (AfterSheet $event) use ($finishRow) {
 
-                $event->sheet->getDelegate()->getStyle('A1:L1')
+                $event->sheet->getDelegate()->getStyle('A1:I1')
                     ->getFill()
                     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
                     ->getStartColor()
                     ->setARGB('DD4B39');
 
-                $event->sheet->getDelegate()->getStyle('A1:L1')
+                $event->sheet->getDelegate()->getStyle('A1:I1')
                     ->getFont()
                     ->getColor()
                     ->setARGB('FFFFFF');
 
-                $event->sheet->getStyle('A1:L' . $finishRow)->applyFromArray([
+                $event->sheet->getStyle('A1:I' . $finishRow)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,

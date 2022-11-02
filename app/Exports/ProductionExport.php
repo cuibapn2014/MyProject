@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Ingredient;
+use App\Models\Production;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -16,7 +16,7 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class IngredientExport implements
+class ProductionExport implements
     FromQuery,
     WithHeadings,
     WithMapping,
@@ -27,11 +27,11 @@ class IngredientExport implements
     WithTitle
 {
     private $index = 0;
-    private $ingredient;
+    private $production;
 
-    public function __construct($ingredient)
+    public function __construct($production)
     {
-        $this->ingredient = $ingredient;
+        $this->production = $production;
     }
     /**
      * @return \Illuminate\Support\Collection
@@ -39,23 +39,24 @@ class IngredientExport implements
     public function query()
     {
         //
-        return $this->ingredient;
+        return $this->production;
     }
 
     public function headings(): array
     {
         return [
             '#',
-            'Mã nguyên liệu',
-            'Tên nguyên phụ liệu',
+            'Mã sản xuất',
+            'Lệnh sản xuất',
+            'Thành phẩm',
+            'Loại',
             'Đơn vị tính',
-            'Tồn kho',
-            'Tồn thực tế',
-            'Giá nhập',
-            'Nhà cung cấp',
-            'Địa chỉ',
-            'Số điện thoại',
-            'Ghi chú'
+            'Công đoạn',
+            'Số lượng yêu cầu',
+            'Đã hoàn thành',
+            'Còn lại',
+            'Mức ưu tiên',
+            'Ngày tạo lệnh'
         ];
     }
 
@@ -64,23 +65,24 @@ class IngredientExport implements
      */
     public function title(): string
     {
-        return 'BÁO CÁO THỐNG KÊ NGUYÊN PHỤ LIỆU ' . Carbon::now()->format('d/m/Y');
+        return 'BÁO CÁO THỐNG KÊ LỆNH SẢN XUẤT ' . Carbon::now()->format('d/m/Y');
     }
 
-    public function map($ingredient): array
+    public function map($production): array
     {
         return [
             ++$this->index,
-            $ingredient->code,
-            $ingredient->Ten,
-            $ingredient->unit_cal->name,
-            $ingredient->amount,
-            $ingredient->used_amount,
-            $ingredient->Gia,
-            $ingredient->provider->name,
-            $ingredient->provider->address,
-            $ingredient->provider->phone_number,
-            $ingredient->GhiChu
+            $production->production_request->code,
+            $production->code,
+            $production->product->Ten,
+            $production->product->ingredient_type->name,
+            $production->product->unit_cal->name,
+            $production->product->stage_product->name,
+            $production->require_total . '.0',
+            $production->produceds != null ? $production->produceds->sum('amount') . '.0' : 0 . '.0', 
+            $production->require_total - $production->produceds->sum('amount') . '.0',
+            $this->getPriority($production->priority),
+            Carbon::parse($production->created_at)->timezone('Asia/Ho_Chi_Minh')->format('d-m-Y'),
         ];
     }
 
@@ -101,9 +103,10 @@ class IngredientExport implements
     public function columnFormats(): array
     {
         return [
-            'E' => NumberFormat::FORMAT_NUMBER_0,
-            'F' => NumberFormat::FORMAT_NUMBER_0,
-            'G' => NumberFormat::FORMAT_CURRENCY_VI_SIMPLE,
+            'H' => NumberFormat::FORMAT_NUMBER_0,
+            'I' => NumberFormat::FORMAT_NUMBER_0,
+            'J' => NumberFormat::FORMAT_NUMBER_0,
+            'L' => NumberFormat::FORMAT_DATE_DDMMYYYY,
         ];
     }
 
@@ -135,5 +138,22 @@ class IngredientExport implements
                 ]);
             },
         ];
+    }
+
+    public function getPriority($priority)
+    {
+        switch ($priority) {
+            case 0:
+                return "Thấp";
+                break;
+            case 1:
+                return "Bình thường";
+                break;
+            case 2:
+                return "Cao";
+                break;
+            default:
+                return "Không xác định";
+        }
     }
 }

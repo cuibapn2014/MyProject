@@ -45,6 +45,7 @@ $current = 1;
                         <th class="px-4 py-3">Trạng thái</th>
                         <th class="px-4 py-3">Tạo bởi</th>
                         <th class="px-4 py-3">Cập nhật</th>
+                        <th class="px-4 py-3">Ngày giao hàng</th>
                         <th class="px-4 py-3">Hành động</th>
                     </tr>
                 </thead>
@@ -107,6 +108,10 @@ $current = 1;
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{ \Carbon\Carbon::parse($order->updated_at)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y')
+                            }}
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                            {{ \Carbon\Carbon::parse($order->delivery_date)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y')
                             }}
                         </td>
                         <td class="px-4 py-3 text-sm flex items-center">

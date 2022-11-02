@@ -37,7 +37,7 @@ $current = 12;
           </svg>
       </button>
   </form>
-    <button onclick=""
+    <button onclick="location.href='/admin/plan/export'"
       class="flex items-center px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border-0 rounded-lg active:bg-green-700 hover:bg-green-700 focus:outline-none focus:shadow-outline-purple">
       Xuất Excel
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"

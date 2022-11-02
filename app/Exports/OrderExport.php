@@ -17,8 +17,15 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class OrderExport implements FromQuery, 
-WithHeadings, WithMapping, ShouldAutoSize, WithStyles, WithEvents, WithColumnFormatting, WithTitle
+class OrderExport implements
+    FromQuery,
+    WithHeadings,
+    WithMapping,
+    ShouldAutoSize,
+    WithStyles,
+    WithEvents,
+    WithColumnFormatting,
+    WithTitle
 {
     // use Exportable;
     private $index = 0;
@@ -44,7 +51,7 @@ WithHeadings, WithMapping, ShouldAutoSize, WithStyles, WithEvents, WithColumnFor
             '#',
             'Tên khách hàng',
             'Số điện thoại',
-            'Địa chỉ',      
+            'Địa chỉ',
             'Tổng thanh toán',
             'Đã thanh toán',
             'Nợ công',
@@ -76,7 +83,7 @@ WithHeadings, WithMapping, ShouldAutoSize, WithStyles, WithEvents, WithColumnFor
         ];
     }
 
-     /**
+    /**
      * @return string
      */
     public function title(): string
@@ -86,7 +93,7 @@ WithHeadings, WithMapping, ShouldAutoSize, WithStyles, WithEvents, WithColumnFor
 
     public function styles(Worksheet $sheet)
     {
-        
+
         return [
             // Style the first row as bold text.
             1    => ['font' => ['size' => 12,]],
@@ -101,28 +108,28 @@ WithHeadings, WithMapping, ShouldAutoSize, WithStyles, WithEvents, WithColumnFor
 
     public function registerEvents(): array
     {
-        $finishRow = $this->query()->get()->count() + 1;
+        $finishRow = $this->query()->count() + 1;
         return [
-            AfterSheet::class    => function (AfterSheet $event) use ($finishRow){
+            AfterSheet::class    => function (AfterSheet $event) use ($finishRow) {
                 $event->sheet->getDelegate()->getStyle('A1:M1')
-                ->getFill()
-                ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-                ->getStartColor()
-                ->setARGB('DD4B39');
+                    ->getFill()
+                    ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                    ->getStartColor()
+                    ->setARGB('DD4B39');
 
                 $event->sheet->getDelegate()->getStyle('A1:M1')
-                ->getFont()
-                ->getColor()
-                ->setARGB('FFFFFF');
+                    ->getFont()
+                    ->getColor()
+                    ->setARGB('FFFFFF');
 
-                $event->sheet->getStyle('A1:M'.$finishRow)->applyFromArray([
+                $event->sheet->getStyle('A1:M' . $finishRow)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                             'color' => ['argb' => '000000'],
                         ],
                     ],
-         ]);
+                ]);
             },
         ];
     }
@@ -141,14 +148,24 @@ WithHeadings, WithMapping, ShouldAutoSize, WithStyles, WithEvents, WithColumnFor
 
     public function getStatus($status)
     {
-        switch($status)
-        {
-            case -1: return "Không duyệt";break;
-            case 1: return "Chờ duyệt";break;
-            case 2: return "Đã duyệt";break;
-            case 3: return "Hoàn tất";break;
-            case 4: return "Đã hủy";break;
-            default: return "Không xác định";
+        switch ($status) {
+            case -1:
+                return "Không duyệt";
+                break;
+            case 1:
+                return "Chờ duyệt";
+                break;
+            case 2:
+                return "Đã duyệt";
+                break;
+            case 3:
+                return "Hoàn tất";
+                break;
+            case 4:
+                return "Đã hủy";
+                break;
+            default:
+                return "Không xác định";
         }
     }
 }
