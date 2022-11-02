@@ -158,7 +158,8 @@ const app = new Vue({
             checkAll: false,
             dataTask: [],
             objProduct: null,
-            objRequestProduct: null
+            objRequestProduct: null,
+            objTask: null
         }
     },
     methods: {
@@ -507,6 +508,10 @@ const app = new Vue({
             })
 
             return (totalProduced / total) * 100
+        },
+        toggleViewTask(task){
+            this.objTask = task
+            this.isOpenViewTask = !this.isOpenViewTask
         }
     }
 });
