@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/tailwind.output.css') }}" />
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?time={{ time() }}" />
     <link rel="stylesheet" href="{{ asset('css/tooltip.css') }}">
 
     <!-- Font awesome -->
@@ -161,7 +161,7 @@
         </transition>
         [[ setSelectedMenu({{ $current }}) ]]
     </div>
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}?time={{ time() }}" defer></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     @yield('script')
