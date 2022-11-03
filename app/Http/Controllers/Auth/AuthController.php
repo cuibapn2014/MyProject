@@ -78,6 +78,7 @@ class AuthController extends Controller
         $user->name = $req->fullname;
         $user->email = $req->email;
         $user->password = Hash::make($req->password);
+        $user->image = "user.png";
         $user->id_role = 3;
         $user->save();
 

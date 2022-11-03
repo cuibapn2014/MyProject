@@ -86,9 +86,11 @@ class TaskController extends Controller
     public function edit($id)
     {
         $this->middleware('admin');
+        $task = Task::findOrFail($id);
+        $this->authorize('update', $task);
         return view('admin.manage.task.editTask', [
             'users' => User::where('id', '!=', auth()->user()->id)->get(),
-            'task' => Task::findOrFail($id)
+            'task' => $task
         ]);
     }
 
@@ -112,6 +114,9 @@ class TaskController extends Controller
         );
 
         $task = Task::findOrFail($id);
+
+        $this->authorize('update', $task);
+
         $task->update([
             'tieu_de' => $req->title,
             'chi_tiet' => $req->detail,
