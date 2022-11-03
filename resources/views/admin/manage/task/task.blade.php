@@ -74,7 +74,7 @@ $role = auth()->user()->id_role;
                         </td>
                         <td class="px-4 py-3 text-sm flex">
                             <button v-tooltip="'Xem chi tiết'" title="Xem chi tiết"
-                                @click="toggleViewTask({{ $task->load(['assigns','user', 'assigns.reciever', 'assigns.reciever.role']) }})"
+                                @click="toggleViewTask({{ $task->load(['assigns','user', 'user.role', 'assigns.reciever', 'assigns.reciever.role']) }})"
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Delete">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
@@ -200,7 +200,6 @@ $role = auth()->user()->id_role;
                             </div>    
                         </div>
                     </div>
-                    <p v-if="this.dataAnalyze?.productions.length <= 0" class="text-center dark:text-gray-200 my-4 px-2">Không có dữ liệu</p>
                 </div>
                 <footer class="
             flex flex-col
@@ -219,7 +218,7 @@ $role = auth()->user()->id_role;
                 <div class="flex py-3 dark:text-gray-200">
                     <p class="flex items-center">
                         <img :src="'{{ asset('/img/user/') }}/' + this.objTask?.user.image" class="w-6 h-6 mr-2 rounded-full object-cover" alt="">   
-                        bởi <strong class="ml-1">[[ this.objTask?.user.name ]]</strong>
+                        bởi <strong class="ml-1">[[ this.objTask?.user.name ]] - [[ this.objTask?.user.role.name ]]</strong>
                       </p>
                 </div>
                     <button @click="toggleViewTask(null)" class="
