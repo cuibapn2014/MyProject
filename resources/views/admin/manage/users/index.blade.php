@@ -48,6 +48,7 @@ $current = 9;
                         <th class="px-4 py-3">Liên hệ</th>
                         <th class="px-4 py-3">Email</th>
                         <th class="px-4 py-3">Chức vụ</th>
+                        <th class="px-4 py-3">Trực tuyến</th>
                         <th class="px-4 py-3">Trạng thái</th>
                         <th class="px-4 py-3">Ngày tham gia</th>
                         <th class="px-4 py-3">Hành động</th>
@@ -79,6 +80,21 @@ $current = 9;
                         <td class="px-4 py-3 text-sm">
                             {{ $user->role->name }}
                         </td>
+                        @if(Cache::has('user-' . $user->id))
+                        <td class="px-4 py-3 text-sm">
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-green-100 text-green-700 dark:bg-green-600">
+                                Trực tuyến
+                            </span>
+                        </td>
+                        @else
+                        <td class="px-4 py-3 text-sm">
+                            <span
+                                class="px-2 py-1 font-semibold leading-tight rounded-full dark:text-white bg-gray-100 text-gray-700 dark:bg-gray-700">
+                                Ngoại tuyến
+                            </span>
+                        </td>
+                        @endif
                         @switch($user->status)
                         @case(1)
                         <td class="px-4 py-3 text-sm">
