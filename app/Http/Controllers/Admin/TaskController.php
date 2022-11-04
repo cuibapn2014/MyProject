@@ -142,8 +142,10 @@ class TaskController extends Controller
 
     public function delete($id)
     {
+        $task = Task::findOrFail($id);
+        $this->authorize('update', $task);
         Assign::where('id_CongViec', $id)->delete();
-        Task::findOrFail($id)->delete();
+        $task->delete();
         return back()->with('success', 'Đã xóa');
     }
 }

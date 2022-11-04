@@ -305,10 +305,22 @@ const app = new Vue({
         getListTask() {
             window.Echo.private(`task.${this.user}`)
                 .listen('TaskEvent', (e) => {
-                    console.log(e)
                     this.dataTask.push(e.assign)
-                    console.log(this.dataTask)
                     this.countTask += 1
+                    Toastify({
+                        text: `Bạn có thông báo ${this.countTask} công việc mới`,
+                        duration: 5000,
+                        close: true,
+                        gravity: "bottom", // `top` or `bottom`
+                        position: "left", // `left`, `center` or `right`
+                        stopOnFocus: false, // Prevents dismissing of toast on hover
+                        className: "z-50",
+                        style: {
+                            background: "linear-gradient(to right, #00b09b, #96c93d)",
+                        },
+                    }).showToast();
+                    const audioFile = new Audio('/sounds/notification_sound.wav')
+                    audioFile.play()
                 })
         },
 

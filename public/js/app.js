@@ -11656,12 +11656,26 @@ var app = new Vue({
       var _this5 = this;
 
       window.Echo["private"]("task.".concat(this.user)).listen('TaskEvent', function (e) {
-        console.log(e);
-
         _this5.dataTask.push(e.assign);
 
-        console.log(_this5.dataTask);
         _this5.countTask += 1;
+        toastify_js__WEBPACK_IMPORTED_MODULE_8___default()({
+          text: "B\u1EA1n c\xF3 th\xF4ng b\xE1o ".concat(_this5.countTask, " c\xF4ng vi\u1EC7c m\u1EDBi"),
+          duration: 5000,
+          close: true,
+          gravity: "bottom",
+          // `top` or `bottom`
+          position: "left",
+          // `left`, `center` or `right`
+          stopOnFocus: false,
+          // Prevents dismissing of toast on hover
+          className: "z-50",
+          style: {
+            background: "linear-gradient(to right, #00b09b, #96c93d)"
+          }
+        }).showToast();
+        var audioFile = new Audio('/sounds/notification_sound.wav');
+        audioFile.play();
       });
     },
     getThemeFromLocalStorage: function getThemeFromLocalStorage() {
