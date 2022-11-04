@@ -13,7 +13,7 @@ class FinanceController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('role:ADMIN,CEO,USER_ACCOUNTANT,USER_SALES');
+        $this->middleware('role:ADMIN,CEO,USER_ACCOUNTANT,USER_SALES,USER_MANAGER');
     }
 
     public function index(Request $request){

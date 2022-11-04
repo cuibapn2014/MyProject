@@ -15,7 +15,7 @@ class TaskController extends Controller
     //
     public function index()
     {
-        if (!in_array(auth()->user()->role->alias,array('CEO', 'ADMIN'))) return redirect()->route('admin.task.user.index');
+        if (!in_array(auth()->user()->role->alias,array('CEO', 'ADMIN', 'USER_MANAGER'))) return redirect()->route('admin.task.user.index');
         return view('admin.manage.task.task', ['tasks' => Task::orderByDesc('created_at')->paginate(25)]);
     }
 

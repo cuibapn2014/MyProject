@@ -35,7 +35,7 @@ $current = 9;
             </svg>
         </button>
     </form>
-    <div class="w-full overflow-x-auto rounded-lg shadow-xs mb-4" v-dragscroll style="max-height: 600px;">
+    <div class="w-full overflow-x-auto rounded-lg shadow-xs mb-4">
         <div class="w-full">
             <table class="w-full whitespace-no-wrap">
                 @if($users->count() > 0)

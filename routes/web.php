@@ -123,7 +123,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
     // });
 
 
-    $route->group(['prefix' => 'order','middleware' => 'role:ADMIN,CEO,USER_SALES'], function ($route) {
+    $route->group(['prefix' => 'order','middleware' => 'role:ADMIN,CEO,USER_SALES,USER_MANAGER'], function ($route) {
         $route->get('/', [OrderController::class, 'index'])->name('admin.order.index');
         $route->get('/create', [OrderController::class, 'create'])->name('admin.order.create');
         $route->post('/create', [OrderController::class, 'store'])->name('admin.order.request.create');
@@ -169,7 +169,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
         $route->get('/export', [ProductionController::class, 'export'])->name('admin.plan.export');
     });
 
-    $route->group(['prefix' => 'warehouse', 'middleware' => 'role:ADMIN,CEO,STOREKEEPER,USER_ACCOUNTANT'], function ($route) {
+    $route->group(['prefix' => 'warehouse', 'middleware' => 'role:ADMIN,CEO,STOREKEEPER,USER_ACCOUNTANT,USER_MANAGER'], function ($route) {
         $route->group(['prefix' => 'imports'], function ($route) {
             $route->get('/', [WarehouseImportController::class, 'index'])->name('admin.warehouse.import.index');
             $route->get('/create', [WarehouseImportController::class, 'create'])->name('admin.warehouse.import.create');
@@ -232,7 +232,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'user'], function ($route) {
     $route->get('/requirement/update-status/{id}', [RequirementController::class, 'updateStatus'])->name('admin.requirement.updateStatus');
 
 
-    $route->group(['prefix' => 'employee', 'middleware' => 'role:ADMIN,CEO,USER_HR'], function ($route) {
+    $route->group(['prefix' => 'employee', 'middleware' => 'role:ADMIN,CEO,USER_HR,USER_MANAGER'], function ($route) {
         $route->get('/', [UserController::class, 'index'])->name('admin.employee.index');
         $route->post('/update/{id}', [UserController::class, 'updateStatus'])->name('admin.employee.updateStatus');
     });

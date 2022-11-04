@@ -14,7 +14,7 @@ class CustomerController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('role:USER_SALES,ADMIN,CEO');
+        $this->middleware('role:USER_SALES,ADMIN,CEO,USER_MANAGER');
     }
 
     public function index(Request $request)
