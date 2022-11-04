@@ -3,21 +3,21 @@
 @section('main')
 @php
 $current = 4;
-$role = auth()->user()->id_role;
+$role = auth()->user()->role->alias;
 @endphp
 
 <div class="container px-6 mx-auto grid">
     @if(session('success'))
     <p class="p-2 rounded-md my-2 bg-green-100 text-green-400 text-sm">{{ session('success') }}</p>
     @endif
-    <div v-if="{{ $role }} < 3" class="grid py-2">
+    <div v-if="{{ $role}} != 'CUSTOMER'" class="grid py-2">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
             Cần làm
         </h2>
         <task v-if="this.dataTask.length > 0" :assign="this.dataTask"></task>
         <p v-else class="dark:text-gray-200 text-center">Hiện không có công việc nào được giao cho bạn</p>
     </div>
-    <hr class="my-4">
+    <hr v-if="{{ $role}} != 'CUSTOMER'" class="my-4">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
         Quản lí công việc
     </h2>
