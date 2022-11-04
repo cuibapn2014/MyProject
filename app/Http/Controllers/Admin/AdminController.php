@@ -81,6 +81,7 @@ class AdminController extends Controller
         if ($req->hasFile('image')) {
             $extension = $req->file('image')->getClientOriginalExtension();
             if ($req->file('image') != null && in_array($extension, $accept)) {
+                if($user->image != 'user.png')
                 File::delete(public_path("img/user/" . $user->image));
                 $file_name = current(explode('.', $req->file('image')->getClientOriginalName())) . '_' . time() . '.' . $extension;
                 $req->file('image')->move('img/user/', $file_name);
