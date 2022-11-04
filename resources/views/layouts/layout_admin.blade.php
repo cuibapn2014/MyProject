@@ -105,6 +105,21 @@
                             @csrf
                             <div class="text-base grow pl-2 flex flex-col">
                                 <label class="my-1">
+                                    <span>Mật khẩu hiện tại</span>
+                                    <input class="
+                                block
+                                w-full
+                                mt-1
+                                text-sm
+                                dark:border-gray-600 dark:bg-gray-700
+                                focus:border-purple-400
+                                focus:outline-none
+                                focus:shadow-outline-purple
+                                dark:text-gray-300 dark:focus:shadow-outline-gray
+                                form-input
+                            " type="password" name="current_password" />
+                                </label>
+                                <label class="my-1">
                                     <span>Mật khẩu mới</span>
                                     <input class="
                                 block

@@ -20,13 +20,22 @@ class ChangePasswordController extends Controller
     {
         $user = User::findOrFail(auth()->user()->id);
         $req->validate([
+            'current_password' => 'required',
             'new_password' => 'required|min:6',
             'confirm_password' => 'required|same:new_password'
+        ], [
+            'required' => 'Không được bỏ trống',
+            'same' => 'Xác nhận mật khẩu không khớp',
         ]);
+
+        if (!Hash::check($req->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Mật khẩu hiện tại không đúng']);
+        }
+
         $user->password = Hash::make($req->new_password);
         $user->remember_token = Str::random(60);
 
         $user->save();
-        return back()->with('success', 'Cập nhật thành công');
+        return back()->with('success', 'Đã thay đổi mật khẩu');
     }
 }

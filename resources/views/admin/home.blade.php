@@ -340,4 +340,21 @@ $current = 0;
 @section('script')
 <!-- <script src="{{ asset('js/charts-pie.js') }}" defer></script> -->
 <!-- <script src="{{ asset('js/charts-lines.js') }}" defer></script> -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+        var str = '{{ session("success") }}' || '{{ $errors->first() }}';
+        if (str != '') {
+            Toastify({
+                text: str,
+                duration: 3000,
+                close: false,
+                gravity: "top",
+                position: "center",
+                stopOnFocus: false,
+                style: {
+                    background: " {{ $errors->first() ?  'rgb(239 68 68 / 1)' : 'rgb(34 197 94 / 1)' }}",
+                }
+            }).showToast();
+        }
+    </script>
 @endsection
