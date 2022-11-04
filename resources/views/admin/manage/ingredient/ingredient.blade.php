@@ -104,7 +104,7 @@ $current = 3;
                             {{number_format($ingredient->amount) . ' ' . $ingredient->unit_cal->name}}
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{number_format($ingredient->amount) . ' ' . $ingredient->unit_cal->name}}
+                            {{number_format($ingredient->used_amount) . ' ' . $ingredient->unit_cal->name}}
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{$ingredient->GhiChu}}
