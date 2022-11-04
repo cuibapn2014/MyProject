@@ -21,7 +21,7 @@ class UserController extends Controller
             ->orWhere('phone', 'like', '%' . $request->keyword . '%')
             ->orWhere('email', 'like', '%' . $request->keyword . '%')
             ->orWhereRelation('role', 'name', 'like', '%' . $request->keyword . '%')
-            ->orderByDesc('id_role')
+            ->orderBy('name')
             ->paginate(25);
         $roles = Role::orderBy('name')->get();
 
