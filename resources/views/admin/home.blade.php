@@ -8,39 +8,6 @@ $current = 0;
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
         Bảng điều khiển
     </h2>
-    <!-- hover:h-[400px] hover:lg:h-[300px] hover:md:h-[300px] -->
-    <!-- <div
-        class="bg-gradient-to-r h-11 overflow-hidden duration-150 relative from-sky-500 to-indigo-500 my-2 text-white p-2 rounded-lg">
-        <p class="font-semibold flex items-center text-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path
-                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
-            <span class="mx-1">Cập nhật 2.0</span>
-        </p>
-        <ul class="list-disc font-semibold mx-4">
-            <li class="my-2">Cập nhật giao diện</li>
-            <li class="my-2">Cập nhật Quản lý công việc</li>
-            <li class="my-2">Khách hàng - Theo dõi thông tin của khách hàng <span
-                    class="bg-red-500 p-1 text-xs rounded-lg mx-1">Mới</span></li>
-            <li class="my-2">Sản phẩm - Theo dõi và kiểm tra sản phẩm sản xuất bởi doanh nghiệp của bạn <span
-                    class="bg-red-500 p-1 text-xs rounded-lg mx-1">Mới</span></li>
-            <li class="my-2">Quản lý nhân sự - Kiểm soát cơ cấu tổ chức của bạn <span
-                    class="bg-red-500 p-1 text-xs rounded-lg mx-1">Mới</span></li>
-            <li class="my-2">Quản lý nhà cung cấp - Dễ dàng lựa chọn nguyên liệu, tối ưu vốn <span
-                    class="bg-red-500 p-1 text-xs rounded-lg mx-1">Mới</span></li>
-            <li class="my-2">Quản lý tài chính - Kiểm soát dòng tiền cho doanh nghiệp của bạn <span
-                    class="bg-red-500 p-1 text-xs rounded-lg mx-1">Mới</span></li>
-        </ul>
-        <a href="http://zaloapp.com/qr/p/yie1866egwd6"
-            class="flex absolute top-3 right-2 font-semibold items-center hover:text-gray-200 duration-150 hover:mr-2">
-            <span>Liên hệ ngay</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-        </a>
-    </div> -->
     @if($data_share['order_warning']->count() > 0)
     <div class="duration-150 relative bg-red-500 mb-2 text-white p-2 rounded-lg">
         <p class="font-semibold flex items-center text-lg">
@@ -338,10 +305,9 @@ $current = 0;
 </div>
 @endsection
 @section('script')
-<!-- <script src="{{ asset('js/charts-pie.js') }}" defer></script> -->
-<!-- <script src="{{ asset('js/charts-lines.js') }}" defer></script> -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js" defer></script>
     <script>
+        window.onload = () => {
         var str = '{{ session("success") }}' || '{{ $errors->first() }}';
         if (str != '') {
             Toastify({
@@ -356,5 +322,6 @@ $current = 0;
                 }
             }).showToast();
         }
+    }
     </script>
 @endsection
