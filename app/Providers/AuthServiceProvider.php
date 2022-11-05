@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Produced;
 use App\Models\Task;
+use App\Policies\Admin\ProductionPolicy;
 use App\Policies\Admin\TaskPolicy;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -19,6 +21,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
         Task::class => TaskPolicy::class,
+        Produced::class => ProductionPolicy::class,
     ];
 
     /**

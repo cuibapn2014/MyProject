@@ -30,6 +30,7 @@ class ProducedController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('update');
         $this->validate($request, 
         [
             'id_production' => 'required|exists:productions,id',

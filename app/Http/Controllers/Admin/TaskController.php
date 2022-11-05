@@ -136,7 +136,9 @@ class TaskController extends Controller
     public function removeUser($id)
     {
         $this->middleware('admin');
-        Assign::findOrFail($id)->delete();
+        $assign = Assign::findOrFail($id);
+        $this->authorize('update', $assign->task);
+        $assign->delete();
         return back()->with('success', 'Đã gỡ');
     }
 

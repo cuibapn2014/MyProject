@@ -216,7 +216,7 @@ $current = 12;
           border-bottom border-gray-200
           py-2
         ">
-        <h2 class="text-2xl font-bold">Cập nhật số lượng sản xuất</h2>
+        <h2 class="text-2xl font-bold">Cập nhật sản xuất thực tế</h2>
         <button class="rounded-lg border border-opacity-75" @click="toggleUpdateAmountModal(null)">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
             stroke-width="2">
@@ -319,11 +319,11 @@ $current = 12;
               <tr
                 class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 sticky top-0">
                 <th class="px-4 py-3 font-bold">#</th>
-                <th class="px-4 py-3">Lô</th>
+                <th class="px-4 py-3">Lô SX</th>
                 <th class="px-4 py-3">Số lượng</th>
                 <th class="px-4 py-3">Ngày bắt đầu</th>
                 <th class="px-4 py-3">Ngày kết thúc</th>
-                <th class="px-4 py-3">Tạo bởi</th>
+                <th class="px-4 py-3">Bởi</th>
               </tr>
             </thead>
             <tbody class="bg-[#ffffff] divide-y dark:divide-gray-700 dark:bg-gray-800">

@@ -103,9 +103,10 @@ class IngredientController extends Controller
                     $image->move('img', $file_name);
                     $photo->urlImage = $file_name;
                     $photo->type = 'pl';
-                    $photo->id_provide = $ingredient->id;
-                    $photo->save();
+                    $photo->id_provide = $ingredient->id;      
                 }
+                else $photo->urlImage = 'placeholder.jpg';
+                $photo->save();
             }
         }
 

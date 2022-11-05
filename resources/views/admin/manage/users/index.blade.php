@@ -47,6 +47,7 @@ $current = 9;
                         <th class="px-4 py-3">Tên</th>
                         <th class="px-4 py-3">Liên hệ</th>
                         <th class="px-4 py-3">Email</th>
+                        <th class="px-4 py-3">Phòng ban</th>
                         <th class="px-4 py-3">Chức vụ</th>
                         <th class="px-4 py-3">Trực tuyến</th>
                         <th class="px-4 py-3">Trạng thái</th>
@@ -76,6 +77,9 @@ $current = 9;
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{ $user->email ?? 'Chưa có' }}
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                            {{ $user->role->department->name ?? '' }}
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{ $user->role->name }}

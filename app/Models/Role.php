@@ -17,4 +17,9 @@ class Role extends Model
     ];
 
     public $timestamps = false;
+
+    public function department()
+    {
+        return $this->belongsTo(\App\Models\Department::class, 'id_department', 'id');
+    }
 }
