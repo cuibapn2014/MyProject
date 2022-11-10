@@ -420,7 +420,8 @@ $current = 11;
           rounded-t-lg
           duration-150
           dark:bg-gray-800
-          sm:rounded-lg sm:m-4 sm:max-w-xl
+          w-full h-screen
+          relative
         " role="dialog" id="modal" @click.stop="">
                 <!-- Remove header if you don't want a close icon. Use modal body to place modal tile. -->
                 <header class="flex justify-end">
@@ -469,13 +470,15 @@ $current = 11;
             items-center
             justify-end
             px-6
-            py-3
+            py-4
             -mx-6
             -mb-4
             space-y-4
             sm:space-y-0 sm:space-x-6 sm:flex-row
             bg-gray-50
             dark:bg-gray-800
+            absolute bottom-0
+            w-full
           ">
                     <button @click="openAnalyzeModal(null)" class="
               w-full
