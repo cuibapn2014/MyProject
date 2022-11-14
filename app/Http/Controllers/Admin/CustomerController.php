@@ -38,6 +38,7 @@ class CustomerController extends Controller
         try {
             $customer = Customer::create($request->all());
             $customer->creator = auth()->user()->id;
+            $customer->save();
             DB::commit();
         } catch (\Exception $ex) {
             DB::rollback();
