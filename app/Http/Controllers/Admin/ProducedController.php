@@ -30,7 +30,8 @@ class ProducedController extends Controller
 
     public function store(Request $request)
     {
-        $this->authorize('update');
+        // $this->authorize('update');
+        if(auth()->user()->role->id_department != 4 && auth()->user()->role->alias != 'USER_MANAGER') return abort(403);
         $this->validate($request, 
         [
             'id_production' => 'required|exists:productions,id',
