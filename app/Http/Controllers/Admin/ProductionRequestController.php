@@ -50,7 +50,7 @@ class ProductionRequestController extends Controller
                 $file->move('img_product', $file_name);
             }
 
-            $newArr['image'] = $file_name == '' ? 'placeholder.jpg' : $file_name;
+            $newArr['image'] = !$file_name && $file_name == '' ? 'placeholder.jpg' : $file_name;
             $newArr['creator'] = auth()->user()->id;
 
             ProductionRequest::create($newArr);

@@ -26,6 +26,6 @@ class ProductionPolicy
      */
     public function update(User $user)
     {
-        return $user->role->department->id === 4;
+        return $user->role->department->id === 4 || $user->role->alias == 'USER_MANAGER';
     }
 }

@@ -297,7 +297,7 @@ $current = 0;
                 </div>
                 <div class="flex items-center">
                     <span class="inline-block w-3 h-3 mr-1 bg-purple-600 rounded-full"></span>
-                    <span>Doanh thu ước tính</span>
+                    <span>Đơn hàng</span>
                 </div>
             </div>
         </div>
