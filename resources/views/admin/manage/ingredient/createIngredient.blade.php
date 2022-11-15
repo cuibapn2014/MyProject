@@ -56,6 +56,27 @@ $current = $title == "Nguyên phụ liệu" ? 3 : 5;
                     @endforeach
                 </select>
                 </label>
+                @if($current == 5)
+                <label class="block text-sm mt-4 mb-2">
+                    <span class="text-gray-700 dark:text-gray-400">Công đoạn</span>
+                    <select class=" block
+                    w-full
+                    mt-1
+                    text-sm
+                    dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+                    form-select
+                    focus:border-purple-400
+                    focus:outline-none
+                    focus:shadow-outline-purple
+                    dark:focus:shadow-outline-gray" name="stage" id="stage" aria-placeholder="Chọn công đoạn">
+                    <option value="">-- Chọn công đoạn --</option>
+                    <option value="1" selected>Cắt</option>
+                    <option value="2">Bán thành phẩm</option>
+                    <option value="3">Hoàn thiện</option>
+                    <option value="4">Là ủi</option>
+                </select>
+                </label>
+                @endif
                 <label class="block text-sm mt-4 mb-2">
                     <span class="text-gray-700 dark:text-gray-400">Đơn vị tính</span>
                     <select class=" block

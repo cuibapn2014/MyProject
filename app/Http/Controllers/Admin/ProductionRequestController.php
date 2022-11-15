@@ -31,7 +31,7 @@ class ProductionRequestController extends Controller
 
     public function create()
     {
-        $orders = Order::where('status', 1)->orderByDesc('id')->get();
+        $orders = Order::where('status', 2)->orderByDesc('id')->get();
         $product = Ingredient::where('stage', '>', 0)->where('id_ingredient_type', '>', 1)->get();
         return view('admin.manage.production.createProduction', compact('orders', 'product'));
     }

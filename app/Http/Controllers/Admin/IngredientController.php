@@ -54,7 +54,7 @@ class IngredientController extends Controller
 
     public function getStore(Request $request)
     {
-        $providers = Provider::where('status', 'Đang hợp tác')->get();
+        $providers = Provider::where('status', 1)->get();
         $units = UnitCalculate::all();
         $ingredientTypes = IngredientType::all();
         $title = $request->type == 1 ? "Thành phẩm" : "Nguyên phụ liệu";
@@ -71,7 +71,7 @@ class IngredientController extends Controller
             [
                 'name' => 'required',
                 // 'image.*' => 'required',
-                'price' => 'integer'
+                'price' => 'integer|nullable'
             ],
             [
                 'name.required' => 'Tên Nguyên phụ liệu không được để trống',
@@ -87,10 +87,12 @@ class IngredientController extends Controller
 
         $ingredient = new Ingredient();
         $ingredient->Ten = $req->name;
+        $ingredient->stage = $req->stage ?? 0;
         $ingredient->id_ingredient_type = $req->id_ingredient_type;
         $ingredient->id_unit = $req->id_unit;
         $ingredient->id_provider = $req->provider;
         $ingredient->GhiChu = $req->note;
+        $ingredient->code = $req->code;
         $ingredient->Gia = $req->price;
 
         $ingredient->save();
@@ -110,7 +112,10 @@ class IngredientController extends Controller
             }
         }
 
+        if(!$req->stage)
         return redirect()->route('admin.ingredient.index')->with('success', 'Thêm mới thành công');
+
+        return redirect()->route('admin.product.index')->with('success', 'Thêm mới thành công');
     }
 
     public function getUpdate(Request $request, $id)
@@ -128,7 +133,7 @@ class IngredientController extends Controller
             $req,
             [
                 'name' => 'required',
-                'price' => 'integer'
+                'price' => 'integer|nullable'
             ],
             [
                 'name.required' => 'Tên Nguyên phụ liệu không được để trống',
@@ -140,6 +145,7 @@ class IngredientController extends Controller
         //     return back()->with('error', 'Bạn không được để trống mục hình ảnh');
         $ingredient = Ingredient::findOrFail($id);
         $ingredient->Ten = $req->name;
+        $ingredient->code = $req->code;
         if ($ingredient->id_ingredient_type < 3)
             $ingredient->Gia = $req->price;
         else if ($ingredient->id_ingredient_type == 3)

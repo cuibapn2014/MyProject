@@ -19,6 +19,7 @@ class Ingredient extends Model
         'Ten', 
         'GhiChu', 
         'HinhAnh',
+        'code',
         'amount',
         'used_amount',
         'waste_amount'
