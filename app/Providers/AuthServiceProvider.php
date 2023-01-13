@@ -35,7 +35,8 @@ class AuthServiceProvider extends ServiceProvider
 
         //
         ResetPassword::createUrlUsing(function ($user, string $token){
-            return URL::to('/reset-password').'/'.$token.'?email='.$user->email;
+            // return URL::to('/reset-password').'/'.$token.'?email='.$user->email;
+            return 'http://localhost:5173/reset-password/'.$token.'?email='.$user->email;
         });
     }
 }
