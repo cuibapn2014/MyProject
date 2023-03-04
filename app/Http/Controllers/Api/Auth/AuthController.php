@@ -31,9 +31,25 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $data = $request;
+        Validator::extend('is_lock', function($attribute, $value, $param, $validate) use ($request){
+            $user = User::where('email', $value)->firstOrFail();
+            if($user->status == 2) return false;
+            return true;
+        });
+        Validator::extend('is_not_use', function($attribute, $value, $param, $validate) use ($request){
+            $user = User::where('email', $value)->firstOrFail();
+            if($user->status == 3) return false;
+            return true;
+        });
         $validator = Validator::make($data->all(), [
-            'email' => 'required|email',
+            'email' => 'required|email|is_lock|is_not_use',
             'password' => 'required|string|min:6',
+        ],[
+            'email.required' => 'Email không được để trống',
+            'password.required' => 'Mật khẩu không được để trống',
+            'email' => 'Email không hợp lệ',
+            'is_lock' => 'Tài khoản của bạn đang tạm khóa',
+            'is_not_use' => 'Tài khoản đã ngừng sử dụng'
         ]);
 
         if ($validator->fails()) {

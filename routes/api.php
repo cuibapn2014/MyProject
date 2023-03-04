@@ -1,13 +1,23 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\IngredientController;
 use App\Http\Controllers\Admin\QualityController;
 use App\Http\Controllers\Api\AnalyticController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\ForgotPasswordController;
+use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\FinanceController;
+use App\Http\Controllers\Api\IngredientController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\ProductionController;
+use App\Http\Controllers\Api\ProductionRequestController;
+use App\Http\Controllers\Api\ProviderController;
+use App\Http\Controllers\Api\PurchaseRemindController;
+use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\UploadImageController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\WarehouseExportController;
+use App\Http\Controllers\Api\WarehouseImportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -62,6 +72,126 @@ Route::group([
     'middleware' => ['api']
 ], function ($router) {
     $router->get('/', [OrderController::class, 'index']);
+    // $router->get('/', [AnalyticController::class, 'getRevenue']);
+    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
+    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
+});
+
+Route::group([
+    'prefix' => 'customer',
+    'middleware' => ['api']
+], function ($router) {
+    $router->get('/', [CustomerController::class, 'index']);
+    // $router->get('/', [AnalyticController::class, 'getRevenue']);
+    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
+    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
+});
+
+Route::group([
+    'prefix' => 'provider',
+    'middleware' => ['api']
+], function ($router) {
+    $router->get('/', [ProviderController::class, 'index']);
+    // $router->get('/', [AnalyticController::class, 'getRevenue']);
+    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
+    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
+});
+
+Route::group([
+    'prefix' => 'task',
+    'middleware' => ['api']
+], function ($router) {
+    $router->get('/', [TaskController::class, 'index']);
+    // $router->get('/', [AnalyticController::class, 'getRevenue']);
+    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
+    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
+});
+
+Route::group([
+    'prefix' => 'finance',
+    'middleware' => ['api']
+], function ($router) {
+    $router->get('/', [FinanceController::class, 'index']);
+    // $router->get('/', [AnalyticController::class, 'getRevenue']);
+    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
+    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
+});
+
+Route::group([
+    'prefix' => 'ingredient',
+    'middleware' => ['api']
+], function ($router) {
+    $router->get('/', [IngredientController::class, 'index']);
+    // $router->get('/', [AnalyticController::class, 'getRevenue']);
+    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
+    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
+});
+
+Route::group([
+    'prefix' => 'product',
+    'middleware' => ['api']
+], function ($router) {
+    $router->get('/', [IngredientController::class, 'index']);
+    // $router->get('/', [AnalyticController::class, 'getRevenue']);
+    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
+    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
+});
+
+Route::group([
+    'prefix' => 'warehouse-import',
+    'middleware' => ['api']
+], function ($router) {
+    $router->get('/', [WarehouseImportController::class, 'index']);
+    // $router->get('/', [AnalyticController::class, 'getRevenue']);
+    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
+    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
+});
+
+Route::group([
+    'prefix' => 'warehouse-export',
+    'middleware' => ['api']
+], function ($router) {
+    $router->get('/', [WarehouseExportController::class, 'index']);
+    // $router->get('/', [AnalyticController::class, 'getRevenue']);
+    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
+    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
+});
+
+Route::group([
+    'prefix' => 'users',
+    'middleware' => ['api']
+], function ($router) {
+    $router->get('/', [UserController::class, 'index']);
+    // $router->get('/', [AnalyticController::class, 'getRevenue']);
+    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
+    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
+});
+
+Route::group([
+    'prefix' => 'production-request',
+    'middleware' => ['api']
+], function ($router) {
+    $router->get('/', [ProductionRequestController::class, 'index']);
+    // $router->get('/', [AnalyticController::class, 'getRevenue']);
+    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
+    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
+});
+
+Route::group([
+    'prefix' => 'production',
+    'middleware' => ['api']
+], function ($router) {
+    $router->get('/', [ProductionController::class, 'index']);
+    // $router->get('/', [AnalyticController::class, 'getRevenue']);
+    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
+    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
+});
+
+Route::group([
+    'prefix' => 'purchase-remind',
+    'middleware' => ['api']
+], function ($router) {
+    $router->get('/', [PurchaseRemindController::class, 'index']);
     // $router->get('/', [AnalyticController::class, 'getRevenue']);
     // $router->get('/debt', [AnalyticController::class, 'getDebt']);
     // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);

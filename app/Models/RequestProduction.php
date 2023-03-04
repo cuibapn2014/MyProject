@@ -30,4 +30,8 @@ class RequestProduction extends Model
     {
         return $this->belongsTo(\App\Models\ProductionRequest::class, 'id_production_request', 'id');
     }
+
+    public function user(){
+        return $this->belongsTo(\App\Models\User::class, 'censor', 'id');
+    }
 }
