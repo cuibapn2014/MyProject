@@ -15,16 +15,18 @@ class CreateProductionRequestsTable extends Migration
     {
         Schema::create('production_requests', function (Blueprint $table) {// Sản phẩm hoàn thiện
             $table->id();
-            $table->bigInteger('detail_order_id');
+            $table->integer('detail_order_id');
+            $table->integer('id_product');
             $table->string('code');
-            $table->string('name');
             $table->string('size')->nullable();
             $table->string('color')->nullable();
-            $table->integer('amount')->min(1);
+            $table->integer('amount')->min(0);
             $table->integer('completed')->default(0);
             $table->string('image')->nullable()->default('placeholder.jpg');
             $table->string('note')->nullable();
             $table->integer('creator');
+            $table->integer('status')->default(1);
+            $table->integer('priority');
             $table->timestamps();
         });
     }

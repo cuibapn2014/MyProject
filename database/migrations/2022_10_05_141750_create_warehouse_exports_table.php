@@ -16,9 +16,9 @@ class CreateWarehouseExportsTable extends Migration
         Schema::create('warehouse_exports', function (Blueprint $table) {
             $table->id();
             $table->string('code');
+            $table->integer('type');
             $table->integer('id_ingredient');
             $table->integer('id_production');
-            $table->integer('id_order');
             $table->integer('amount');
             $table->string('note')->nullable();
             $table->integer('status')->default(1)->comment('1:Chờ duyệt / 2: Đã duyệt');
