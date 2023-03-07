@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Helpers\NumberFormatCustom;
 use App\Models\Ingredient;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromQuery;
@@ -99,7 +100,7 @@ class ProductExport implements
         return [
             'F' => NumberFormat::FORMAT_NUMBER_0,
             'G' => NumberFormat::FORMAT_NUMBER_0,
-            'H' => NumberFormat::FORMAT_CURRENCY_VI_SIMPLE,
+            'H' => NumberFormatCustom::FORMAT_CURRENCY_VI_SIMPLE,
         ];
     }
 

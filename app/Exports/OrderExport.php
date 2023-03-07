@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Helpers\NumberFormatCustom;
 use App\Models\Order;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -137,9 +138,9 @@ class OrderExport implements
     public function columnFormats(): array
     {
         return [
-            'E' => NumberFormat::FORMAT_CURRENCY_VI_SIMPLE,
-            'F' => NumberFormat::FORMAT_CURRENCY_VI_SIMPLE,
-            'G' => NumberFormat::FORMAT_CURRENCY_VI_SIMPLE,
+            'E' => NumberFormatCustom::FORMAT_CURRENCY_VI_SIMPLE,
+            'F' => NumberFormatCustom::FORMAT_CURRENCY_VI_SIMPLE,
+            'G' => NumberFormatCustom::FORMAT_CURRENCY_VI_SIMPLE,
             'H' => NumberFormat::FORMAT_DATE_DDMMYYYY,
             'I' => NumberFormat::FORMAT_DATE_DDMMYYYY,
             'J' => NumberFormat::FORMAT_DATE_DDMMYYYY
