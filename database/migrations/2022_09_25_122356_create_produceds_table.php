@@ -15,8 +15,11 @@ class CreateProducedsTable extends Migration
     {
         Schema::create('produceds', function (Blueprint $table) {
             $table->id();
+            $table->string('lot_number')->max(12);
             $table->integer('id_production');
             $table->bigInteger('amount');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->integer('creator');
             $table->timestamps();
         });

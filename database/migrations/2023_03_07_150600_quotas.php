@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRolesTable extends Migration
+class Quotas extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateRolesTable extends Migration
      */
     public function up()
     {
-        Schema::create('roles', function (Blueprint $table) {
+        //
+        Schema::create('quotas', function (Blueprint $table) {
             $table->id();
+            $table->integer('id_product');
+            $table->integer('id_ingredient');
+            $table->integer('amount');
             $table->string('name');
-            $table->string('alias');
-            $table->integer('id_department')->nullable();
-            // $table->timestamps();
         });
     }
 
@@ -29,6 +30,7 @@ class CreateRolesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('roles');
+        //
+        Schema::dropIfExists('quotas');
     }
 }

@@ -14,9 +14,10 @@ class CongViec extends Migration
     public function up()
     {
         //
-        Schema::create('cong_viec', function(Blueprint $table) {
+        Schema::create('tasks', function(Blueprint $table) {
             $table->id();
             $table->bigInteger('id_nguoi_giao');
+            $table->string('tieu_de');
             $table->string('chi_tiet')->nullable();
             $table->timestamp('ngay_hoan_thanh');
             $table->timestamps();
@@ -31,6 +32,6 @@ class CongViec extends Migration
     public function down()
     {
         //
-        Schema::dropIfExists('cong_viec');
+        Schema::dropIfExists('tasks');
     }
 }

@@ -15,10 +15,14 @@ class CreateFinancesTable extends Migration
     {
         Schema::create('finances', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
+            $table->string('code')->max(12);
+            $table->string('title')->max(255);
+            $table->integer('type');
             $table->string('detail')->nullable();
-            $table->float('total')->min(0);
+            $table->bigInteger('total')->min(0);
             $table->integer('id_user');
+            $table->integer('status')->default(1);
+            $table->date('create_date');
             $table->timestamps();
         });
     }

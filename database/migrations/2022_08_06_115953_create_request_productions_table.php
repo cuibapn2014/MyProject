@@ -16,9 +16,10 @@ class CreateRequestProductionsTable extends Migration
         Schema::create('request_productions', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('id_ingredient');
+            $table->bigInteger('id_production_request');
             $table->bigInteger('amount')->default(0);
             $table->integer('status')->default(1);
-            $table->integer('id_plan_production');
+            $table->integer('censor');
             $table->timestamps();
         });
     }

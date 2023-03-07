@@ -20,6 +20,7 @@ class CreateCustomersTable extends Migration
             $table->string('address');
             $table->string('note')->nullable();
             $table->integer('edit')->nullable();
+            $table->integer('creator');
             $table->timestamps();
         });
     }

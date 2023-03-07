@@ -14,7 +14,7 @@ class ChatLuong extends Migration
     public function up()
     {
         //
-        Schema::create('chat_luong', function(Blueprint $table){
+        Schema::create('qualities', function(Blueprint $table){
             $table->id();
             $table->string('Ten');
         });
@@ -28,6 +28,6 @@ class ChatLuong extends Migration
     public function down()
     {
         //
-        Schema::dropIfExists('chat_luong');
+        Schema::dropIfExists('qualities');
     }
 }

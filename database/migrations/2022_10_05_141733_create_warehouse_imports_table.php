@@ -20,6 +20,8 @@ class CreateWarehouseImportsTable extends Migration
             $table->integer('type');
             $table->integer('id_production');
             $table->bigInteger('amount');
+            $table->bigInteger('paid')->default(0);
+            $table->bigInteger('price')->default(0);
             $table->string('note');
             $table->integer('status')->default(1)->comment('1: Chờ duyệt, 2: Đã duyệt');
             $table->date('import_date');

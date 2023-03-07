@@ -15,12 +15,15 @@ class CreateProductionsTable extends Migration
     {
         Schema::create('productions', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->max(10);
             $table->integer('id_product');
-            $table->bigInteger('id_plan_production');
-            $table->bigInteger('require_amount')->default(0);
+            $table->integer('id_plan_ingredient');
+            $table->integer('id_production_request');
+            $table->integer('require_total')->default(0);
             $table->integer('status')->default(0);
             $table->string('note')->nullable();
             $table->integer('creator');
+            $table->integer('priority');
             $table->timestamps();
         });
     }

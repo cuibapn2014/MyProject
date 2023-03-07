@@ -16,10 +16,14 @@ class DonHang extends Migration
         //
         Schema::create('orders', function(Blueprint $table){
             $table->id();
-            $table->string('TenKhachHang')->nullable();
-            $table->string('SoDienThoai')->nullable()->max(12)->min(10);
-            $table->string('DiaChi')->nullable();
-            $table->timestamp('NgayTraDon')->nullable();
+            $table->bigInteger('id_customer')->nullable();
+            $table->integer('vat')->nullable();
+            $table->bigInteger('total')->nullable();
+            $table->bigInteger('paid')->nullable();
+            $table->integer('status')->default(1);
+            $table->string('note')->nullable();
+            $table->dateTime('NgayTraDon')->nullable();
+            $table->integer('id_NhanVien')->nullable();
             $table->timestamps();
         });
     }
