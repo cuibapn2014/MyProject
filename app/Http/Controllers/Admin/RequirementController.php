@@ -44,7 +44,7 @@ class RequirementController extends Controller
                 'code' => $code,
                 'id_ingredient' => $requestProduction->id_ingredient,
                 'type' => 2,
-                'id_production' => $requestProduction->id_production,
+                'id_production' => $requestProduction->id_production_request,
                 'amount' => $requestProduction->amount,
                 'note' => 'Nhập kho tự động từ yêu cầu sản xuất ' . $requestProduction->production_request->code,
                 'import_date' => \Carbon\Carbon::now()->timezone('Asia/Ho_Chi_Minh')->format('Y-m-d'),

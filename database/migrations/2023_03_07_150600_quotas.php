@@ -19,7 +19,7 @@ class Quotas extends Migration
             $table->integer('id_product');
             $table->integer('id_ingredient');
             $table->integer('amount');
-            $table->string('name');
+            // $table->string('name');
         });
     }
 
