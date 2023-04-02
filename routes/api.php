@@ -92,6 +92,10 @@ Route::group([
     'middleware' => ['api']
 ], function ($router) {
     $router->get('/', [ProviderController::class, 'index']);
+    $router->get('/{id}', [ProviderController::class, 'show']);
+    $router->post('/create', [ProviderController::class, 'store']);
+    $router->put('/update/{id}', [ProviderController::class, 'update']);
+    $router->delete('/delete/{id}', [ProviderController::class, 'destroy']);
     // $router->get('/', [AnalyticController::class, 'getRevenue']);
     // $router->get('/debt', [AnalyticController::class, 'getDebt']);
     // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
