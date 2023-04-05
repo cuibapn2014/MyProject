@@ -69,5 +69,13 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+        $role = auth()->user()->role->alias;
+        if (!in_array($role, ['USER_MANAGER', 'CEO', 'ADMIN', 'USER_HR']))
+            return response()->json(['msg' => 'access denied'], Response::HTTP_FORBIDDEN);
+        $user = User::findOrFail($id);
+        if (in_array($user->role->alias, ['USER_MANAGER', 'CEO', 'ADMIN', 'USER_HR']))
+            return response()->json(['msg' => 'access denied'], Response::HTTP_FORBIDDEN);
+        $user->delete();
+        return response()->json(['msg' => 'success'], Response::HTTP_OK);
     }
 }

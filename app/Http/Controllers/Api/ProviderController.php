@@ -18,11 +18,11 @@ class ProviderController extends Controller
     public function index(Request $request)
     {
         //
-        $providers = Provider::where('name', 'like', '%'.$request->keyword.'%')
-        ->orWhere('address', 'like', '%'.$request->keyword.'%')
-        ->orWhere('phone_number', 'like', '%'.$request->keyword.'%')
-        ->orderByDesc('id')
-        ->paginate(25);
+        $providers = Provider::where('name', 'like', '%' . $request->keyword . '%')
+            ->orWhere('address', 'like', '%' . $request->keyword . '%')
+            ->orWhere('phone_number', 'like', '%' . $request->keyword . '%')
+            ->orderByDesc('id')
+            ->paginate(25);
         return response()->json(['code' => 200, 'data' => $providers], Response::HTTP_OK);
     }
 
@@ -38,18 +38,18 @@ class ProviderController extends Controller
         $validator  = Validator::make($request->all(), [
             'name' => 'required',
             'phone_number' => 'required|digits:10'
-        ],[
+        ], [
             'required' => ':attribute không được để trống',
             'digits' => 'Số điện thoại không hợp lệ'
-        ],[
+        ], [
             'name' => 'Tên nhà cung cấp',
             'phone_number' => 'Số điện thoại'
         ]);
 
-        if($validator->fails())
+        if ($validator->fails())
             return response()->json(['msg' => 'error', 'errors' => $validator->errors()], Response::HTTP_BAD_REQUEST);
-        
-        $provider = Provider::updateOrCreate(['id' => $request->id],$request->all());
+
+        $provider = Provider::updateOrCreate(['id' => $request->id], $request->all());
         return response()->json(['msg' => 'create success', 'data' => $provider], Response::HTTP_OK);
     }
 
@@ -79,15 +79,15 @@ class ProviderController extends Controller
         $validator  = Validator::make($request->all(), [
             'name' => 'required',
             'phone_number' => 'required|digits:10'
-        ],[
+        ], [
             'required' => ':attribute không được để trống',
             'digits' => 'Số điện thoại không hợp lệ'
-        ],[
+        ], [
             'name' => 'Tên nhà cung cấp',
             'phone_number' => 'Số điện thoại'
         ]);
 
-        if($validator->fails())
+        if ($validator->fails())
             return response()->json(['msg' => 'error', 'errors' => $validator->errors()], Response::HTTP_BAD_REQUEST);
 
         $provider = Provider::findOrFail($id);

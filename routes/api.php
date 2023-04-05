@@ -82,9 +82,10 @@ Route::group([
     'middleware' => ['api']
 ], function ($router) {
     $router->get('/', [CustomerController::class, 'index']);
-    // $router->get('/', [AnalyticController::class, 'getRevenue']);
-    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
-    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
+    $router->get('/{id}', [CustomerController::class, 'show']);
+    $router->post('/create', [CustomerController::class, 'store']);
+    $router->put('/update/{id}', [CustomerController::class, 'update']);
+    $router->delete('/delete/{id}', [CustomerController::class, 'destroy']);
 });
 
 Route::group([
@@ -169,6 +170,7 @@ Route::group([
     // $router->get('/', [AnalyticController::class, 'getRevenue']);
     // $router->get('/debt', [AnalyticController::class, 'getDebt']);
     // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
+    $router->delete('/delete/{id}', [UserController::class, 'destroy']);
 });
 
 Route::group([
