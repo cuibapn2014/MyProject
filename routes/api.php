@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductionController;
 use App\Http\Controllers\Api\ProductionRequestController;
 use App\Http\Controllers\Api\ProviderController;
+use App\Http\Controllers\Api\ProviderSelectController;
 use App\Http\Controllers\Api\PurchaseRemindController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\UploadImageController;
@@ -94,10 +95,10 @@ Route::group([
 ], function ($router) {
     $router->get('/', [ProviderController::class, 'index']);
     $router->get('/{id}', [ProviderController::class, 'show']);
+    $router->get('/select', [ProviderSelectController::class, 'index']);
     $router->post('/create', [ProviderController::class, 'store']);
     $router->put('/update/{id}', [ProviderController::class, 'update']);
     $router->delete('/delete/{id}', [ProviderController::class, 'destroy']);
-    // $router->get('/', [AnalyticController::class, 'getRevenue']);
     // $router->get('/debt', [AnalyticController::class, 'getDebt']);
     // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
 });
