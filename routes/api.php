@@ -93,9 +93,9 @@ Route::group([
     'prefix' => 'provider',
     'middleware' => ['api']
 ], function ($router) {
+    $router->get('/select', [ProviderSelectController::class, 'index']);
     $router->get('/', [ProviderController::class, 'index']);
     $router->get('/{id}', [ProviderController::class, 'show']);
-    $router->get('/select', [ProviderSelectController::class, 'index']);
     $router->post('/create', [ProviderController::class, 'store']);
     $router->put('/update/{id}', [ProviderController::class, 'update']);
     $router->delete('/delete/{id}', [ProviderController::class, 'destroy']);

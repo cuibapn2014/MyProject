@@ -18,6 +18,7 @@ class ProviderSelectController extends Controller
     {
         //
         $providers = Provider::where('name', 'like', '%' . $request->name . '%')
+            ->where('status' , 1)
             ->orderBy('name')
             ->get(['name AS text', 'id AS value']);
         return response()->json(['code' => 200, 'data' => $providers], Response::HTTP_OK);

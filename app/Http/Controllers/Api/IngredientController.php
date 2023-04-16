@@ -19,7 +19,7 @@ class IngredientController extends Controller
     public function index(Request $requestuest)
     {
         //
-        $type = $requestuest->ingredient_type ?? 1;
+        $type = $requestuest->type ?? 1;
         $ingredient = Ingredient::with([
             'provider',
             'provider:id,name,address,phone_number',
@@ -33,9 +33,10 @@ class IngredientController extends Controller
                 ->orWhereRelation('provider', 'phone_number', 'like', '%' . $requestuest->keyword . '%')
                 ->orWhere('GhiChu', 'like', '%' . $requestuest->keyword . '%')
                 ->orWhere('code', 'like', '%' . $requestuest->keyword . '%');
-        })
-            ->where('id_ingredient_type', $type)
-            ->paginate(25);
+        });
+        if($type == 1) $ingredient = $ingredient->where('id_ingredient_type', $type);
+        else $ingredient = $ingredient->where('id_ingredient_type', '>', 1);
+        $ingredient = $ingredient->paginate(25);
         return response()->json(['code' => 200, 'data' => $ingredient], Response::HTTP_OK);
     }
 
