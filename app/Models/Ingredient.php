@@ -54,4 +54,11 @@ class Ingredient extends Model
     {
         return $this->belongsTo(\App\Models\StageProduct::class, 'stage', 'id');
     }
+
+    public static function generateCode(){
+        $current = self::where('code', 'like', 'NPL%')->orderByDesc('code')->select('code')->first();
+        $number = $current ? str_replace("NPL", "", $current->code) : 0;
+        $code = "NPL".str_pad(intval($number) + 1, 6, '0', STR_PAD_LEFT);
+        return $code;
+    }
 }

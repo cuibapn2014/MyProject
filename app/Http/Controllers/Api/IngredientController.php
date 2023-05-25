@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Image;
 use App\Models\Ingredient;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
 class IngredientController extends Controller
@@ -25,7 +27,9 @@ class IngredientController extends Controller
             'provider:id,name,address,phone_number',
             'images',
             'images:id_provide,urlImage',
-            'ingredient_type'
+            'ingredient_type',
+            'unit_cal',
+            'unit_cal:id,name'
         ])->where(function ($query) use ($requestuest) {
             $query->where('Ten', 'like', '%' . $requestuest->keyword . '%')
                 ->orWhereRelation('provider', 'name', 'like', '%' . $requestuest->keyword . '%')
@@ -49,50 +53,77 @@ class IngredientController extends Controller
     public function store(Request $request)
     {
         //
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'name' => 'required',
-                // 'image.*' => 'required',
-                'price' => 'integer|nullable'
-            ],
-            [
-                'name.required' => 'Tên Nguyên phụ liệu không được để trống',
-                // 'price.required' => 'Giá không được để trống',
-                'price.integer' => 'Giá phải là số nguyên',
-                // 'image.*.required' => 'Bạn chưa thêm hình ảnh cho Nguyên phụ liệu này',
-            ]
-        );
+        $hasStage = $request->has('stage');
 
+        Validator::extend('exists_name', function($attribute, $value, $parameters) use ($request){
+            $exists = Ingredient::where('stage', $request->stage)
+            ->where('id_ingredient_type', $request->id_ingredient_type)
+            ->where('Ten', 'like', $value)
+            ->exists();
+            return !$exists;
+        });
+
+        $rules = [
+            'name' => [
+                'required',
+                'exists_name',
+                // Rule::unique('ingredients', 'Ten')
+            ],
+            'price' => [
+                'regex:/^[+]?[0-9](\.?\d+)*$/',
+                'nullable',
+                'gte:0'
+            ],
+            'id_unit_cal' => 'required',
+            'id_ingredient_type' => 'required',
+        ];
+
+        $messages = [
+            'required' => 'Không được bỏ trống',
+            'price.integer' => 'Giá phải là số nguyên',
+            'name.unique' => 'Tên thành phẩm đã tồn tại',
+            'exists_name' => 'Tên đã tồn tại'
+        ];
+
+        if($hasStage)
+            $rules['stage'] = ['required'];
+
+        $validator = Validator::make($request->all(),$rules, $messages);
         if ($validator->fails())
             return response()->json(['msg' => 'error', 'errors' => $validator->errors()], Response::HTTP_BAD_REQUEST);
-
+            
+        $code = Ingredient::generateCode();
         $ingredient = new Ingredient();
         $ingredient->Ten = $request->name;
         $ingredient->stage = $request->stage ?? 0;
         $ingredient->id_ingredient_type = $request->id_ingredient_type;
-        $ingredient->id_unit = $request->id_unit;
-        $ingredient->id_provider = $request->provider;
+        $ingredient->id_unit = $request->id_unit_cal;
+        $ingredient->id_provider = $request->provider_id;
         $ingredient->GhiChu = $request->note;
-        $ingredient->code = $request->code;
-        $ingredient->Gia = $request->price;
+        $ingredient->code = $code;
+        $ingredient->Gia = $request->price ? str_replace('.','',$request->price) : 0;
 
         $ingredient->save();
-        if ($request->file('image')) {
-            foreach ($request->file('image') as $image) {
-                $photo = new Image();
-                if ($image != null) {
-                    $extension = $image->getClientOriginalExtension();
-                    $file_name = current(explode('.', $image->getClientOriginalName())) . '_' . time() . '.' . $extension;
-                    $image->move('img', $file_name);
-                    $photo->urlImage = $file_name;
-                    $photo->type = 'pl';
-                    $photo->id_provide = $ingredient->id;      
+        try{
+            if ($request->file('image')) {
+                foreach ($request->file('image') as $image) {
+                    $photo = new Image();
+                    if ($image != null) {
+                        $extension = $image->getClientOriginalExtension();
+                        $file_name = current(explode('.', $image->getClientOriginalName())) . '_' . time() . '.' . $extension;
+                        $image->move('img', $file_name);
+                        $photo->urlImage = $file_name;
+                        $photo->type = 'pl';
+                        $photo->id_provide = $ingredient->id;      
+                    }
+                    else $photo->urlImage = 'placeholder.jpg';
+                    $photo->save();
                 }
-                else $photo->urlImage = 'placeholder.jpg';
-                $photo->save();
             }
+        }catch(\Exception $ex){
+            throw $ex;
         }
+        return response()->json(['msg' => 'create success', 'data' => $ingredient], Response::HTTP_OK);
     }
 
     /**
@@ -104,6 +135,14 @@ class IngredientController extends Controller
     public function show($id)
     {
         //
+        $ingredient = Ingredient::with([
+            'images',
+            'provider',
+            'ingredient_type',
+            'stage_product',
+            'unit_cal'
+        ])->findOrFail($id);
+        return response()->json(['msg' => 'success', 'data' => $ingredient], Response::HTTP_OK);
     }
 
     /**
@@ -113,9 +152,79 @@ class IngredientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $requestuest, $id)
+    public function update(Request $request, $id)
     {
         //
+        $hasStage = $request->has('stage');
+
+        Validator::extend('exists_name', function($attribute, $value, $parameters) use ($request, $id){
+            $exists = Ingredient::where('stage', $request->stage)
+            ->where('id_ingredient_type', $request->id_ingredient_type)
+            ->where('Ten', 'like', $value)
+            ->where('id', '!=', $id)
+            ->exists();
+            return !$exists;
+        });
+
+        $rules = [
+            'name' => [
+                'required',
+                'exists_name',
+                // Rule::unique('ingredients', 'Ten')
+            ],
+            'price' => [
+                'regex:/^[+]?[0-9](\.?\d+)*$/',
+                'nullable',
+                'gte:0'
+            ],
+            'id_unit_cal' => 'required',
+            'id_ingredient_type' => 'required',
+        ];
+
+        $messages = [
+            'required' => 'Không được bỏ trống',
+            'price.integer' => 'Giá phải là số nguyên',
+            'name.unique' => 'Tên thành phẩm đã tồn tại',
+            'price.integer' => 'Giá phải là số nguyên',
+            'exists_name' => 'Tên đã tồn tại'
+        ];
+
+        if($hasStage)
+            $rules['stage'] = ['required'];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails())
+            return response()->json(['msg' => 'error', 'errors' => $validator->errors()], Response::HTTP_BAD_REQUEST);
+
+        $ingredient = Ingredient::findOrFail($id);
+        $ingredient->Ten = $request->name;
+        $ingredient->stage = $request->stage ?? 0;
+        $ingredient->id_ingredient_type = $request->id_ingredient_type;
+        $ingredient->id_unit = $request->id_unit_cal;
+        $ingredient->id_provider = $request->provider_id;
+        $ingredient->GhiChu = $request->note;
+        $ingredient->Gia = $request->price ? str_replace('.','',$request->price) : 0;
+        $ingredient->save();
+
+        try{
+            if ($request->hasFile('image')) {
+                foreach ($request->file('image') as $image) {
+                    $photo = new Image();
+                    if ($image != null) {
+                        $extension = $image->getClientOriginalExtension();
+                        $file_name = current(explode('.', $image->getClientOriginalName())) . '_' . time() . '.' . $extension;
+                        $image->move('img', $file_name);
+                        $photo->urlImage = $file_name;
+                        $photo->type = 'pl';
+                        $photo->id_provide = $ingredient->id;
+                        $photo->save();
+                    }
+                }
+            }
+        }catch(\Exception $ex){
+            throw $ex;
+        }
+        return response()->json(['msg' => 'create success', 'data' => $ingredient], Response::HTTP_OK);
     }
 
     /**
@@ -127,5 +236,13 @@ class IngredientController extends Controller
     public function destroy($id)
     {
         //
+        $ingredient = Ingredient::findOrFail($id);
+        $files = Image::where('id_provide', $ingredient->id)->where('type', 'pl');
+        foreach($files as $item){
+            File::delete(public_path("img/".$item->urlImage));
+        }
+        $files->delete();
+        $ingredient->delete();
+        return response()->json(['msg' => 'success'], Response::HTTP_OK);
     }
 }
