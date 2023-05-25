@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\FinanceController;
+use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\IngredientController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductionController;
@@ -19,6 +20,9 @@ use App\Http\Controllers\Api\UploadImageController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WarehouseExportController;
 use App\Http\Controllers\Api\WarehouseImportController;
+use App\Http\Controllers\Api\IngredientTypeSelectController;
+use App\Http\Controllers\Api\StageSelectController;
+use App\Http\Controllers\Api\UnitCalSelectController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -128,9 +132,10 @@ Route::group([
     'middleware' => ['api']
 ], function ($router) {
     $router->get('/', [IngredientController::class, 'index']);
-    // $router->get('/', [AnalyticController::class, 'getRevenue']);
-    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
-    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
+    $router->get('/{id}', [IngredientController::class, 'show']);
+    $router->post('/create', [IngredientController::class, 'store']);
+    $router->post('/update/{id}', [IngredientController::class, 'update']);
+    $router->delete('/delete/{id}', [IngredientController::class, 'destroy']);
 });
 
 Route::group([
@@ -203,3 +208,11 @@ Route::group([
     // $router->get('/debt', [AnalyticController::class, 'getDebt']);
     // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
 });
+
+// select
+Route::get('ingredient-type/select', [IngredientTypeSelectController::class, 'index'])->middleware('api');
+Route::get('unit-cal/select', [UnitCalSelectController::class, 'index'])->middleware('api');
+Route::get('stage/select', [StageSelectController::class, 'index'])->middleware('api');
+
+// File
+Route::delete('image/delete/{id}', [ImageController::class, 'destroy'])->middleware('api');
