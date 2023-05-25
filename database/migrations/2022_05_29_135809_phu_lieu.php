@@ -17,7 +17,7 @@ class PhuLieu extends Migration
         Schema::create('ingredients', function (Blueprint $table){
             $table->id();
             $table->string('code')->max(10);
-            $table->string('Ten')->unique();
+            $table->string('Ten');
             $table->string('GhiChu')->nullable();
             $table->bigInteger('id_ingredient_type');
             $table->bigInteger('id_provider')->nullable();
