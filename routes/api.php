@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WarehouseExportController;
 use App\Http\Controllers\Api\WarehouseImportController;
 use App\Http\Controllers\Api\IngredientTypeSelectController;
+use App\Http\Controllers\Api\QuotaController;
 use App\Http\Controllers\Api\StageSelectController;
 use App\Http\Controllers\Api\UnitCalSelectController;
 use Illuminate\Http\Request;
@@ -132,6 +133,7 @@ Route::group([
     'middleware' => ['api']
 ], function ($router) {
     $router->get('/', [IngredientController::class, 'index']);
+    $router->get('/select', [IngredientController::class, 'getDataBySelectBox']);
     $router->get('/{id}', [IngredientController::class, 'show']);
     $router->post('/create', [IngredientController::class, 'store']);
     $router->post('/update/{id}', [IngredientController::class, 'update']);
@@ -146,6 +148,14 @@ Route::group([
     // $router->get('/', [AnalyticController::class, 'getRevenue']);
     // $router->get('/debt', [AnalyticController::class, 'getDebt']);
     // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
+});
+
+Route::group([
+    'prefix' => 'quota',
+    'middleware' => ['api']
+], function ($router) {
+    $router->get('/', [QuotaController::class, 'index']);
+    $router->post('/create', [QuotaController::class, 'store']);
 });
 
 Route::group([
