@@ -148,7 +148,7 @@ class IngredientController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $requestuest
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -244,5 +244,17 @@ class IngredientController extends Controller
         $files->delete();
         $ingredient->delete();
         return response()->json(['msg' => 'success'], Response::HTTP_OK);
+    }
+
+    /**
+     * Search records by term
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+    */
+    public function getDataBySelectBox(Request $request){
+        $ingredients = Ingredient::where('Ten', 'like', '%'.$request->get('name').'%')
+        ->select('id as value', 'Ten as text')
+        ->get();
+        return response()->json(['code' => 200, 'data' => $ingredients], Response::HTTP_OK);
     }
 }
