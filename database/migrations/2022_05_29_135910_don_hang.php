@@ -17,6 +17,7 @@ class DonHang extends Migration
         Schema::create('orders', function(Blueprint $table){
             $table->id();
             $table->bigInteger('id_customer')->nullable();
+            $table->string('code')->nullable();
             $table->integer('vat')->nullable();
             $table->bigInteger('total')->nullable();
             $table->bigInteger('paid')->nullable();
