@@ -15,6 +15,7 @@ class Order extends Model
     protected $table = 'orders';
 
     protected $fillable = [
+        'code',
         'id_customer',
         'NgayTraDon',
         'id_NhanVien',
@@ -53,5 +54,12 @@ class Order extends Model
             $total += $detail->amount * $detail->price;
         }
         return $total;
+    }
+
+    public static function generateCode($id, $char = "DH"){
+        date_default_timezone_set("Asia/Ho_Chi_Minh");
+        $today = date('Y-m-d');
+        $code = $char . date('d') . date('m') . date('y') . $id;
+        return $code;
     }
 }
