@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Select;
 
 use App\Http\Controllers\Controller;
-use App\Models\Provider;
+use App\Models\IngredientType;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ProviderSelectController extends Controller
+class IngredientTypeSelectController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,11 +17,10 @@ class ProviderSelectController extends Controller
     public function index(Request $request)
     {
         //
-        $providers = Provider::where('name', 'like', '%' . $request->name . '%')
-            ->where('status' , 1)
+        $ingredientType = IngredientType::where('name', 'like', '%' . $request->name . '%')
             ->orderBy('name')
             ->get(['name AS text', 'id AS value']);
-        return response()->json(['code' => 200, 'data' => $providers], Response::HTTP_OK);
+        return response()->json(['code' => 200, 'data' => $ingredientType], Response::HTTP_OK);
     }
 
     /**

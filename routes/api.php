@@ -13,17 +13,19 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductionController;
 use App\Http\Controllers\Api\ProductionRequestController;
 use App\Http\Controllers\Api\ProviderController;
-use App\Http\Controllers\Api\ProviderSelectController;
+use App\Http\Controllers\Api\Select\ProviderSelectController;
 use App\Http\Controllers\Api\PurchaseRemindController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\UploadImageController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WarehouseExportController;
 use App\Http\Controllers\Api\WarehouseImportController;
-use App\Http\Controllers\Api\IngredientTypeSelectController;
+use App\Http\Controllers\Api\Select\IngredientTypeSelectController;
+use App\Http\Controllers\Api\Select\ProductSelectController;
 use App\Http\Controllers\Api\QuotaController;
-use App\Http\Controllers\Api\StageSelectController;
-use App\Http\Controllers\Api\UnitCalSelectController;
+use App\Http\Controllers\Api\Select\CustomerSelectController;
+use App\Http\Controllers\Api\Select\StageSelectController;
+use App\Http\Controllers\Api\Select\UnitCalSelectController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -78,6 +80,7 @@ Route::group([
     'middleware' => ['api']
 ], function ($router) {
     $router->get('/', [OrderController::class, 'index']);
+    $router->post('/update-status/{id}', [OrderController::class, 'updateStatus']);
     // $router->get('/', [AnalyticController::class, 'getRevenue']);
     // $router->get('/debt', [AnalyticController::class, 'getDebt']);
     // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
@@ -98,7 +101,6 @@ Route::group([
     'prefix' => 'provider',
     'middleware' => ['api']
 ], function ($router) {
-    $router->get('/select', [ProviderSelectController::class, 'index']);
     $router->get('/', [ProviderController::class, 'index']);
     $router->get('/{id}', [ProviderController::class, 'show']);
     $router->post('/create', [ProviderController::class, 'store']);
@@ -219,10 +221,19 @@ Route::group([
     // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
 });
 
-// select
-Route::get('ingredient-type/select', [IngredientTypeSelectController::class, 'index'])->middleware('api');
-Route::get('unit-cal/select', [UnitCalSelectController::class, 'index'])->middleware('api');
-Route::get('stage/select', [StageSelectController::class, 'index'])->middleware('api');
+// Select box
+Route::group([
+    'prefix' => 'select-box',
+    'middleware' => ['api']
+], function ($router) {
+    $router->get('ingredient-type', [IngredientTypeSelectController::class, 'index']);
+    $router->get('unit-cal', [UnitCalSelectController::class, 'index']);
+    $router->get('stage', [StageSelectController::class, 'index']);
+    $router->get('product', [ProductSelectController::class, 'index']);
+    $router->get('customer', [CustomerSelectController::class, 'index']);
+    $router->get('/provider', [ProviderSelectController::class, 'index']);
+});
+
 
 // File
 Route::delete('image/delete/{id}', [ImageController::class, 'destroy'])->middleware('api');
