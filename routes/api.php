@@ -80,10 +80,11 @@ Route::group([
     'middleware' => ['api']
 ], function ($router) {
     $router->get('/', [OrderController::class, 'index']);
+    $router->get('/{id}', [OrderController::class, 'show']);
     $router->post('/update-status/{id}', [OrderController::class, 'updateStatus']);
-    // $router->get('/', [AnalyticController::class, 'getRevenue']);
-    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
-    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
+    $router->post('/create', [OrderController::class, 'store']);
+    $router->post('/update/{id}', [OrderController::class, 'update']);
+    $router->delete('/delete/{id}', [OrderController::class, 'destroy']);
 });
 
 Route::group([
@@ -106,8 +107,6 @@ Route::group([
     $router->post('/create', [ProviderController::class, 'store']);
     $router->put('/update/{id}', [ProviderController::class, 'update']);
     $router->delete('/delete/{id}', [ProviderController::class, 'destroy']);
-    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
-    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
 });
 
 Route::group([
@@ -115,9 +114,6 @@ Route::group([
     'middleware' => ['api']
 ], function ($router) {
     $router->get('/', [TaskController::class, 'index']);
-    // $router->get('/', [AnalyticController::class, 'getRevenue']);
-    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
-    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
 });
 
 Route::group([
@@ -125,9 +121,6 @@ Route::group([
     'middleware' => ['api']
 ], function ($router) {
     $router->get('/', [FinanceController::class, 'index']);
-    // $router->get('/', [AnalyticController::class, 'getRevenue']);
-    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
-    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
 });
 
 Route::group([
@@ -135,7 +128,6 @@ Route::group([
     'middleware' => ['api']
 ], function ($router) {
     $router->get('/', [IngredientController::class, 'index']);
-    $router->get('/select', [IngredientController::class, 'getDataBySelectBox']);
     $router->get('/{id}', [IngredientController::class, 'show']);
     $router->post('/create', [IngredientController::class, 'store']);
     $router->post('/update/{id}', [IngredientController::class, 'update']);
@@ -147,9 +139,6 @@ Route::group([
     'middleware' => ['api']
 ], function ($router) {
     $router->get('/', [IngredientController::class, 'index']);
-    // $router->get('/', [AnalyticController::class, 'getRevenue']);
-    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
-    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
 });
 
 Route::group([
@@ -165,9 +154,6 @@ Route::group([
     'middleware' => ['api']
 ], function ($router) {
     $router->get('/', [WarehouseImportController::class, 'index']);
-    // $router->get('/', [AnalyticController::class, 'getRevenue']);
-    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
-    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
 });
 
 Route::group([
@@ -175,9 +161,6 @@ Route::group([
     'middleware' => ['api']
 ], function ($router) {
     $router->get('/', [WarehouseExportController::class, 'index']);
-    // $router->get('/', [AnalyticController::class, 'getRevenue']);
-    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
-    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
 });
 
 Route::group([
@@ -185,9 +168,6 @@ Route::group([
     'middleware' => ['api']
 ], function ($router) {
     $router->get('/', [UserController::class, 'index']);
-    // $router->get('/', [AnalyticController::class, 'getRevenue']);
-    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
-    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
     $router->delete('/delete/{id}', [UserController::class, 'destroy']);
 });
 
@@ -196,9 +176,6 @@ Route::group([
     'middleware' => ['api']
 ], function ($router) {
     $router->get('/', [ProductionRequestController::class, 'index']);
-    // $router->get('/', [AnalyticController::class, 'getRevenue']);
-    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
-    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
 });
 
 Route::group([
@@ -206,9 +183,6 @@ Route::group([
     'middleware' => ['api']
 ], function ($router) {
     $router->get('/', [ProductionController::class, 'index']);
-    // $router->get('/', [AnalyticController::class, 'getRevenue']);
-    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
-    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
 });
 
 Route::group([
@@ -216,9 +190,6 @@ Route::group([
     'middleware' => ['api']
 ], function ($router) {
     $router->get('/', [PurchaseRemindController::class, 'index']);
-    // $router->get('/', [AnalyticController::class, 'getRevenue']);
-    // $router->get('/debt', [AnalyticController::class, 'getDebt']);
-    // $router->get('/product-type', [AnalyticController::class, 'countTypeOrder']);
 });
 
 // Select box
@@ -230,8 +201,9 @@ Route::group([
     $router->get('unit-cal', [UnitCalSelectController::class, 'index']);
     $router->get('stage', [StageSelectController::class, 'index']);
     $router->get('product', [ProductSelectController::class, 'index']);
+    $router->get('ingredient', [IngredientController::class, 'getDataBySelectBox']);
     $router->get('customer', [CustomerSelectController::class, 'index']);
-    $router->get('/provider', [ProviderSelectController::class, 'index']);
+    $router->get('provider', [ProviderSelectController::class, 'index']);
 });
 
 
