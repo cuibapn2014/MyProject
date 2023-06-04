@@ -18,10 +18,10 @@ class IngredientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $requestuest)
+    public function index(Request $request)
     {
         //
-        $type = $requestuest->type ?? 1;
+        $type = $request->type ?? 1;
         $ingredient = Ingredient::with([
             'provider',
             'provider:id,name,address,phone_number',
@@ -30,13 +30,13 @@ class IngredientController extends Controller
             'ingredient_type',
             'unit_cal',
             'unit_cal:id,name'
-        ])->where(function ($query) use ($requestuest) {
-            $query->where('Ten', 'like', '%' . $requestuest->keyword . '%')
-                ->orWhereRelation('provider', 'name', 'like', '%' . $requestuest->keyword . '%')
-                ->orWhereRelation('provider', 'address', 'like', '%' . $requestuest->keyword . '%')
-                ->orWhereRelation('provider', 'phone_number', 'like', '%' . $requestuest->keyword . '%')
-                ->orWhere('GhiChu', 'like', '%' . $requestuest->keyword . '%')
-                ->orWhere('code', 'like', '%' . $requestuest->keyword . '%');
+        ])->where(function ($query) use ($request) {
+            $query->where('Ten', 'like', '%' . $request->keyword . '%')
+                ->orWhereRelation('provider', 'name', 'like', '%' . $request->keyword . '%')
+                ->orWhereRelation('provider', 'address', 'like', '%' . $request->keyword . '%')
+                ->orWhereRelation('provider', 'phone_number', 'like', '%' . $request->keyword . '%')
+                ->orWhere('GhiChu', 'like', '%' . $request->keyword . '%')
+                ->orWhere('code', 'like', '%' . $request->keyword . '%');
         });
         if($type == 1) $ingredient = $ingredient->where('id_ingredient_type', $type);
         else $ingredient = $ingredient->where('id_ingredient_type', '>', 1);
@@ -47,7 +47,7 @@ class IngredientController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $requestuest
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
