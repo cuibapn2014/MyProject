@@ -67,7 +67,7 @@ class OrderController extends Controller
                 'note' => $request->note
             ]);
 
-            $order->code = Order::generateCode($order->id);
+            $order->code = generateCode($order->id);
             $order->save();
 
             if ($request->has('id_product')) {
