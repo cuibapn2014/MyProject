@@ -18,6 +18,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('optimize:clear')->daily();
         $schedule->command('view:clear')->daily();
         $schedule->command('auth:clear-resets')->everyFiveMinutes();
+        $schedule->command('queue:work --stop-when-empty')
+             ->everyMinute()
+             ->withoutOverlapping();
     }
 
     /**
