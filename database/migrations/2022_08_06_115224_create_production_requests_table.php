@@ -17,7 +17,7 @@ class CreateProductionRequestsTable extends Migration
             $table->id();
             $table->integer('detail_order_id');
             $table->integer('id_product');
-            $table->string('code');
+            $table->string('code')->nullable();
             $table->string('size')->nullable();
             $table->string('color')->nullable();
             $table->integer('amount')->min(0);
