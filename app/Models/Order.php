@@ -55,11 +55,4 @@ class Order extends Model
         }
         return $total;
     }
-
-    public static function generateCode($id, $char = "DH"){
-        date_default_timezone_set("Asia/Ho_Chi_Minh");
-        $today = date('Y-m-d');
-        $code = $char . date('d') . date('m') . date('y') . $id;
-        return $code;
-    }
 }
