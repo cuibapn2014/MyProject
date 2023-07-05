@@ -32,20 +32,23 @@ class AuthController extends Controller
     {
         $data = $request;
         Validator::extend('is_lock', function($attribute, $value, $param, $validate) use ($request){
-            $user = User::where('email', $value)->firstOrFail();
+            $user = User::where('email', $value)->first();
+            if(!$user) return true;
             if($user->status == 2) return false;
             return true;
         });
         Validator::extend('is_not_use', function($attribute, $value, $param, $validate) use ($request){
-            $user = User::where('email', $value)->firstOrFail();
+            $user = User::where('email', $value)->first();
+            if(!$user) return true;
             if($user->status == 3) return false;
             return true;
         });
         $validator = Validator::make($data->all(), [
-            'email' => 'required|email|is_lock|is_not_use',
+            'email' => 'required|email|is_lock|is_not_use|exists:users,email',
             'password' => 'required|string|min:6',
         ],[
             'email.required' => 'Email không được để trống',
+            'email.exists' => 'Email chưa được đăng ký',
             'password.required' => 'Mật khẩu không được để trống',
             'email' => 'Email không hợp lệ',
             'is_lock' => 'Tài khoản của bạn đang tạm khóa',
