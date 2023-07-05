@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\PlanIngredient;
 use App\Models\Production;
+use App\Models\ProductionRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductionController extends Controller
@@ -44,9 +47,42 @@ class ProductionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $id_production)
     {
         //
+        $planIngredient = PlanIngredient::where('id_production_request', $id_production)->get();
+        $exists = Production::where('id_production_request', $id_production);
+        $productRequest = ProductionRequest::findOrFail($id_production);
+        if ($exists->count() > 0) $exists->delete();
+        if (count($planIngredient) <= 0)
+            return response()->json(['status' => 'failed', 'msg' => 'Thất bại! Hãy tạo kế hoạch vật tư trước khi tạo lệnh sản xuất'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        DB::beginTransaction();
+        try {
+            foreach ($planIngredient as $plan) {
+                if ($plan->ingredient->id_ingredient_type != 1) {
+                    $production = Production::create([
+                        'code' => 'Creating',
+                        'id_product' => $plan->id_ingredient,
+                        'id_plan_ingredient' => $plan->id,
+                        'id_production_request' => $id_production,
+                        'require_total' => $plan->total,
+                        'priority' => $productRequest->priority,
+                        'creator' => auth()->user()->id
+                    ]);
+                    $production->code = generateCode($production->id, 'LSX');
+                    $production->save();
+                }
+            }
+
+            $productRequest->status = 2;
+            $productRequest->save();
+
+            DB::commit();
+        } catch (\Exception $ex) {
+            DB::rollBack();
+            throw $ex;
+        }
+        return response()->json(['code' => 200, 'msg' => 'Tạo lệnh sản xuất thành công'], Response::HTTP_OK);
     }
 
     /**
