@@ -24,8 +24,10 @@ use App\Http\Controllers\Api\Select\IngredientTypeSelectController;
 use App\Http\Controllers\Api\Select\ProductSelectController;
 use App\Http\Controllers\Api\QuotaController;
 use App\Http\Controllers\Api\Select\CustomerSelectController;
+use App\Http\Controllers\Api\Select\OrderSelectController;
 use App\Http\Controllers\Api\Select\StageSelectController;
 use App\Http\Controllers\Api\Select\UnitCalSelectController;
+use App\Models\Production;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -176,6 +178,12 @@ Route::group([
     'middleware' => ['api']
 ], function ($router) {
     $router->get('/', [ProductionRequestController::class, 'index']);
+    $router->get('/{id}', [ProductionRequestController::class, 'show']);
+    $router->get('/progress/{id}', [ProductionRequestController::class, 'showDataProgress']);
+    $router->post('/create', [ProductionRequestController::class, 'store']);
+    $router->post('/update/{id}', [ProductionRequestController::class, 'update']);
+    $router->put('/update-status/{id}', [ProductionRequestController::class, 'updateStatus']);
+    $router->delete('/delete/{id}', [ProductionRequestController::class, 'destroy']);
 });
 
 Route::group([
@@ -183,6 +191,7 @@ Route::group([
     'middleware' => ['api']
 ], function ($router) {
     $router->get('/', [ProductionController::class, 'index']);
+    $router->post('/create/{id_production}', [ProductionController::class, 'store']);
 });
 
 Route::group([
@@ -190,6 +199,7 @@ Route::group([
     'middleware' => ['api']
 ], function ($router) {
     $router->get('/', [PurchaseRemindController::class, 'index']);
+    $router->post('/create/{id_request}', [PurchaseRemindController::class, 'createPurchase']);
 });
 
 // Select box
@@ -204,6 +214,7 @@ Route::group([
     $router->get('ingredient', [IngredientController::class, 'getDataBySelectBox']);
     $router->get('customer', [CustomerSelectController::class, 'index']);
     $router->get('provider', [ProviderSelectController::class, 'index']);
+    $router->get('order', [OrderSelectController::class, 'index']);
 });
 
 
