@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\CreatePlaningIngredient;
+use App\Models\Ingredient;
 use App\Models\PlanIngredient;
 use App\Models\ProductionRequest;
 use Illuminate\Http\Request;
@@ -32,6 +33,7 @@ class ProductionRequestController extends Controller
             ->orWhere('size', 'like', '%' . $request->keyword . '%')
             ->orWhere('color', 'like', '%' . $request->keyword . '%')
             ->orWhereRelation('product', 'Ten', 'like', '%' . $request->keyword . '%')
+            ->orderBy('status')
             ->orderByDesc('id')
             ->paginate(25);
 
@@ -107,7 +109,8 @@ class ProductionRequestController extends Controller
     {
         //
         $production = ProductionRequest::with([
-            'product:id,Ten',
+            'product:id,Ten,amount,used_amount,id_unit',
+            'product.unit_cal',
             'detail_order:id,id_product,id_DonHang',
             'detail_order.order:id,code,id_customer',
             'detail_order.product:id,Ten',
@@ -219,6 +222,41 @@ class ProductionRequestController extends Controller
         $productRequest->update([
             'status' => $status
         ]);
+        return response()->json(['msg' => 'Cập nhật thành công'], Response::HTTP_OK);
+    }
+
+    /**
+     * Update completed amount
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+    */
+    public function updateCompleted(Request $request)
+    {
+        $requestProduction = ProductionRequest::findOrFail($request->idRequest);
+        $maxAmount = Ingredient::findOrFail($request->idIngredient);
+
+        $validator = Validator::make($request->all(), [
+            'completed' => [
+                'min:0',
+                function ($attribute, $value, $fail) use ($maxAmount, $requestProduction) {
+                    if ($value - $requestProduction->completed > $maxAmount->amount || $value < 0 || $value > $requestProduction->amount) {
+                        $fail('Số lượng phân bổ không hợp lệ');
+                    }
+                },
+            ],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['msg' => 'Cập nhật thất bại', 'errors' => $validator->errors()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        $calAmount =  $requestProduction->completed - $request->completed;
+        $maxAmount->amount += $calAmount;
+        $maxAmount->save();
+
+        $requestProduction->completed = $request->completed;
+        $requestProduction->save();
+
         return response()->json(['msg' => 'Cập nhật thành công'], Response::HTTP_OK);
     }
 }

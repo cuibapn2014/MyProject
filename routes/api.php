@@ -183,6 +183,7 @@ Route::group([
     $router->post('/create', [ProductionRequestController::class, 'store']);
     $router->post('/update/{id}', [ProductionRequestController::class, 'update']);
     $router->put('/update-status/{id}', [ProductionRequestController::class, 'updateStatus']);
+    $router->put('/update-completed', [ProductionRequestController::class, 'updateCompleted']);
     $router->delete('/delete/{id}', [ProductionRequestController::class, 'destroy']);
 });
 
