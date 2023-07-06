@@ -64,7 +64,8 @@ class AuthController extends Controller
         }
         $cookie = $this->getCookie($token);
         $user = User::find(auth()->user()->id);
-        $user->last_login_at = \Carbon\Carbon::now();
+        date_default_timezone_set("Asia/Ho_Chi_Minh");
+        $user->last_login_at = date("Y-m-d H:i");
         $user->ip_last_login = $request->ip();
         $user->save();
 
