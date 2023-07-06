@@ -60,9 +60,13 @@ class AuthController extends Controller
         }
         $minutes = $request->remember ? (60 * 24 * 30) : 60; 
         if (!$token = auth()->setTTL($minutes)->attempt($validator->validated())) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Mật khẩu không chính xác'], 401);
         }
         $cookie = $this->getCookie($token);
+        $user = User::find(auth()->user()->id);
+        $user->last_login_at = \Carbon\Carbon::now();
+        $user->ip_last_login = $request->ip();
+        $user->save();
 
         return $this->createNewToken($token)->withCookie($cookie);
     }
