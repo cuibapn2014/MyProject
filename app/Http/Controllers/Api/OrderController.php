@@ -48,9 +48,11 @@ class OrderController extends Controller
                 [
                     'quantity.*' => 'min:1',
                     'quality.*' => 'required',
+                    'paid' => 'required'
                 ],
                 [
                     'quality.*.required' => 'Không được để trống chất lượng sản phẩm',
+                    'paid.required' => 'Vui lòng nhập số tiền Đã thanh toán'
                 ]
             );
 
