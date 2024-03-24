@@ -14,6 +14,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
         "maatwebsite/excel": "^3.1",
+        "marvinlabs/laravel-discord-logger": "^1.4",
         "pusher/pusher-php-server": "^7.0",
         "tymon/jwt-auth": "^1.0"
     },
