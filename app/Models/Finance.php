@@ -24,6 +24,11 @@ class Finance extends Model
         'create_date'
     ];
 
+    protected $casts = [
+        'status' => 'integer',
+        'total' => 'biginteger'
+    ];
+
     public function user(){
         return $this->belongsTo(User::class, 'id_user', 'id');
     }

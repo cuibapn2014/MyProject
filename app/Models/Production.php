@@ -24,6 +24,10 @@ class Production extends Model
         'reviewer'
     ];
 
+    protected $casts = [
+        'status' => 'integer'
+    ];
+
     public function product()
     {
         return $this->belongsTo(\App\Models\Ingredient::class, 'id_product', 'id');

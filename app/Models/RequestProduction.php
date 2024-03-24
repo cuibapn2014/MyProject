@@ -19,6 +19,10 @@ class RequestProduction extends Model
         'censor'
     ];
 
+    protected $casts = [
+        'status' => 'integer'
+    ];
+
     public $timestamps = true;
 
     public function ingredient()

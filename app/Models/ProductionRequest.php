@@ -26,6 +26,10 @@ class ProductionRequest extends Model
         'creator'
     ];
 
+    protected $casts = [
+        'status' => 'integer'
+    ];
+
     public function detail_order()
     {
         return $this->belongsTo(\App\Models\DetailOrder::class, 'detail_order_id', 'id');

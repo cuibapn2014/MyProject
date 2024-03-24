@@ -26,6 +26,12 @@ class Order extends Model
         'note'
     ];
 
+    protected $casts = [
+        'status' => 'integer',
+        'total' => 'biginteger',
+        'paid' => 'biginteger'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'id_NhanVien', 'id');
